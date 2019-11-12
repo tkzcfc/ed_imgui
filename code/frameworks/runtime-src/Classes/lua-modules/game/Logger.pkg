@@ -1,0 +1,28 @@
+$#include "log/Logger.h"
+
+
+class Logger
+{
+public:
+
+	Logger();
+
+	~Logger();
+
+	static Logger& getInstance();
+
+	static Logger* getInstancePtr();
+
+	void addLog(int type, const char* fmt);
+
+	void showAppLog(bool* p_open);
+
+	void showAppLogNoClose();
+	
+	void showAppAndNoWindow();
+
+	void clear();
+
+	void setTitle(const char* title);
+};
+

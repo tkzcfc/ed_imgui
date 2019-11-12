@@ -1,0 +1,52 @@
+$#include "core/CRect.h"
+
+
+class CRect
+{
+public:
+
+	CRect();
+
+	void setAnchorPoint(float x, float y);
+	 
+	 Vec2 getAnchorPoint();
+
+	void setContentSize(float w, float h);
+	
+	Vec2 getContentSize();
+
+	void setPoint(float x, float y);
+	
+	Vec2 getPoint();
+
+	void setScale(float scalex, float scaley);
+
+	Vec2 getScale();
+
+	void setRotation(float _angle);
+	
+	float getRotation();
+
+	// 切变
+	void setSkewX(float skewx);
+
+	void setSkewY(float skewy);
+	
+	Vec2 getSkew();
+
+	void apply();
+
+	Vec2 getVertexByIndex(int index);
+
+	int getVertexCount();
+	
+	void debugDraw(cc.DrawNode* pDrawNode);
+
+	void setVisible(bool value);
+
+	bool isVisible();
+
+	void setColor(unsigned int color);
+	
+	unsigned int getColor();
+};

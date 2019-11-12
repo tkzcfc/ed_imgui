@@ -1,0 +1,58 @@
+$#include "core/Tools.h"
+
+
+class Tools
+{
+public:
+	static bool openFileMultiSelect(const std::string& InFilter, StringArray* OutPathArr);
+	
+	std::string GbkToUtf8(const std::string& strGbk);
+
+	std::string Utf8ToGbk(const std::string& strUtf8);
+	
+	static std::string getFilename(const std::string& InPath);
+	
+	static bool isInRect(cc.Node* InNode, const float InX, const float InY);
+	
+	static long getMillisecond();
+	
+	static bool copyFile(const std::string& existingFileName, const std::string& newFileName, bool bFailIfExists);
+	
+	static std::string replaceString(const std::string& str, const std::string& targetstr, const std::string& replacestr);
+	
+	static void runExe(std::string exe, std::string cmd);
+	
+	static void* getImguiTextureID(const std::string& key, bool isPlist = false);
+
+	static int getImguiTextureWidth(const std::string& key, bool isPlist = false);
+
+	static int getImguiTextureHeight(const std::string& key, bool isPlist = false);
+	
+	static bool imgui_inputText(const char* label, std::string& buf, unsigned int buf_size, unsigned int flags = 0);
+	
+	static std::vector<std::string> getLogicalDriveStrings();
+	
+	static std::string UTS(std::string str);
+
+	static std::string STU(std::string str);
+	
+	static int bor_int32(int a, int b);
+	
+	static unsigned int bor_uint32(unsigned int a, unsigned int b);
+	
+	static Size getWindowSize();
+	
+	static bool          BeginTabItem_NoClose(const char* label, int flags = 0);
+	
+	static ImVec2 getMouseClickedPos(int index);
+	
+	static bool BeginWindow_NoClose(const char* name, int flags);
+	
+	static bool check_AcceptDragDropPayload(const char* type, int flags = 0);
+
+	static std::string AcceptDragDropPayload(const char* type, int flags = 0);
+	
+	static ImVec4 getStyleColor(int type);
+	
+	static bool copyFile(std::string srcFile, std::string dstFile);
+};

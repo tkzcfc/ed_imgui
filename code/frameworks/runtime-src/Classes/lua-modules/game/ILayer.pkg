@@ -1,0 +1,29 @@
+$#include "ilayer/ILayer.h"
+
+class ILayer : public cc.Layer
+{
+public:
+
+	static ILayer* create();
+
+	void updateImGUI();
+
+	void removeImGUI(std::string name);
+	
+	bool IsAnyWindowHovered();
+
+	bool setChineseFont(std::string fontFileName, float size_pixels);
+	
+	bool setSystemChineseFont(std::string fontFileName, float size_pixels);
+	
+	void registerLuaHandle(std::string name, LuaFunction handle);
+
+	void unregisterLuaHandle(std::string name);
+
+	void clearLuaHandle();
+	
+	
+	void setEngulfAllTouchs(bool value);
+
+	bool isEngulfAllTouchs();
+};

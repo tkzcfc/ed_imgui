@@ -1,0 +1,41 @@
+-- This file is generated automatically. Please do not change it
+-- Generated automatically by ed_imgui on 11/12/19 15:47:22.
+local M = {}
+function M:load(context)
+    context.uniqueID = 1
+
+    local Sprite_1 = require("app.cell.SpriteCell").new(context,
+                                                        "Projects/PaoKu/bomb_red.png",
+                                                        0)
+    Sprite_1:setName("Sprite_1")
+    Sprite_1.renderNode:setAnchorPoint(cc.p(0.500000, 0.500000))
+    Sprite_1.renderNode:setPosition(0.000000, 0.000000)
+    Sprite_1.renderNode:setContentSize(cc.size(107.000000, 32.000000))
+    Sprite_1.renderNode:setRotation(0.000000)
+    Sprite_1.renderNode:setLocalZOrder(0)
+    Sprite_1.renderNode:setScaleX(1.000000)
+    Sprite_1.renderNode:setScaleY(1.000000)
+    Sprite_1.renderNode:setOpacity(255)
+    Sprite_1.renderNode:setColor(cc.c3b(255, 255, 255))
+    context:addCell(Sprite_1)
+end
+
+M.bgCellData = {
+    ["posx"] = 600,
+    ["scale"] = 1,
+    ["posy"] = 391.25,
+    ["rect_data"] = {
+        [1] = {
+            ["contentSize"] = {["y"] = 32.44677734375, ["x"] = 99.837463378906},
+            ["scale"] = {["y"] = 1, ["x"] = 1},
+            ["color"] = 4280440551,
+            ["anchorPoint"] = {["y"] = 0.5, ["x"] = 0.5},
+            ["isVisible"] = true,
+            ["point"] = {["y"] = -0.1536865234375, ["x"] = -3.7467956542969},
+            ["rotation"] = 0,
+            ["skew"] = {["y"] = 0, ["x"] = 0}
+        }
+    },
+    ["line_data"] = {}
+}
+return M

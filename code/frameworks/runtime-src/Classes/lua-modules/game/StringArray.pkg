@@ -1,0 +1,18 @@
+$#include "core/type/StringArray.h"
+
+
+class StringArray
+{
+public:
+
+	StringArray();
+
+	~StringArray();
+
+	inline int getValueCount();
+
+	inline const std::string& getValueByIndex(int InIndex);
+
+	void addString(const std::string& InValue);
+};
+

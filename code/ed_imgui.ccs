@@ -1,0 +1,297 @@
+<Solution>
+  <PropertyGroup Name="ed_imgui" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="Res">
+          <Folder Name="gem_icon">
+            <Image Name="icon_1.png" />
+            <Image Name="icon_2.png" />
+            <Image Name="icon_3.png" />
+            <Image Name="icon_4.png" />
+            <Image Name="icon_5.png" />
+            <Image Name="icon_6.png" />
+            <Image Name="icon_7.png" />
+          </Folder>
+          <PlistImageFolder Image="selectrole.png" PListFile="selectrole.plist" Name=".selectrole_PList.Dir">
+            <PlistImageFile Name="baidi.png" Key="baidi.png" />
+            <PlistImageFile Name="baijixuanze.png" Key="baijixuanze.png" />
+            <PlistImageFile Name="chuagnjian.png" Key="chuagnjian.png" />
+            <PlistImageFile Name="digang.png" Key="digang.png" />
+            <PlistImageFile Name="fangkuang1.png" Key="fangkuang1.png" />
+            <PlistImageFile Name="fanhui.png" Key="fanhui.png" />
+            <PlistImageFile Name="hua.png" Key="hua.png" />
+            <PlistImageFile Name="huaban.png" Key="huaban.png" />
+            <PlistImageFile Name="huawen1.png" Key="huawen1.png" />
+            <PlistImageFile Name="juesexuanze.png" Key="juesexuanze.png" />
+            <PlistImageFile Name="kaisi.png" Key="kaisi.png" />
+            <PlistImageFile Name="kuang1.png" Key="kuang1.png" />
+            <PlistImageFile Name="luocha.png" Key="luocha.png" />
+            <PlistImageFile Name="nanzhu.png" Key="nanzhu.png" />
+            <PlistImageFile Name="shaiziditu.png" Key="shaiziditu.png" />
+            <PlistImageFile Name="tiaowen.png" Key="tiaowen.png" />
+            <PlistImageFile Name="waikuang1.png" Key="waikuang1.png" />
+            <PlistImageFile Name="waikuang2.png" Key="waikuang2.png" />
+            <PlistImageFile Name="weichuangjian.png" Key="weichuangjian.png" />
+            <PlistImageFile Name="wenlu.png" Key="wenlu.png" />
+            <PlistImageFile Name="xianze2.png" Key="xianze2.png" />
+            <PlistImageFile Name="xingming.png" Key="xingming.png" />
+            <PlistImageFile Name="xiuluo.png" Key="xiuluo.png" />
+            <PlistImageFile Name="xuanze1.png" Key="xuanze1.png" />
+          </PlistImageFolder>
+          <PlistImageFolder Image="ui1.png" PListFile="ui1.plist" Name=".ui1_PList.Dir">
+            <PlistImageFile Name="7dbpui01.png" Key="7dbpui01.png" />
+            <PlistImageFile Name="7dbpui02.png" Key="7dbpui02.png" />
+            <PlistImageFile Name="adui05.png" Key="adui05.png" />
+            <PlistImageFile Name="alpha.png" Key="alpha.png" />
+            <PlistImageFile Name="bpan01.png" Key="bpan01.png" />
+            <PlistImageFile Name="bpan02.png" Key="bpan02.png" />
+            <PlistImageFile Name="bssuipian.png" Key="bssuipian.png" />
+            <PlistImageFile Name="button01.png" Key="button01.png" />
+            <PlistImageFile Name="button02.png" Key="button02.png" />
+            <PlistImageFile Name="button03.png" Key="button03.png" />
+            <PlistImageFile Name="button04.png" Key="button04.png" />
+            <PlistImageFile Name="chakys.png" Key="chakys.png" />
+            <PlistImageFile Name="chengzhangtp.png" Key="chengzhangtp.png" />
+            <PlistImageFile Name="chongzhi.png" Key="chongzhi.png" />
+            <PlistImageFile Name="currency.png" Key="currency.png" />
+            <PlistImageFile Name="czan01.png" Key="czan01.png" />
+            <PlistImageFile Name="czan02.png" Key="czan02.png" />
+            <PlistImageFile Name="czangq.png" Key="czangq.png" />
+            <PlistImageFile Name="czdzk.png" Key="czdzk.png" />
+            <PlistImageFile Name="dengljm01.png" Key="dengljm01.png" />
+            <PlistImageFile Name="dengljm02.png" Key="dengljm02.png" />
+            <PlistImageFile Name="disk.png" Key="disk.png" />
+            <PlistImageFile Name="dljmld01.png" Key="dljmld01.png" />
+            <PlistImageFile Name="dljmld02.png" Key="dljmld02.png" />
+            <PlistImageFile Name="down.png" Key="down.png" />
+            <PlistImageFile Name="dybaox.png" Key="dybaox.png" />
+            <PlistImageFile Name="exp.png" Key="exp.png" />
+            <PlistImageFile Name="expbar1.png" Key="expbar1.png" />
+            <PlistImageFile Name="expbar2.png" Key="expbar2.png" />
+            <PlistImageFile Name="expbar3.png" Key="expbar3.png" />
+            <PlistImageFile Name="fubenan02.png" Key="fubenan02.png" />
+            <PlistImageFile Name="fubenui01.png" Key="fubenui01.png" />
+            <PlistImageFile Name="fubenui02.png" Key="fubenui02.png" />
+            <PlistImageFile Name="fubenui08.png" Key="fubenui08.png" />
+            <PlistImageFile Name="ghui02.png" Key="ghui02.png" />
+            <PlistImageFile Name="ghui03.png" Key="ghui03.png" />
+            <PlistImageFile Name="ghui04.png" Key="ghui04.png" />
+            <PlistImageFile Name="ghui09.png" Key="ghui09.png" />
+            <PlistImageFile Name="ghui10.png" Key="ghui10.png" />
+            <PlistImageFile Name="ghui11.png" Key="ghui11.png" />
+            <PlistImageFile Name="gmjh.png" Key="gmjh.png" />
+            <PlistImageFile Name="gold.png" Key="gold.png" />
+            <PlistImageFile Name="gonghui.png" Key="gonghui.png" />
+            <PlistImageFile Name="gonghuijianzhu.png" Key="gonghuijianzhu.png" />
+            <PlistImageFile Name="gongxian.png" Key="gongxian.png" />
+            <PlistImageFile Name="green.png" Key="green.png" />
+            <PlistImageFile Name="guanbi01.png" Key="guanbi01.png" />
+            <PlistImageFile Name="guanbi02.png" Key="guanbi02.png" />
+            <PlistImageFile Name="haoyou.png" Key="haoyou.png" />
+            <PlistImageFile Name="help01.png" Key="help01.png" />
+            <PlistImageFile Name="help02.png" Key="help02.png" />
+            <PlistImageFile Name="huis.png" Key="huis.png" />
+            <PlistImageFile Name="icon01.png" Key="icon01.png" />
+            <PlistImageFile Name="icon02.png" Key="icon02.png" />
+            <PlistImageFile Name="icon03.png" Key="icon03.png" />
+            <PlistImageFile Name="icon04.png" Key="icon04.png" />
+            <PlistImageFile Name="icon05.png" Key="icon05.png" />
+            <PlistImageFile Name="icon06.png" Key="icon06.png" />
+            <PlistImageFile Name="icon07.png" Key="icon07.png" />
+            <PlistImageFile Name="icon08.png" Key="icon08.png" />
+            <PlistImageFile Name="icon09.png" Key="icon09.png" />
+            <PlistImageFile Name="icon10.png" Key="icon10.png" />
+            <PlistImageFile Name="icon11.png" Key="icon11.png" />
+            <PlistImageFile Name="icon12.png" Key="icon12.png" />
+            <PlistImageFile Name="icon13.png" Key="icon13.png" />
+            <PlistImageFile Name="icon14.png" Key="icon14.png" />
+            <PlistImageFile Name="icon15.png" Key="icon15.png" />
+            <PlistImageFile Name="icon16.png" Key="icon16.png" />
+            <PlistImageFile Name="icon17.png" Key="icon17.png" />
+            <PlistImageFile Name="icon18.png" Key="icon18.png" />
+            <PlistImageFile Name="icon19.png" Key="icon19.png" />
+            <PlistImageFile Name="icon40.png" Key="icon40.png" />
+            <PlistImageFile Name="icon41.png" Key="icon41.png" />
+            <PlistImageFile Name="icon42.png" Key="icon42.png" />
+            <PlistImageFile Name="jiahao.png" Key="jiahao.png" />
+            <PlistImageFile Name="jianh.png" Key="jianh.png" />
+            <PlistImageFile Name="jie.png" Key="jie.png" />
+            <PlistImageFile Name="jiesan.png" Key="jiesan.png" />
+            <PlistImageFile Name="jinjie.png" Key="jinjie.png" />
+            <PlistImageFile Name="jinjiedhzt.png" Key="jinjiedhzt.png" />
+            <PlistImageFile Name="jisi.png" Key="jisi.png" />
+            <PlistImageFile Name="juese.png" Key="juese.png" />
+            <PlistImageFile Name="knapsack.png" Key="knapsack.png" />
+            <PlistImageFile Name="lock.png" Key="lock.png" />
+            <PlistImageFile Name="lunhui.png" Key="lunhui.png" />
+            <PlistImageFile Name="lunhuichuanguan01.png" Key="lunhuichuanguan01.png" />
+            <PlistImageFile Name="lv.png" Key="lv.png" />
+            <PlistImageFile Name="lxjttp.png" Key="lxjttp.png" />
+            <PlistImageFile Name="mail02.png" Key="mail02.png" />
+            <PlistImageFile Name="menuBtn.png" Key="menuBtn.png" />
+            <PlistImageFile Name="nhdicon02.png" Key="nhdicon02.png" />
+            <PlistImageFile Name="nhdicon04.png" Key="nhdicon04.png" />
+            <PlistImageFile Name="nhdicon06.png" Key="nhdicon06.png" />
+            <PlistImageFile Name="nhdicon08.png" Key="nhdicon08.png" />
+            <PlistImageFile Name="nhdicon10.png" Key="nhdicon10.png" />
+            <PlistImageFile Name="nhdicon12.png" Key="nhdicon12.png" />
+            <PlistImageFile Name="nhdicon13.png" Key="nhdicon13.png" />
+            <PlistImageFile Name="nhdicon14.png" Key="nhdicon14.png" />
+            <PlistImageFile Name="nhdzxui01.png" Key="nhdzxui01.png" />
+            <PlistImageFile Name="nhdzxui02.png" Key="nhdzxui02.png" />
+            <PlistImageFile Name="nhdzxui03.png" Key="nhdzxui03.png" />
+            <PlistImageFile Name="nhdzxui04.png" Key="nhdzxui04.png" />
+            <PlistImageFile Name="nhdzxui05.png" Key="nhdzxui05.png" />
+            <PlistImageFile Name="nhdzxui07.png" Key="nhdzxui07.png" />
+            <PlistImageFile Name="nhdzxui08.png" Key="nhdzxui08.png" />
+            <PlistImageFile Name="nhdzxui10.png" Key="nhdzxui10.png" />
+            <PlistImageFile Name="nhdzxui11.png" Key="nhdzxui11.png" />
+            <PlistImageFile Name="nhdzxui12.png" Key="nhdzxui12.png" />
+            <PlistImageFile Name="nhdzxui13.png" Key="nhdzxui13.png" />
+            <PlistImageFile Name="nhdzxui14.png" Key="nhdzxui14.png" />
+            <PlistImageFile Name="nhdzxui15.png" Key="nhdzxui15.png" />
+            <PlistImageFile Name="nhdzxui16.png" Key="nhdzxui16.png" />
+            <PlistImageFile Name="nhdzxui17.png" Key="nhdzxui17.png" />
+            <PlistImageFile Name="nhdzxui18.png" Key="nhdzxui18.png" />
+            <PlistImageFile Name="nhdzxui19.png" Key="nhdzxui19.png" />
+            <PlistImageFile Name="nhdzxui20.png" Key="nhdzxui20.png" />
+            <PlistImageFile Name="nhdzxui21.png" Key="nhdzxui21.png" />
+            <PlistImageFile Name="nhdzxui22.png" Key="nhdzxui22.png" />
+            <PlistImageFile Name="nhdzxui24.png" Key="nhdzxui24.png" />
+            <PlistImageFile Name="nhdzxui25.png" Key="nhdzxui25.png" />
+            <PlistImageFile Name="nhdzxui26.png" Key="nhdzxui26.png" />
+            <PlistImageFile Name="nhdzxui27.png" Key="nhdzxui27.png" />
+            <PlistImageFile Name="nhdzxui29.png" Key="nhdzxui29.png" />
+            <PlistImageFile Name="nhdzxui30.png" Key="nhdzxui30.png" />
+            <PlistImageFile Name="nhdzxui31.png" Key="nhdzxui31.png" />
+            <PlistImageFile Name="nhdzxui32.png" Key="nhdzxui32.png" />
+            <PlistImageFile Name="nhdzxui39.png" Key="nhdzxui39.png" />
+            <PlistImageFile Name="nhdzxui40.png" Key="nhdzxui40.png" />
+            <PlistImageFile Name="nhdzxui41.png" Key="nhdzxui41.png" />
+            <PlistImageFile Name="nhdzxui42.png" Key="nhdzxui42.png" />
+            <PlistImageFile Name="nhdzxui43.png" Key="nhdzxui43.png" />
+            <PlistImageFile Name="nhdzxui44.png" Key="nhdzxui44.png" />
+            <PlistImageFile Name="nhdzxui45.png" Key="nhdzxui45.png" />
+            <PlistImageFile Name="nhdzxui46.png" Key="nhdzxui46.png" />
+            <PlistImageFile Name="nhdzxui47.png" Key="nhdzxui47.png" />
+            <PlistImageFile Name="nhdzxui48.png" Key="nhdzxui48.png" />
+            <PlistImageFile Name="nhdzxui49.png" Key="nhdzxui49.png" />
+            <PlistImageFile Name="nhdzxui50.png" Key="nhdzxui50.png" />
+            <PlistImageFile Name="nhdzxui51.png" Key="nhdzxui51.png" />
+            <PlistImageFile Name="nhdzxui52.png" Key="nhdzxui52.png" />
+            <PlistImageFile Name="pingjia01.png" Key="pingjia01.png" />
+            <PlistImageFile Name="pingjia02.png" Key="pingjia02.png" />
+            <PlistImageFile Name="pingjia03.png" Key="pingjia03.png" />
+            <PlistImageFile Name="pingjia04.png" Key="pingjia04.png" />
+            <PlistImageFile Name="purple.png" Key="purple.png" />
+            <PlistImageFile Name="qianghua.png" Key="qianghua.png" />
+            <PlistImageFile Name="qingxzfwq.png" Key="qingxzfwq.png" />
+            <PlistImageFile Name="qitianrichang.png" Key="qitianrichang.png" />
+            <PlistImageFile Name="red.png" Key="red.png" />
+            <PlistImageFile Name="renwu.png" Key="renwu.png" />
+            <PlistImageFile Name="rwui01.png" Key="rwui01.png" />
+            <PlistImageFile Name="rwui01_1.png" Key="rwui01_1.png" />
+            <PlistImageFile Name="rwui02.png" Key="rwui02.png" />
+            <PlistImageFile Name="rwui02_1.png" Key="rwui02_1.png" />
+            <PlistImageFile Name="shenmishangdian.png" Key="shenmishangdian.png" />
+            <PlistImageFile Name="shuxingzhuanyi.png" Key="shuxingzhuanyi.png" />
+            <PlistImageFile Name="shuzifh.png" Key="shuzifh.png" />
+            <PlistImageFile Name="smsdui01.png" Key="smsdui01.png" />
+            <PlistImageFile Name="smsdui02.png" Key="smsdui02.png" />
+            <PlistImageFile Name="sztsk.png" Key="sztsk.png" />
+            <PlistImageFile Name="tankuang01.png" Key="tankuang01.png" />
+            <PlistImageFile Name="tankuang02.png" Key="tankuang02.png" />
+            <PlistImageFile Name="tequan.png" Key="tequan.png" />
+            <PlistImageFile Name="tili.png" Key="tili.png" />
+            <PlistImageFile Name="touxian.png" Key="touxian.png" />
+            <PlistImageFile Name="tpan01.png" Key="tpan01.png" />
+            <PlistImageFile Name="tpan02.png" Key="tpan02.png" />
+            <PlistImageFile Name="tpan03.png" Key="tpan03.png" />
+            <PlistImageFile Name="tpan04.png" Key="tpan04.png" />
+            <PlistImageFile Name="tpan05.png" Key="tpan05.png" />
+            <PlistImageFile Name="tpan06.png" Key="tpan06.png" />
+            <PlistImageFile Name="tpan07.png" Key="tpan07.png" />
+            <PlistImageFile Name="tpan08.png" Key="tpan08.png" />
+            <PlistImageFile Name="tpan09.png" Key="tpan09.png" />
+            <PlistImageFile Name="tpan10.png" Key="tpan10.png" />
+            <PlistImageFile Name="tpan11.png" Key="tpan11.png" />
+            <PlistImageFile Name="tpan12.png" Key="tpan12.png" />
+            <PlistImageFile Name="tpan13.png" Key="tpan13.png" />
+            <PlistImageFile Name="tpan14.png" Key="tpan14.png" />
+            <PlistImageFile Name="tpan22.png" Key="tpan22.png" />
+            <PlistImageFile Name="tpan23.png" Key="tpan23.png" />
+            <PlistImageFile Name="tuijian.png" Key="tuijian.png" />
+            <PlistImageFile Name="ui01.png" Key="ui01.png" />
+            <PlistImageFile Name="ui02.png" Key="ui02.png" />
+            <PlistImageFile Name="ui03.png" Key="ui03.png" />
+            <PlistImageFile Name="ui04.png" Key="ui04.png" />
+            <PlistImageFile Name="ui05.png" Key="ui05.png" />
+            <PlistImageFile Name="ui06.png" Key="ui06.png" />
+            <PlistImageFile Name="ui07.png" Key="ui07.png" />
+            <PlistImageFile Name="ui08.png" Key="ui08.png" />
+            <PlistImageFile Name="ui09.png" Key="ui09.png" />
+            <PlistImageFile Name="ui10.png" Key="ui10.png" />
+            <PlistImageFile Name="ui11.png" Key="ui11.png" />
+            <PlistImageFile Name="ui13.png" Key="ui13.png" />
+            <PlistImageFile Name="ui14.png" Key="ui14.png" />
+            <PlistImageFile Name="ui15.png" Key="ui15.png" />
+            <PlistImageFile Name="ui16.png" Key="ui16.png" />
+            <PlistImageFile Name="ui17.png" Key="ui17.png" />
+            <PlistImageFile Name="ui18.png" Key="ui18.png" />
+            <PlistImageFile Name="ui19.png" Key="ui19.png" />
+            <PlistImageFile Name="ui20.png" Key="ui20.png" />
+            <PlistImageFile Name="ui23.png" Key="ui23.png" />
+            <PlistImageFile Name="ui24.png" Key="ui24.png" />
+            <PlistImageFile Name="ui25.png" Key="ui25.png" />
+            <PlistImageFile Name="ui26.png" Key="ui26.png" />
+            <PlistImageFile Name="ui27.png" Key="ui27.png" />
+            <PlistImageFile Name="ui28.png" Key="ui28.png" />
+            <PlistImageFile Name="ui29.png" Key="ui29.png" />
+            <PlistImageFile Name="ui30.png" Key="ui30.png" />
+            <PlistImageFile Name="ui31.png" Key="ui31.png" />
+            <PlistImageFile Name="ui32.png" Key="ui32.png" />
+            <PlistImageFile Name="ui33.png" Key="ui33.png" />
+            <PlistImageFile Name="up.png" Key="up.png" />
+            <PlistImageFile Name="vip.png" Key="vip.png" />
+            <PlistImageFile Name="vipsz02.png" Key="vipsz02.png" />
+            <PlistImageFile Name="vipui01.png" Key="vipui01.png" />
+            <PlistImageFile Name="vipui02.png" Key="vipui02.png" />
+            <PlistImageFile Name="vipui03.png" Key="vipui03.png" />
+            <PlistImageFile Name="vipui04.png" Key="vipui04.png" />
+            <PlistImageFile Name="white.png" Key="white.png" />
+            <PlistImageFile Name="xiangqian.png" Key="xiangqian.png" />
+            <PlistImageFile Name="xiaot05.png" Key="xiaot05.png" />
+            <PlistImageFile Name="xiaot07.png" Key="xiaot07.png" />
+            <PlistImageFile Name="xinzbtp.png" Key="xinzbtp.png" />
+            <PlistImageFile Name="xlshuzi01.png" Key="xlshuzi01.png" />
+            <PlistImageFile Name="xunze01.png" Key="xunze01.png" />
+            <PlistImageFile Name="xunze02.png" Key="xunze02.png" />
+            <PlistImageFile Name="yellow.png" Key="yellow.png" />
+            <PlistImageFile Name="yizbtp.png" Key="yizbtp.png" />
+            <PlistImageFile Name="youqing.png" Key="youqing.png" />
+            <PlistImageFile Name="zbwui01.png" Key="zbwui01.png" />
+            <PlistImageFile Name="zbwui02.png" Key="zbwui02.png" />
+            <PlistImageFile Name="zcwpka01.png" Key="zcwpka01.png" />
+            <PlistImageFile Name="zhuanzka.png" Key="zhuanzka.png" />
+          </PlistImageFolder>
+          <Image Name="grid.png" />
+          <ExportJsonFile Name="jiazdh.ExportJson" />
+          <Image Name="Line_pic_line.png" />
+          <Image Name="Object.png" />
+          <Image Name="slot_pic_fruit_1a.png" />
+        </Folder>
+        <Folder Name="widget">
+          <Project Name="Loading.csd" Type="Scene" />
+          <Project Name="MessageBox.csd" Type="Scene" />
+          <Project Name="RevivePoint.csd" Type="Node" />
+        </Folder>
+        <Project Name="DefaultStudioFile.csd" Type="Node" />
+        <Image Name="disk.png" />
+        <Image Name="file.png" />
+        <Image Name="folder.png" />
+        <Project Name="TestScene.csd" Type="Scene" />
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
