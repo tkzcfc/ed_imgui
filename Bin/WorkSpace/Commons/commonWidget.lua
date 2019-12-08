@@ -1,5 +1,5 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 16:09:26.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:52:00.
 local M = {}
 function M:loadNode()
     local _root = cc.Node:create()

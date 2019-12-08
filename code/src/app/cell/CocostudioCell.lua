@@ -100,9 +100,9 @@ function CocostudioCell:updateDrawBase()
 end
 
 function CocostudioCell:getLuaPath(path)
-    path = Tools:replaceString(path, ".lua", "")
-    path = Tools:replaceString(path, "/", ".")
-    path = Tools:replaceString(path, "\\", ".")
+    path = string.gsub(path, ".lua", "")
+    path = string.gsub(path, "/", ".")
+    path = string.gsub(path, "\\", ".")
     return path
 end
 
@@ -227,4 +227,5 @@ function CocostudioCell:getBox()
 end
 
 return CocostudioCell
+
 

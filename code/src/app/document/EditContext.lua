@@ -668,7 +668,7 @@ function EditContext:save()
 
 	data = self:publish()
 	local fullPath = _MyG.GlobalData:getPublishPath(self.fullPath)
-	boolValue = _MyG.Functions:writeScriptToFile(data, fullPath)
+	boolValue = _MyG.Functions:writePublishScriptToFile(data, fullPath)
 	if not boolValue then
 		logE("保存发布文件失败")
 	end

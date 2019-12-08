@@ -109,6 +109,7 @@ function LayerBGCell:publish()
 
     output.child_rect_data = rect_data
     output.child_line_data = line_data
+    output["workSpace"] = self.workSpace
 
     return output
 end

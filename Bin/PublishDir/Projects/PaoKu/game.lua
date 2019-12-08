@@ -1,5 +1,5 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 15:47:23.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:51:35.
 local M = {}
 function M:loadNode()
     local _root = cc.Node:create()
@@ -35,8 +35,9 @@ end
 
 M.bgCellData = {
     ["child_rect_data"] = {},
-    ["child_line_data"] = {},
     ["line_data"] = {},
+    ["child_line_data"] = {},
+    ["workSpace"] = {[2] = 1024, [1] = 4069},
     ["rect_data"] = {},
     ["referenceResources"] = {
         [1] = "Projects/PaoKu/Bg_game.png",

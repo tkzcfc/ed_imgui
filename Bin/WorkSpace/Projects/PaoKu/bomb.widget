@@ -1,8 +1,8 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 15:47:22.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:51:31.
 local M = {}
 function M:load(context)
-    context.uniqueID = 1
+    context.uniqueID = 2
 
     local Sprite_1 = require("app.cell.SpriteCell").new(context,
                                                         "Projects/PaoKu/bomb_red.png",

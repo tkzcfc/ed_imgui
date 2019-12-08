@@ -117,28 +117,19 @@ function MapEditContext:publish()
 
 	output = output .. "\nfunction M:loadBackgroundNode()\n"
 	if self.backgroundLayer then
-		output = output .. string.format("local %s = cc.Node:create()\n", G_ROOT_NODE_NAME)
-		output = output .. string.format("%s:setName(%q)\n", G_ROOT_NODE_NAME, G_ROOT_NODE_NAME)
-		output = output .. self:publishNode(self.backgroundLayer.renderNode)
-		output = output .. string.format("return %s\n", G_ROOT_NODE_NAME)
+		output = output .. self:publishLayer(self.backgroundLayer)
 	end
 	output = output .. "end\n"
 
 	output = output .. "\nfunction M:loadGameNode()\n"
 	if self.gameLayer then
-		output = output .. string.format("local %s = cc.Node:create()\n", G_ROOT_NODE_NAME)
-		output = output .. string.format("%s:setName(%q)\n", G_ROOT_NODE_NAME, G_ROOT_NODE_NAME)
-		output = output .. self:publishNode(self.gameLayer.renderNode)
-		output = output .. string.format("return %s\n", G_ROOT_NODE_NAME)
+		output = output .. self:publishLayer(self.gameLayer)
 	end
 	output = output .. "end\n"
 
 	output = output .. "\nfunction M:loadForegroundNode()\n"
 	if self.foregroundLayer then
-		output = output .. string.format("local %s = cc.Node:create()\n", G_ROOT_NODE_NAME)
-		output = output .. string.format("%s:setName(%q)\n", G_ROOT_NODE_NAME, G_ROOT_NODE_NAME)
-		output = output .. self:publishNode(self.foregroundLayer.renderNode)
-		output = output .. string.format("return %s\n", G_ROOT_NODE_NAME)
+		output = output .. self:publishLayer(self.foregroundLayer)
 	end
 	output = output .. "end\n"
 
@@ -155,6 +146,24 @@ function MapEditContext:publish()
 
 	output = output .. "\nreturn M\n"
 
+	return output
+end
+
+function MapEditContext:publishLayer(layer)
+	local output = ""
+
+	-- output = output .. string.format("local %s = cc.Node:create()\n", G_ROOT_NODE_NAME)
+	-- output = output .. string.format("%s:setName(%q)\n", G_ROOT_NODE_NAME, G_ROOT_NODE_NAME)
+	-- output = output .. self:publishNode(layer.renderNode)
+	-- output = output .. string.format("return %s\n", G_ROOT_NODE_NAME)
+
+	-- print_lua_value(layer.bgCellData.workSpace)
+	-- local workSpace = layer.bgCellData.workSpace
+
+	local src = string.format("_root:addChild(%s)", layer:getName())
+	local tar = string.format("%s:setContentSize(cc.size(%s.LuaFileInfo.bgCellData.workSpace[1], %s.LuaFileInfo.bgCellData.workSpace[2]))\n\treturn %s", layer:getName(), layer:getName(), layer:getName(), layer:getName())
+	output = output .. self:publishNode(layer.renderNode)
+	output = Tools:replaceString(output, src, tar)
 	return output
 end
 

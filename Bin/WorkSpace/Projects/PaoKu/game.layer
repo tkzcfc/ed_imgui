@@ -1,8 +1,8 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 15:47:23.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:51:34.
 local M = {}
 function M:load(context)
-    context.uniqueID = 2
+    context.uniqueID = 4
 
     local Sprite_1 = require("app.cell.SpriteCell").new(context,
                                                         "Projects/PaoKu/Bg_game.png",
@@ -40,7 +40,7 @@ M.bgCellData = {
     ["scale"] = 0.20000000298023,
     ["workSpaceRectColor"] = {["r"] = 0, ["b"] = 0, ["a"] = 1, ["g"] = 0},
     ["posy"] = 342.70138549805,
-    ["workSpace"] = {[1] = 4069, [2] = 1024},
+    ["workSpace"] = {[2] = 1024, [1] = 4069},
     ["rect_data"] = {},
     ["line_data"] = {}
 }

@@ -10,7 +10,7 @@ cc.exports.G_AnalyStudioResource = require("app.logic.AnalyStudioResource")
 
 cc.exports.G_GEN_COM_FILE_HEADER = function()
 	local fmt = [[
--- This file is generated automatically. Please do not change it
+-- This file is generated automatically.
 -- Generated automatically by ed_imgui on %s.
 
 ]]

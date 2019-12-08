@@ -103,7 +103,7 @@ _MyG.ShowLoading = function()
 end
 
 _MyG.HideLoading = function()
-    LoadingShowTag = true
+    LoadingShowTag = false
 end
 
 

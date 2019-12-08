@@ -36,10 +36,12 @@ function GlobalData:ctor()
 	self:addFileType("WIDGET", ".widget", ".lua")
 	self:addFileType("LAYER", ".layer", ".lua")
 
-	self.RootWritePath = lfs.currentdir() .. "/" ..self.WorkSpaceDirName.."/"
+	self.CurExePath = G_Helper.fmtPath(lfs.currentdir() .. "/")
+
+	self.RootWritePath = self.CurExePath ..self.WorkSpaceDirName.."/"
 	self.CommonResourcePath = self.RootWritePath..self.CommonResourceDirName.."/"
 	self.ProjectsPath = self.RootWritePath..self.ProjectsDirName.."/"
-	self.PublishProjectsPath = lfs.currentdir() .. "/"..self.PublishProjectsDirName.."/"
+	self.PublishProjectsPath = self.CurExePath..self.PublishProjectsDirName.."/"
 	self.CocosResourcePath = self.RootWritePath..self.CocosResourceDirName.."/"
 
 	self.RootWritePath = G_Helper.fmtPath(self.RootWritePath)

@@ -1,5 +1,5 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 16:11:12.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:51:37.
 local M = {}
 function M:loadNode()
     local _root = cc.Node:create()
@@ -94,7 +94,6 @@ end
 
 M.bgCellData = {
     ["child_rect_data"] = {},
-    ["child_line_data"] = {},
     ["line_data"] = {
         [1] = {
             ["points"] = {
@@ -116,6 +115,8 @@ M.bgCellData = {
             }
         }
     },
+    ["child_line_data"] = {},
+    ["workSpace"] = {[1] = 4096, [2] = 1024},
     ["rect_data"] = {
         [1] = {
             ["points"] = {

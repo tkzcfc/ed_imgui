@@ -145,24 +145,31 @@ end
 function Functions:fmtLuaScript(filepath)
 	local fullFilePath = FileUtilsInstance:fullPathForFilename(filepath)
 	local fullExePath
+
 	if G_MAC.IS_WINDOWS then
-		fullExePath = FileUtilsInstance:fullPathForFilename("lua-format/win32/lua-format.exe")
+		fullExePath = _MyG.GlobalData.CurExePath .. "res/lua-format/win32/lua-format.exe"
 	elseif G_MAC.IS_IOS then
-		fullExePath = FileUtilsInstance:fullPathForFilename("lua-format/darwin/lua-format")
+		fullExePath = _MyG.GlobalData.CurExePath .. "res/lua-format/darwin/lua-format"
+	else
+		return
+	end
+	fullExePath = FileUtilsInstance:fullPathForFilename(fullExePath)
+
+	if not FileUtilsInstance:isFileExist(fullExePath) then
+		logW("File '%s' does not exist", fullExePath)
+		return
 	end
 
-	if fullExePath then
-		local cmd = string.format("%s %q", fullExePath, fullFilePath)
-		local subfile = io.popen(cmd, "r")
-		if subfile then
-			local r = subfile:read("*a")
-			subfile:close()
-			if type(r) == "string" and r ~= "" then
-				logW(r)
-			end
-		else
-			logW("create " .. cmd .. "fail")
+	local cmd = string.format("%s %q", fullExePath, fullFilePath)
+	local subfile = io.popen(cmd, "r")
+	if subfile then
+		local r = subfile:read("*a")
+		subfile:close()
+		if type(r) == "string" and r ~= "" then
+			logW(r)
 		end
+	else
+		logW("Failed to execute command %q", cmd)
 	end
 end
 

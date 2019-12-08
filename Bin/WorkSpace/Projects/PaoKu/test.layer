@@ -1,8 +1,8 @@
--- This file is generated automatically. Please do not change it
--- Generated automatically by ed_imgui on 11/12/19 16:11:11.
+-- This file is generated automatically.
+-- Generated automatically by ed_imgui on 12/08/19 12:51:37.
 local M = {}
 function M:load(context)
-    context.uniqueID = 17
+    context.uniqueID = 23
 
     local CocostudioFile_1 = require("app.cell.CocostudioCell").new(context,
                                                                     "CocoStudioFile.lua",
@@ -75,7 +75,7 @@ M.bgCellData = {
     ["scale"] = 0.3999999165535,
     ["workSpaceRectColor"] = {["r"] = 0, ["b"] = 0, ["a"] = 1, ["g"] = 0},
     ["posy"] = 201.12506103516,
-    ["workSpace"] = {[2] = 1024, [1] = 4096},
+    ["workSpace"] = {[1] = 4096, [2] = 1024},
     ["rect_data"] = {
         [1] = {
             ["contentSize"] = {["y"] = 170.55163574219, ["x"] = 316.14501953125},
