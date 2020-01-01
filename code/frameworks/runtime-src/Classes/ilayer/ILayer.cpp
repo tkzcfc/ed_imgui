@@ -519,8 +519,14 @@ void ILayer::onExit()
 	//	g_MouseCursors[cursor_n] = NULL;
 	//}
 
+	ImGui::SetCurrentContext(m_context);
+
 	irender->ImGui_ImplOpenGL3_Shutdown();
 	CC_SAFE_DELETE(irender);
+
+	ImGui::DestroyContext(m_context);
+	m_context = NULL;
+
 	Layer::onExit();
 }
 
