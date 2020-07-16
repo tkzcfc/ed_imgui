@@ -1,0 +1,258 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-05 17:05:54
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-05-05 15:17:47
+-- @Description: 
+
+local CenterWindow = class("CenterWindow")
+
+local centerDocumentManager = _MyG.CenterDocumentManager
+
+function CenterWindow:ctor()
+
+	self.cache_isContainMouse = false
+	self.cache_ceontex_w = 0
+	self.cache_ceontex_h = 0
+
+	local render = ScissorLayer:create()
+	_MyG.MainScene.rootNode:addChild(render)
+
+	self.render = render
+    self.senderSize = cc.size(0, 0)
+
+    self.rootNode = cc.Node:create()
+    render:addChild(self.rootNode, 1)
+
+	self:initEventDispatcher()
+end
+
+function CenterWindow:onGUI()
+	if centerDocumentManager:count() > 0 then
+		self.render:setVisible(true)
+		self:updateRenderSize()
+		self:updateContainStatus()
+		centerDocumentManager:onGUI()
+	else
+		self.render:setVisible(false)
+	end
+end
+
+function CenterWindow:changeEventDispatcher(rootNode)
+	if rootNode.isTouchEnabled and rootNode:isTouchEnabled() then
+		rootNode:setTouchEnabled(false)
+		rootNode:setEventDispatcher(self.eventDispatcher)
+		rootNode:setTouchEnabled(true)
+	else
+		rootNode:setEventDispatcher(self.eventDispatcher)
+	end
+
+	local children = rootNode:getChildren()
+	if #children < 1 then
+		return
+	end
+
+	for k,v in pairs(children) do
+		self:changeEventDispatcher(v)
+	end
+end
+
+function CenterWindow:changeEventDispatcherSelf(rootNode)
+	if rootNode.isTouchEnabled and rootNode:isTouchEnabled() then
+		rootNode:setTouchEnabled(false)
+		rootNode:setEventDispatcher(self.eventDispatcher)
+		rootNode:setTouchEnabled(true)
+	else
+		rootNode:setEventDispatcher(self.eventDispatcher)
+	end
+end
+
+function CenterWindow:isContainMouse()
+	return self.cache_isContainMouse
+end
+
+function CenterWindow:checkMouseIsContain()
+    -- local pos = ImGui.GetIO().MousePos
+    -- pos = G_Helper.win_2_visible_pos(pos)
+    local pos = _MyG.MouseEventDispatcher:getCursorPos()
+    return Tools:isInRect(self.render, pos.x, pos.y)
+end
+
+
+function CenterWindow:updateRenderSize()
+	local edContext = _MyG.edContext
+    local style = ImGui.GetStyle()
+    local thickness = edContext:getSplitterThickness()
+    local framePaddingY = style.FramePadding.y
+
+    local pos = cc.p(edContext:getLeftPaneWidth(), edContext:getBottomPanelHeight())
+	local size = cc.size(edContext:getCenterPaneWidth(), edContext:getCenterPaneHeight())
+
+    pos.x = pos.x + thickness * 3 + framePaddingY
+    pos.y = pos.y + thickness * 2 + framePaddingY
+
+    size.width = size.width - thickness - framePaddingY
+    size.height = size.height - thickness - style.IndentSpacing
+
+    pos.x = G_Helper.win_2_visible_x(pos.x)
+    pos.y = G_Helper.win_2_visible_x(pos.y)
+    size.width = G_Helper.win_2_visible_x(size.width)
+    size.height = G_Helper.win_2_visible_x(size.height) - framePaddingY
+
+    self.senderSize = size
+
+	self.render:setPosition(pos)
+	self.render:setContentSize(size)
+
+	if math.abs(size.width - self.cache_ceontex_w) > 0.0001 or math.abs(size.height - self.cache_ceontex_h) > 0.0001 then
+		self.cache_ceontex_w = size.width
+		self.cache_ceontex_h = size.height
+		self:onContentSizeChange()
+	end
+end
+
+function CenterWindow:updateBGGrid()
+    if self.gridRender == nil then
+        self.gridRender = cc.Node:create()
+        self.render:addChild(self.gridRender, 0)
+
+        self.gridRender.cache_width = 0
+        self.gridRender.cache_height = 0
+    end
+
+    if self.gridRender.cache_width < self.senderSize.width or self.gridRender.cache_height < self.senderSize.height then
+        self.gridRender:removeAllChildren()
+
+        local gridtemplate = cc.Sprite:create("Res/grid.png")
+        local size = gridtemplate:getContentSize()
+        local panelSize = cc.size(self.senderSize.width, self.senderSize.height)
+        local scale = 2
+
+        size.width = size.width * scale
+        size.height = size.height * scale
+
+        local xcount = math.floor(panelSize.width / size.width) + 1
+        local ycount = math.floor(panelSize.height / size.height) + 1
+
+        for i=0, ycount do
+            for j = 0, xcount do
+                local grid = cc.Sprite:create("Res/grid.png")
+                grid:setPosition(j * size.width, i * size.height)
+                grid:setScale(scale)
+                self.gridRender:addChild(grid)
+            end
+        end
+
+        self.gridRender.cache_width = xcount * size.width
+        self.gridRender.cache_height = ycount * size.height
+    end
+end
+
+function CenterWindow:addChild(node, z)
+    self.rootNode:addChild(node, z or 0)
+end
+
+function CenterWindow:onContentSizeChange()
+	self.rootNode:setPosition(self.cache_ceontex_w * 0.5, self.cache_ceontex_h * 0.5)
+	self:updateBGGrid()
+end
+
+function CenterWindow:updateContainStatus()
+    self.cache_isContainMouse_valid = true
+
+    if not ImGui.IsRootWindowOrAnyChildHovered() then
+        self.cache_isContainMouse =false
+        return false
+    end
+
+    local style = ImGui.GetStyle()
+    local framePaddingY = style.FramePadding.y
+    local canvas_pos = ImGui.GetCursorScreenPos()
+    local canvas_size = ImGui.GetContentRegionAvail()
+    local mousePos = ImGui.GetIO().MousePos
+    local mouse_pos_in_canvas = cc.p(mousePos.x - canvas_pos.x, mousePos.y - canvas_pos.y)
+
+    if mouse_pos_in_canvas.x >= 0 and mouse_pos_in_canvas.y >= framePaddingY and mouse_pos_in_canvas.x <= canvas_size.x and mouse_pos_in_canvas.y <= canvas_size.y then
+        self.cache_isContainMouse = true
+    else
+        self.cache_isContainMouse = false
+    end
+    self.cache_mouse_pos_in_canvas = mouse_pos_in_canvas
+end
+
+
+function CenterWindow:initEventDispatcher()
+    self.cache_MouseDownStatus = {}
+
+    G_SysEventEmitter:on("onMouseMove", function(event)
+        if self.cache_MouseDownStatus[event:getMouseButton()] or self:isContainMouse() then
+            self.eventDispatcher:dispatchEvent(event)
+            -- print("move", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
+        end
+    end)
+
+    G_SysEventEmitter:on("onMouseScroll", function(event)
+        if self:isContainMouse() then
+            self.eventDispatcher:dispatchEvent(event)
+            -- print("scroll", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
+        end
+    end)
+
+    G_SysEventEmitter:on("onMouseDown", function(event)
+        if self:isContainMouse() then
+            self.cache_MouseDownStatus[event:getMouseButton()] = true
+            self.eventDispatcher:dispatchEvent(event)
+            -- print("down", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
+        end
+    end)
+
+    G_SysEventEmitter:on("onMouseUp", function(event)
+        local valid = self.cache_MouseDownStatus[event:getMouseButton()] or self:isContainMouse()
+        self.cache_MouseDownStatus[event:getMouseButton()] = false
+        if valid then
+            self.eventDispatcher:dispatchEvent(event)
+        end
+    end)
+
+    G_SysEventEmitter:on("onTouchBegan", function(event)
+        if self:isContainMouse() then
+            self.eventDispatcher:dispatchEvent(event)
+        end
+    end)
+
+    G_SysEventEmitter:on("onTouchMoved", function(event)
+        self.eventDispatcher:dispatchEvent(event)
+    end)
+
+
+    G_SysEventEmitter:on("onTouchEnded", function(event)
+        self.eventDispatcher:dispatchEvent(event)
+    end)
+
+    G_SysEventEmitter:on("onTouchCancelled", function(event)
+        self.eventDispatcher:dispatchEvent(event)
+    end)
+
+    self.eventDispatcher = cc.EventDispatcher:new()
+    self.eventDispatcher:setEnabled(true)
+    self.eventDispatcher:retain()
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+local function onGUI()
+	_MyG.CenterWindow:onGUI()
+end
+
+_MyG.CenterWindow = CenterWindow.new()
+_MyG.edContext:registerLuaHandle("onGUI_Center", onGUI)

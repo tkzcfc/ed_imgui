@@ -1,0 +1,56 @@
+{
+    "type": "map",
+    "data": {
+        "children": [
+            {
+                "type": "Layer",
+                "data": {
+                    "position": {
+                        "y": 0,
+                        "x": 0
+                    },
+                    "assetFile": "Projects/test/l1.asset",
+                    "contentSize": {
+                        "height": 0,
+                        "width": 0
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "gameLayer"
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderScale": 0.20000000298023,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [],
+                    "show_rect": true,
+                    "rect_data": []
+                },
+                "PluginRefResources": [
+                    "Projects/test/dpsglogo.png",
+                    "Projects/test/Loading.png",
+                    "Projects/test/DPSG_GradualChangeText.png"
+                ],
+                "PluginMapLayer": {
+                    "foregroundAssets": [
+                        "Projects/test/l1.asset",
+                        "Projects/test/l1.asset"
+                    ],
+                    "backgroundAssets": [
+                        "Projects/test/l1.asset",
+                        "Projects/test/defaultLayer.asset"
+                    ],
+                    "gameLayerAsset": "Projects/test/l1.asset"
+                }
+            },
+            "_renderPos": {
+                "y": -177.66510009766,
+                "x": -570.88403320313
+            }
+        }
+    }
+}

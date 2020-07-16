@@ -15,6 +15,8 @@ CRect::CRect()
 	
 	setColor(IM_COL32(255, 0, 0, 255));
 	setVisible(true);
+
+	m_alpha = 1.0f;
 }
 
 void CRect::setAnchorPoint(float x, float y)
@@ -192,10 +194,18 @@ void CRect::debugDraw(DrawNode* pDrawNode)
 
 	static int indexBuffer[][2] = { {0, 1},{ 1, 2 },{ 2, 3 },{ 3, 0 } };
 
+
+	Color4F color = m_color;
+	color.a *= m_alpha;
 	for (auto i = 0U; i < 4; ++i)
 	{
-		pDrawNode->drawLine(getVertexByIndex(indexBuffer[i][0]), getVertexByIndex(indexBuffer[i][1]), m_color);
+		pDrawNode->drawLine(getVertexByIndex(indexBuffer[i][0]), getVertexByIndex(indexBuffer[i][1]), color);
 	}
+}
+
+void CRect::setAlpha(float alpha)
+{
+	m_alpha = alpha;
 }
 
 void CRect::setVisible(bool value)

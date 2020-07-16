@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>frames</key>
+		<dict>
+			<key>test/king/loading_01.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,160},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_02.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,304},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_03.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,448},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_04.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,592},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_05.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,736},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_06.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,880},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_07.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,160},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_08.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{160,0},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_09.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,304},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_10.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,448},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_11.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,592},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>test/king/loading_12.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,736},{144,144}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{144,144}</string>
+			</dict>
+			<key>disk.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{144,880},{137,145}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{137,145}</string>
+			</dict>
+			<key>file.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,0},{160,160}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{160,160}</string>
+			</dict>
+			<key>folder.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{288,144},{136,142}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{136,142}</string>
+			</dict>
+		</dict>
+		<key>metadata</key>
+		<dict>
+			<key>format</key>
+			<integer>2</integer>
+			<key>textureFileName</key>
+			<string>plist_test.png</string>
+			<key>realTextureFileName</key>
+			<string>plist_test.png</string>
+			<key>size</key>
+			<string>{512,1024}</string>
+		</dict>
+		<key>texture</key>
+		<dict>
+			<key>width</key>
+			<integer>512</integer>
+			<key>height</key>
+			<integer>1024</integer>
+		</dict>
+	</dict>
+</plist>

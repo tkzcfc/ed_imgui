@@ -44,6 +44,14 @@ public:
 
 	bool isEngulfAllTouchs();
 
+	void setDrawDefaultWindow(bool draw);
+
+	void setDefaultWindowFlags(ImGuiWindowFlags flags);
+
+	void setGUIBeginCall(const std::function<void()>& call);
+
+	void setGUIEndCall(const std::function<void()>& call);
+
 protected:
 
 	virtual void update(float delta)override;
@@ -84,4 +92,12 @@ private:
 	bool m_drawFinish = false;
 
 	bool m_engulfAllTouchs = false;
+
+	bool m_drawDefaultWindow = false;
+
+	ImGuiWindowFlags m_defaultWindowFlags = 0;
+
+	std::function<void()> m_beginCall = nullptr;
+	std::function<void()> m_endCall = nullptr;
+
 };

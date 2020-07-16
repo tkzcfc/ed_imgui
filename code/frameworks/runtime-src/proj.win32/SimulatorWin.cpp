@@ -16,13 +16,13 @@
 #include <objidl.h>
 #include <shlguid.h>
 #include <shellapi.h>
-#include <Winuser.h>
 
 #include "SimulatorWin.h"
 
 #include "glfw3.h"
 #include "glfw3native.h"
 
+#include "CCLuaEngine.h"
 #include "AppEvent.h"
 #include "AppLang.h"
 #include "runtime/ConfigParser.h"
@@ -31,30 +31,23 @@
 #include "platform/win32/PlayerWin.h"
 #include "platform/win32/PlayerMenuServiceWin.h"
 
-#include "resource.h"
+// define 1 to open console ui and setup windows system menu, 0 to disable
+#include "ide-support/CodeIDESupport.h"
+#if (CC_CODE_IDE_DEBUG_SUPPORT > 0)
+#define SIMULATOR_WITH_CONSOLE_AND_MENU 1
+#else
+#define SIMULATOR_WITH_CONSOLE_AND_MENU 0
+#endif
 
 USING_NS_CC;
 
 static WNDPROC g_oldWindowProc = NULL;
 INT_PTR CALLBACK AboutDialogCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    LOGFONT lf;
-    HFONT hFont;
-
     UNREFERENCED_PARAMETER(lParam);
     switch (message)
     {
     case WM_INITDIALOG:
-        ZeroMemory(&lf, sizeof(LOGFONT));
-        lf.lfHeight = 24;
-        lf.lfWeight = 200;
-        _tcscpy(lf.lfFaceName, _T("Arial"));
-
-        hFont = CreateFontIndirect(&lf);
-        if ((HFONT)0 != hFont)
-        {
-            SendMessage(GetDlgItem(hDlg, IDC_ABOUT_TITLE), WM_SETFONT, (WPARAM)hFont, (LPARAM)TRUE);
-        }
         return (INT_PTR)TRUE;
 
     case WM_COMMAND:
@@ -70,9 +63,9 @@ INT_PTR CALLBACK AboutDialogCallback(HWND hDlg, UINT message, WPARAM wParam, LPA
 void onHelpAbout()
 {
     DialogBox(GetModuleHandle(NULL),
-              MAKEINTRESOURCE(IDD_DIALOG_ABOUT),
-              Director::getInstance()->getOpenGLView()->getWin32Window(),
-              AboutDialogCallback);
+        MAKEINTRESOURCE(IDD_DIALOG_ABOUT),
+        Director::getInstance()->getOpenGLView()->getWin32Window(),
+        AboutDialogCallback);
 }
 
 void shutDownApp()
@@ -84,7 +77,7 @@ void shutDownApp()
 
 std::string getCurAppPath(void)
 {
-    TCHAR szAppDir[MAX_PATH] = {0};
+    TCHAR szAppDir[MAX_PATH] = { 0 };
     if (!GetModuleFileName(NULL, szAppDir, MAX_PATH))
         return "";
     int nEnd = 0;
@@ -100,18 +93,9 @@ std::string getCurAppPath(void)
     std::string strPath = chRtn;
     delete[] chRtn;
     chRtn = NULL;
-    char fuldir[MAX_PATH] = {0};
+    char fuldir[MAX_PATH] = { 0 };
     _fullpath(fuldir, strPath.c_str(), MAX_PATH);
     return fuldir;
-}
-
-static bool stringEndWith(const std::string str, const std::string needle)
-{
-    if (str.length() >= needle.length())
-    {
-        return (0 == str.compare(str.length() - needle.length(), needle.length(), needle));
-    }
-    return false;
 }
 
 static void initGLContextAttrs()
@@ -267,6 +251,7 @@ int SimulatorWin::run()
     _app = new AppDelegate();
     RuntimeEngine::getInstance()->setProjectConfig(_project);
 
+#if (SIMULATOR_WITH_CONSOLE_AND_MENU > 0)
     // create console window
     if (_project.isShowConsole())
     {
@@ -286,6 +271,7 @@ int SimulatorWin::run()
             }
         }
     }
+#endif
 
     // log file
     if (_project.isWriteDebugLogToFile())
@@ -332,7 +318,7 @@ int SimulatorWin::run()
     }
     CCLOG("SCREEN DPI = %d, SCREEN SCALE = %0.2f", dpi, screenScale);
 
-    // check scale
+    // create opengl view
     Size frameSize = _project.getFrameSize();
     float frameScale = 1.0f;
     if (_project.isRetinaDisplay())
@@ -345,40 +331,11 @@ int SimulatorWin::run()
         frameScale = screenScale;
     }
 
-    // check screen workarea
-    RECT workareaSize;
-    if (SystemParametersInfo(SPI_GETWORKAREA, NULL, &workareaSize, NULL))
-    {
-        float workareaWidth = fabsf(workareaSize.right - workareaSize.left);
-        float workareaHeight = fabsf(workareaSize.bottom - workareaSize.top);
-        float frameBorderCX = GetSystemMetrics(SM_CXSIZEFRAME);
-        float frameBorderCY = GetSystemMetrics(SM_CYSIZEFRAME);
-        workareaWidth -= frameBorderCX * 2;
-        workareaHeight -= (frameBorderCY * 2 + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYMENU));
-        CCLOG("WORKAREA WIDTH %0.2f, HEIGHT %0.2f", workareaWidth, workareaHeight);
-        while (true && frameScale > 0.25f)
-        {
-            if (frameSize.width * frameScale > workareaWidth || frameSize.height * frameScale > workareaHeight)
-            {
-                frameScale = frameScale - 0.25f;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if (frameScale < 0.25f) frameScale = 0.25f;
-    }
-    _project.setFrameScale(frameScale);
-    CCLOG("FRAME SCALE = %0.2f", frameScale);
-
-    // create opengl view
     const Rect frameRect = Rect(0, 0, frameSize.width, frameSize.height);
     ConfigParser::getInstance()->setInitViewSize(frameSize);
     const bool isResize = _project.isResizeWindow();
     std::stringstream title;
-    title << "Cocos Simulator (" << _project.getFrameScale() * 100 << "%)";
+    title << "Cocos Simulator - " << ConfigParser::getInstance()->getInitViewName();
     initGLContextAttrs();
     auto glview = GLViewImpl::createWithRect(title.str(), frameRect, frameScale);
     _hwnd = glview->getWin32Window();
@@ -387,9 +344,6 @@ int SimulatorWin::run()
     //SendMessage(_hwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
     //SendMessage(_hwnd, WM_SETICON, ICON_SMALL, (LPARAM)icon);
     //FreeResource(icon);
-
-    // path for looking Lang file, Studio Default images
-    FileUtils::getInstance()->addSearchPath(getApplicationPath().c_str());
 
     auto director = Director::getInstance();
     director->setOpenGLView(glview);
@@ -406,16 +360,17 @@ int SimulatorWin::run()
     {
         RECT rect;
         GetWindowRect(_hwnd, &rect);
-        if (pos.x < 0)
-            pos.x = 0;
-        if (pos.y < 0)
-            pos.y = 0;
         MoveWindow(_hwnd, pos.x, pos.y, rect.right - rect.left, rect.bottom - rect.top, FALSE);
     }
 
+    // path for looking Lang file, Studio Default images
+    FileUtils::getInstance()->addSearchPath(getApplicationPath().c_str());
+
+#if SIMULATOR_WITH_CONSOLE_AND_MENU > 0
     // init player services
     setupUI();
     DrawMenuBar(_hwnd);
+#endif
 
     // prepare
     FileUtils::getInstance()->setPopupNotify(false);
@@ -424,13 +379,8 @@ int SimulatorWin::run()
 
     g_oldWindowProc = (WNDPROC)SetWindowLong(_hwnd, GWL_WNDPROC, (LONG)SimulatorWin::windowProc);
 
-    // update window title
-    updateWindowTitle();
-
     // startup message loop
-    int ret = app->run();
-    CC_SAFE_DELETE(_app);
-    return ret;
+    return app->run();
 }
 
 // services
@@ -441,9 +391,6 @@ void SimulatorWin::setupUI()
 
     // FILE
     menuBar->addItem("FILE_MENU", tr("File"));
-    menuBar->addItem("OPEN_FILE_MENU", tr("Open File") + "...", "FILE_MENU");
-    menuBar->addItem("OPEN_PROJECT_MENU", tr("Open Project") + "...", "FILE_MENU");
-    menuBar->addItem("FILE_MENU_SEP1", "-", "FILE_MENU");
     menuBar->addItem("EXIT_MENU", tr("Exit"), "FILE_MENU");
 
     // VIEW
@@ -463,10 +410,6 @@ void SimulatorWin::setupUI()
         }
     }
 
-    // About
-    menuBar->addItem("HELP_MENU", tr("Help"));
-    menuBar->addItem("ABOUT_MENUITEM", tr("About"), "HELP_MENU");
-
     menuBar->addItem("DIRECTION_MENU_SEP", "-", "VIEW_MENU");
     menuBar->addItem("DIRECTION_PORTRAIT_MENU", tr("Portrait"), "VIEW_MENU")
         ->setChecked(_project.isPortraitFrame());
@@ -475,33 +418,12 @@ void SimulatorWin::setupUI()
 
     menuBar->addItem("VIEW_SCALE_MENU_SEP", "-", "VIEW_MENU");
     std::vector<player::PlayerMenuItem*> scaleMenuVector;
-    auto scale200Menu = menuBar->addItem("VIEW_SCALE_MENU_200", tr("Zoom Out").append(" (200%)"), "VIEW_MENU");
-    auto scale175Menu = menuBar->addItem("VIEW_SCALE_MENU_175", tr("Zoom Out").append(" (175%)"), "VIEW_MENU");
-    auto scale150Menu = menuBar->addItem("VIEW_SCALE_MENU_150", tr("Zoom Out").append(" (150%)"), "VIEW_MENU");
-    auto scale125Menu = menuBar->addItem("VIEW_SCALE_MENU_125", tr("Zoom Out").append(" (125%)"), "VIEW_MENU");
     auto scale100Menu = menuBar->addItem("VIEW_SCALE_MENU_100", tr("Zoom Out").append(" (100%)"), "VIEW_MENU");
     auto scale75Menu = menuBar->addItem("VIEW_SCALE_MENU_75", tr("Zoom Out").append(" (75%)"), "VIEW_MENU");
     auto scale50Menu = menuBar->addItem("VIEW_SCALE_MENU_50", tr("Zoom Out").append(" (50%)"), "VIEW_MENU");
     auto scale25Menu = menuBar->addItem("VIEW_SCALE_MENU_25", tr("Zoom Out").append(" (25%)"), "VIEW_MENU");
     int frameScale = int(_project.getFrameScale() * 100);
-
-    if (frameScale == 200)
-    {
-        scale200Menu->setChecked(true);
-    }
-    else if (frameScale == 175)
-    {
-        scale175Menu->setChecked(true);
-    }
-    else if (frameScale == 150)
-    {
-        scale150Menu->setChecked(true);
-    }
-    else if (frameScale == 125)
-    {
-        scale125Menu->setChecked(true);
-    }
-    else if (frameScale == 100)
+    if (frameScale == 100)
     {
         scale100Menu->setChecked(true);
     }
@@ -522,14 +444,14 @@ void SimulatorWin::setupUI()
         scale100Menu->setChecked(true);
     }
 
-    scaleMenuVector.push_back(scale200Menu);
-    scaleMenuVector.push_back(scale175Menu);
-    scaleMenuVector.push_back(scale150Menu);
-    scaleMenuVector.push_back(scale125Menu);
     scaleMenuVector.push_back(scale100Menu);
     scaleMenuVector.push_back(scale75Menu);
     scaleMenuVector.push_back(scale50Menu);
     scaleMenuVector.push_back(scale25Menu);
+
+    // About
+    menuBar->addItem("HELP_MENU", tr("Help"));
+    menuBar->addItem("ABOUT_MENUITEM", tr("About"), "HELP_MENU");
 
     menuBar->addItem("REFRESH_MENU_SEP", "-", "VIEW_MENU");
     menuBar->addItem("REFRESH_MENU", tr("Refresh"), "VIEW_MENU");
@@ -573,7 +495,8 @@ void SimulatorWin::setupUI()
                             float scale = atof(tmp.c_str()) / 100.0f;
                             project.setFrameScale(scale);
 
-                            _instance->setZoom(scale);
+                            auto glview = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView());
+                            glview->setFrameZoomFactor(scale);
 
                             // update scale menu state
                             for (auto &it : scaleMenuVector)
@@ -581,9 +504,6 @@ void SimulatorWin::setupUI()
                                 it->setChecked(false);
                             }
                             menuItem->setChecked(true);
-
-                            // update window title
-                            _instance->updateWindowTitle();
 
                             // update window size
                             RECT rect;
@@ -618,29 +538,11 @@ void SimulatorWin::setupUI()
                             project.changeFrameOrientationToLandscape();
                             _instance->openProjectWithProjectConfig(project);
                         }
-                        else if (data == "OPEN_FILE_MENU")
-                        {
-                            auto fileDialog = player::PlayerProtocol::getInstance()->getFileDialogService();
-                            stringstream extensions;
-                            extensions << "All Support File|config.json,*.csd,*csd;"
-                                << "Project Config File|config.json;"
-                                << "Cocos Studio File|*.csd;"
-                                << "Cocos Studio Binary File|*.csb";
-                            auto entry = fileDialog->openFile(tr("Choose File"), "", extensions.str());
-
-                            _instance->onOpenFile(entry);
-                        }
-                        else if (data == "OPEN_PROJECT_MENU")
-                        {
-                            auto fileDialog = player::PlayerProtocol::getInstance()->getFileDialogService();
-                            auto path = fileDialog->openDirectory(tr("Choose Folder"), "");
-
-                            _instance->onOpenProjectFolder(path);
-                        }
                         else if (data == "ABOUT_MENUITEM")
                         {
                             onHelpAbout();
                         }
+
                     }
                 }
             }
@@ -677,15 +579,6 @@ void SimulatorWin::setZoom(float frameScale)
 {
     _project.setFrameScale(frameScale);
     cocos2d::Director::getInstance()->getOpenGLView()->setFrameZoomFactor(frameScale);
-}
-
-void SimulatorWin::updateWindowTitle()
-{
-    std::stringstream title;
-    title << "Cocos " << tr("Simulator") << " (" << _project.getFrameScale() * 100 << "%)";
-    std::u16string u16title;
-    cocos2d::StringUtils::UTF8ToUTF16(title.str(), u16title);
-    SetWindowText(_hwnd, (LPCTSTR)u16title.c_str());
 }
 
 // debug log
@@ -725,35 +618,11 @@ void SimulatorWin::parseCocosProjectConfig(ProjectConfig &config)
     }
 
     // set project directory as search root path
-    string solutionDir = tmpConfig.getProjectDir();
-    if (!solutionDir.empty())
-    {
-        for (int i = 0; i < solutionDir.size(); ++i)
-        {
-            if (solutionDir[i] == '\\')
-            {
-                solutionDir[i] = '/';
-            }
-        }
-        int nPos = -1;
-        if (solutionDir[solutionDir.length() - 1] == '/')
-            nPos = solutionDir.rfind('/', solutionDir.length() - 2);
-        else
-            nPos = solutionDir.rfind('/');
-        if (nPos > 0)
-            solutionDir = solutionDir.substr(0, nPos + 1);
-        FileUtils::getInstance()->setDefaultResourceRootPath(solutionDir);
-        FileUtils::getInstance()->addSearchPath(solutionDir);
-        FileUtils::getInstance()->addSearchPath(tmpConfig.getProjectDir().c_str());
-    }
-    else
-    {
-        FileUtils::getInstance()->setDefaultResourceRootPath(tmpConfig.getProjectDir().c_str());
-    }
+    FileUtils::getInstance()->setDefaultResourceRootPath(tmpConfig.getProjectDir());
 
     // parse config.json
     auto parser = ConfigParser::getInstance();
-    auto configPath = solutionDir.append(CONFIG_FILE);
+    auto configPath = tmpConfig.getProjectDir().append(CONFIG_FILE);
     parser->readConfig(configPath);
 
     // set information
@@ -902,23 +771,25 @@ LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     }
     case WM_KEYDOWN:
     {
+#if (SIMULATOR_WITH_CONSOLE_AND_MENU > 0)
         if (wParam == VK_F5)
         {
             _instance->relaunch();
         }
+#endif
         break;
     }
 
     case WM_COPYDATA:
-    {
-        PCOPYDATASTRUCT pMyCDS = (PCOPYDATASTRUCT)lParam;
-        if (pMyCDS->dwData == 1)
         {
-            const char *szBuf = (const char*)(pMyCDS->lpData);
-            SimulatorWin::getInstance()->writeDebugLog(szBuf);
-            break;
+            PCOPYDATASTRUCT pMyCDS = (PCOPYDATASTRUCT) lParam;
+            if (pMyCDS->dwData == 1)
+            {
+                const char *szBuf = (const char*)(pMyCDS->lpData);
+                SimulatorWin::getInstance()->writeDebugLog(szBuf);
+                break;
+            }
         }
-    }
 
     case WM_DESTROY:
     {
@@ -945,7 +816,11 @@ LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             CC_SAFE_FREE(utf8);
             DragFinish(hDrop);
 
-            _instance->onDrop(firstFile);
+            // broadcast drop event
+            AppEvent forwardEvent("APP.EVENT.DROP", APP_EVENT_DROP);
+            forwardEvent.setDataString(firstFile);
+
+            Director::getInstance()->getEventDispatcher()->dispatchEvent(&forwardEvent);
         }
     }   // WM_DROPFILES
 
@@ -953,134 +828,3 @@ LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     return g_oldWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-void SimulatorWin::onOpenFile(const std::string &filePath)
-{
-    string entry = filePath;
-    if (entry.empty()) return;
-
-    if (stringEndWith(entry, "config.json") || stringEndWith(entry, ".csb") || stringEndWith(entry, ".csd"))
-    {
-        replaceAll(entry, "\\", "/");
-        size_t p = entry.find_last_of("/");
-        if (p != entry.npos)
-        {
-            string workdir = entry.substr(0, p);
-            _project.setProjectDir(workdir);
-        }
-
-        _project.setScriptFile(entry);
-        if (stringEndWith(entry, CONFIG_FILE))
-        {
-            ConfigParser::getInstance()->readConfig(entry);
-            _project.setScriptFile(ConfigParser::getInstance()->getEntryFile());
-        }
-        openProjectWithProjectConfig(_project);
-    }
-    else
-    {
-        auto title = tr("Open File") + tr("Error");
-        auto msg = tr("Only support") + " config.json;*.csb;*.csd";
-        auto msgBox = player::PlayerProtocol::getInstance()->getMessageBoxService();
-        msgBox->showMessageBox(title, msg);
-    }
-}
-
-/*
-1. find @folderPath/config.json
-2. get project name from file: @folderPath/folderName.ccs
-3. find @folderPath/cocosstudio/MainScene.csd
-4. find @folderPath/cocosstudio/MainScene.csb
-*/
-void SimulatorWin::onOpenProjectFolder(const std::string &folderPath)
-{
-    string path = folderPath;
-    if (!path.empty())
-    {
-        replaceAll(path, "\\", "/");
-
-        auto fileUtils = FileUtils::getInstance();
-        bool foundProjectFile = false;
-        // 1. check config.json
-        auto configPath = path + "/" + CONFIG_FILE;
-        if (fileUtils->isFileExist(configPath))
-        {
-            ConfigParser::getInstance()->readConfig(configPath);
-            _project.setProjectDir(path);
-            _project.setScriptFile(ConfigParser::getInstance()->getEntryFile());
-            foundProjectFile = true;
-        }
-        // check ccs project
-        else
-        {
-            // 2.
-            if (path.at(path.size() - 1) == '/') path.erase(path.size() - 1);
-            ssize_t pos = path.find_last_of('/');
-            if (pos != std::string::npos)
-            {
-                auto folderName = path.substr(path.find_last_of('/'), path.size());
-                auto ccsFilePath = path + folderName + ".ccs";
-                if (fileUtils->isFileExist(ccsFilePath))
-                {
-                    auto fileContent = fileUtils->getStringFromFile(ccsFilePath);
-
-                    string matchString("<Project Name=\"");
-                    pos = fileContent.find(matchString);
-                    // get project file name
-                    if (pos != std::string::npos)
-                    {
-                        fileContent = fileContent.substr(pos + matchString.size(), fileContent.size());
-                        ssize_t posEnd = fileContent.find_first_of('"');
-                        auto projectFileName = path + "/cocosstudio/" + fileContent.substr(0, posEnd);
-                        _project.setProjectDir(path);
-                        _project.setScriptFile(projectFileName);
-                        foundProjectFile = true;
-                    }
-                }
-            }
-
-            if (!foundProjectFile)
-            {
-                auto csdFilePath = path + "/cocosstudio/MainScene.csd";
-                auto csbFilePath = path + "/cocosstudio/MainScene.csb";
-                // 3.
-                if (fileUtils->isFileExist(csdFilePath))
-                {
-                    _project.setProjectDir(path);
-                    _project.setScriptFile(csdFilePath);
-                    foundProjectFile = true;
-                }
-                // 4.
-                else if (fileUtils->isFileExist(csbFilePath))
-                {
-                    _project.setProjectDir(path);
-                    _project.setScriptFile(csbFilePath);
-                    foundProjectFile = true;
-                }
-            }
-        }
-
-        if (foundProjectFile)
-        {
-            openProjectWithProjectConfig(_project);
-        }
-        else
-        {
-            auto title = tr("Open Project") + tr("Error");
-            auto msgBox = player::PlayerProtocol::getInstance()->getMessageBoxService();
-            msgBox->showMessageBox(title, tr("Can not find project"));
-        }
-    }
-}
-
-void SimulatorWin::onDrop(const std::string &path)
-{
-    auto fileUtils = FileUtils::getInstance();
-    if (fileUtils->isDirectoryExist(path))
-    {
-        onOpenProjectFolder(path);
-    }
-    else if (fileUtils->isFileExist(path))
-    {
-        onOpenFile(path);
-    }
-}

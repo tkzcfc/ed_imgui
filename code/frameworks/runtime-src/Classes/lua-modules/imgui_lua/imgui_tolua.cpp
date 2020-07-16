@@ -1,6 +1,6 @@
 /*
 ** Lua binding: main
-** Generated automatically by tolua++-1.0.92 on Tue Oct  8 18:07:40 2019.
+** Generated automatically by tolua++-1.0.92 on Fri May  8 21:45:06 2020.
 */
 
 #ifndef __cplusplus
@@ -8610,6 +8610,37 @@ tolua_lerror:
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* function: ImGui::ImageButton */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_ImageButton00
+static int tolua_main_ImGui_ImageButton00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isuserdata(tolua_S,1,0,&tolua_err) ||
+     (tolua_isvaluenil(tolua_S,2,&tolua_err) || !tolua_ext_check_is_table(tolua_S,2,"ImVec2",0,&tolua_err)) ||
+     !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  void* user_texture_id = ((void*)  tolua_touserdata(tolua_S,1,0));
+  ImVec2 size = (  tolua_ext_luaval_to_imvec2_value(tolua_S,2,0));
+  {
+   bool tolua_ret = (bool)  ImGui::ImageButton(user_texture_id,size);
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'ImageButton'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* function: ImGui::Checkbox */
 #ifndef TOLUA_DISABLE_tolua_main_ImGui_Checkbox00
 static int tolua_main_ImGui_Checkbox00(lua_State* tolua_S)
@@ -9941,6 +9972,167 @@ static int tolua_main_ImGui_GetContentRegionAvailWidth00(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
  tolua_lerror:
  tolua_error(tolua_S,"#ferror in function 'GetContentRegionAvailWidth'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::IsAnyWindowFocused */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_IsAnyWindowFocused00
+static int tolua_main_ImGui_IsAnyWindowFocused00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   bool tolua_ret = (bool)  ImGui::IsAnyWindowFocused();
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'IsAnyWindowFocused'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::IsAnyWindowHovered */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_IsAnyWindowHovered00
+static int tolua_main_ImGui_IsAnyWindowHovered00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   bool tolua_ret = (bool)  ImGui::IsAnyWindowHovered();
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'IsAnyWindowHovered'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::IsRootWindowFocused */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_IsRootWindowFocused00
+static int tolua_main_ImGui_IsRootWindowFocused00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   bool tolua_ret = (bool)  ImGui::IsRootWindowFocused();
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'IsRootWindowFocused'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::IsRootWindowOrAnyChildFocused */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_IsRootWindowOrAnyChildFocused00
+static int tolua_main_ImGui_IsRootWindowOrAnyChildFocused00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   bool tolua_ret = (bool)  ImGui::IsRootWindowOrAnyChildFocused();
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'IsRootWindowOrAnyChildFocused'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::IsRootWindowOrAnyChildHovered */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_IsRootWindowOrAnyChildHovered00
+static int tolua_main_ImGui_IsRootWindowOrAnyChildHovered00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   bool tolua_ret = (bool)  ImGui::IsRootWindowOrAnyChildHovered();
+   tolua_pushboolean(tolua_S,(bool)tolua_ret);
+  }
+ }
+ return 1;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'IsRootWindowOrAnyChildHovered'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* function: ImGui::AlignFirstTextHeightToWidgets */
+#ifndef TOLUA_DISABLE_tolua_main_ImGui_AlignFirstTextHeightToWidgets00
+static int tolua_main_ImGui_AlignFirstTextHeightToWidgets00(lua_State* tolua_S)
+{
+#if COCOS2D_DEBUG >= 1
+ tolua_Error tolua_err;
+ if (
+     !tolua_isnoobj(tolua_S,1,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  {
+   ImGui::AlignFirstTextHeightToWidgets();
+  }
+ }
+ return 0;
+#if COCOS2D_DEBUG >= 1
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'AlignFirstTextHeightToWidgets'.",&tolua_err);
  return 0;
 #endif
 }
@@ -13255,6 +13447,7 @@ TOLUA_API int tolua_main_open (lua_State* tolua_S)
    tolua_function(tolua_S,"Image",tolua_main_ImGui_Image00);
    tolua_function(tolua_S,"Image",tolua_main_ImGui_Image01);
    tolua_function(tolua_S,"Image",tolua_main_ImGui_Image02);
+   tolua_function(tolua_S,"ImageButton",tolua_main_ImGui_ImageButton00);
    tolua_function(tolua_S,"Checkbox",tolua_main_ImGui_Checkbox00);
    tolua_function(tolua_S,"CheckboxFlags",tolua_main_ImGui_CheckboxFlags00);
    tolua_function(tolua_S,"RadioButton",tolua_main_ImGui_RadioButton00);
@@ -13301,6 +13494,12 @@ TOLUA_API int tolua_main_open (lua_State* tolua_S)
    tolua_function(tolua_S,"CaptureKeyboardFromApp",tolua_main_ImGui_CaptureKeyboardFromApp00);
    tolua_function(tolua_S,"CaptureMouseFromApp",tolua_main_ImGui_CaptureMouseFromApp00);
    tolua_function(tolua_S,"GetContentRegionAvailWidth",tolua_main_ImGui_GetContentRegionAvailWidth00);
+   tolua_function(tolua_S,"IsAnyWindowFocused",tolua_main_ImGui_IsAnyWindowFocused00);
+   tolua_function(tolua_S,"IsAnyWindowHovered",tolua_main_ImGui_IsAnyWindowHovered00);
+   tolua_function(tolua_S,"IsRootWindowFocused",tolua_main_ImGui_IsRootWindowFocused00);
+   tolua_function(tolua_S,"IsRootWindowOrAnyChildFocused",tolua_main_ImGui_IsRootWindowOrAnyChildFocused00);
+   tolua_function(tolua_S,"IsRootWindowOrAnyChildHovered",tolua_main_ImGui_IsRootWindowOrAnyChildHovered00);
+   tolua_function(tolua_S,"AlignFirstTextHeightToWidgets",tolua_main_ImGui_AlignFirstTextHeightToWidgets00);
    tolua_function(tolua_S,"SetNextWindowPos",tolua_main_ImGui_SetNextWindowPos00);
    tolua_function(tolua_S,"SetNextWindowPos",tolua_main_ImGui_SetNextWindowPos01);
    tolua_function(tolua_S,"SetNextWindowSize",tolua_main_ImGui_SetNextWindowSize00);

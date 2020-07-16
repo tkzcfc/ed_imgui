@@ -1,21 +1,49 @@
+-- @Author: fangcheng
+-- @Date:   2020-04-12 13:52:08
+-- @remark: 键盘事件管理
+
 local KeyboardStateMng = class("KeyboardStateMng")
 
 function KeyboardStateMng:ctor()
     self.stateMap = {}
     --键盘事件  
     local function onKeyPressed(keyCode, event)
-        -- print("pressed", keyCode)
+        -- print("pressed", keyCode, cc.KeyCodeKey[keyCode + 1])
         self.stateMap[keyCode] = true
 
+        if not self:canDispatch() then
+            return
+        end
+
         -- Ctrl + S
-        if _MyG.KeyboardStateMng:keyCodeIsPressed(14) and _MyG.KeyboardStateMng:keyCodeIsPressed(142) then
+        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_S) then
             G_SysEventEmitter:emit("onKeyBoardSave")
+        end
+
+        -- Ctrl + Z
+        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_Z) then
+            G_SysEventEmitter:emit("onKeyBoardUndo")
+        end
+
+        -- Ctrl + A
+        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_A) then
+            G_SysEventEmitter:emit("onKeyBoardAll")
+        end
+
+        -- 删除键
+        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_DELETE) then
+            G_SysEventEmitter:emit("onKeyBoardDelete")
         end
     end  
   
     local function onKeyReleased(keyCode, event)
         -- print("released", keyCode)
         self.stateMap[keyCode] = false
+
+        if not self:canDispatch() then
+            return
+        end
+
         if not self:haskeyCodePressed() then
             G_SysEventEmitter:emit("onKeyBoard_Single", keyCode)
         end
@@ -25,6 +53,11 @@ function KeyboardStateMng:ctor()
     listener:registerScriptHandler(onKeyPressed, cc.Handler.EVENT_KEYBOARD_PRESSED)  
     listener:registerScriptHandler(onKeyReleased, cc.Handler.EVENT_KEYBOARD_RELEASED)  
     cc.Director:getInstance():getEventDispatcher():addEventListenerWithFixedPriority(listener, 1)
+end
+
+function KeyboardStateMng:canDispatch()
+    local imgIO = ImGui.GetIO()
+    return not imgIO.WantTextInput and not ImGui.IsAnyMouseDown()
 end
 
 function KeyboardStateMng:keyCodeIsPressed(keyCode)

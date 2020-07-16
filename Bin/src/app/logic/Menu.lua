@@ -24,6 +24,10 @@ local function showMainMenuBar()
         if ImGui.MenuItem(STR("Save")) then
             G_SysEventEmitter:emit("Menu/File/Save")
         end
+
+        if ImGui.MenuItem(STR("SaveAll")) then
+            G_SysEventEmitter:emit("Menu/File/SaveAll")
+        end
         G_SysEventEmitter:emit("onGUI_MainMenuBar_File")
         ImGui.EndMenu()
     end
@@ -77,33 +81,17 @@ G_SysEventEmitter:on("onGUI_MainMenuBar_File_Open", function()
         end
         ImGui.EndMenu()
     end
-
-    -- if ImGui.MenuItem(STR("Map"), "", false, _MyG.ProjectData:isValid()) then
-    --     G_SysEventEmitter:emit("Menu/File/Open/Map", _MyG.ProjectData.projectDirPath)
-    -- end
-    -- if ImGui.MenuItem(STR("Widget"), "", false, _MyG.ProjectData:isValid()) then
-    --     G_SysEventEmitter:emit("Menu/File/Open/Widget", _MyG.ProjectData.projectDirPath)
-    -- end
 end)
 
 G_SysEventEmitter:on("onGUI_MainMenuBar_File_New", function()
     if ImGui.MenuItem(STR("Project")) then
         G_SysEventEmitter:emit("Menu/File/New/Project", _MyG.GlobalData.ProjectsDirName)
     end
-    if ImGui.MenuItem(STR("Map"), "", false, _MyG.ProjectData:isValid()) then
-        G_SysEventEmitter:emit("Menu/File/New/Map", _MyG.ProjectData.projectDirPath)
-    end
-    if ImGui.MenuItem(STR("Widget"), "", false, _MyG.ProjectData:isValid()) then
-        G_SysEventEmitter:emit("Menu/File/New/Widget", _MyG.ProjectData.projectDirPath)
-    end
-    if ImGui.MenuItem(STR("Layer"), "", false, _MyG.ProjectData:isValid()) then
-        G_SysEventEmitter:emit("Menu/File/New/Layer", _MyG.ProjectData.projectDirPath)
-    end
 end)
 
 
 G_SysEventEmitter:on("onGUI_MainMenuBar_Project", function()
-    if ImGui.MenuItem(STR("Project settings"), "", false, _MyG.ProjectData:isValid()) then
+    if ImGui.MenuItem(STR("Project settings"), "", false, _MyG.EditorProject:isValid()) then
         G_SysEventEmitter:emit("Menu/Project/Project settings")
     end
 end)

@@ -47,6 +47,8 @@ public:
 
 	void debugDraw(DrawNode* pDrawNode);
 
+	void setAlpha(float alpha);
+
 	void setVisible(bool value);
 
 	bool isVisible();
@@ -77,4 +79,6 @@ protected:
 
 	Color4F m_color;
 	unsigned int m_color_Uint;
+
+	float m_alpha;
 };

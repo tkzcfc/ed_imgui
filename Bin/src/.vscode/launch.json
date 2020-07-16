@@ -1,0 +1,42 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lua",
+            "request": "launch",
+            "name": "LuaPanda",
+            "program": "${workspaceFolder}/../simulator/win32/imgui_ed.exe",
+            "cwd": "${workspaceRoot}/../",
+            "args": [
+                "-workdir ${workspaceRoot}/../"
+            ],
+            "luaFileExtension": "lua",
+            "connectionPort": 8818,
+            "pathCaseSensitivity": true,
+            "stopOnEntry": false,
+            "useCHook": true,
+            "autoPathMode": true,
+            "logLevel": 1
+        },
+        {
+            "type": "lua",
+            "request": "launch",
+            "name": "LuaPanda-Attach"
+        },
+        {
+            "type": "lua",
+            "request": "launch",
+            "name": "LuaPanda-DebugFile",
+            "luaPath": "",
+            "packagePath": [],
+            "luaFileExtension": "",
+            "connectionPort": 8818,
+            "stopOnEntry": true,
+            "useCHook": true,
+            "logLevel": 1
+        }
+    ]
+}

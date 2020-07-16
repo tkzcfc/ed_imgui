@@ -1,0 +1,1 @@
+python Excel2Lua.py "./sheet_publish-tool/" "./tmp_publish-tool/" "./../publish-tool/WDConfig/"

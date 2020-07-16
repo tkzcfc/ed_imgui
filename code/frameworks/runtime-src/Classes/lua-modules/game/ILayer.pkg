@@ -16,7 +16,7 @@ public:
 	
 	bool setSystemChineseFont(std::string fontFileName, float size_pixels);
 	
-	void registerLuaHandle(std::string name, LuaFunction handle);
+	void registerLuaHandle(std::string name, LUA_FUNCTION handle);
 
 	void unregisterLuaHandle(std::string name);
 
@@ -26,4 +26,5 @@ public:
 	void setEngulfAllTouchs(bool value);
 
 	bool isEngulfAllTouchs();
+
 };

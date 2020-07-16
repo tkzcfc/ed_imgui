@@ -1,130 +1,92 @@
-
-local MainWindow = require("app.window.MainWindow")
-
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-05 12:48:03
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-04-12 14:39:39
+-- @Description: 
 local MainScene = class("MainScene", cc.load("mvc").ViewBase)
 
 function MainScene:onCreate()
-    _MyG.MainScene = self
-    self:initImGUI()
-end
 
-function MainScene:onEnter()
-    self:initWindow()
-    self:initBGGrid()
+	local context = EditorContext:create()
+	self:addChild(context)
 
-    require("app.logic.Menu")
-    require("app.logic.MenuItem")
-end
-
-function MainScene:initImGUI()
-    local ilayer = ILayer:create()
-    ilayer:registerLuaHandle("onInit", function()
-
-        if _MyG.UseSystemChineseFont then
-            if ilayer:setSystemChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
-                _MyG.SupportChineseFont = true
-            else
-                _MyG.SupportChineseFont = false
-            end
-        else
-            if ilayer:setChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
-                _MyG.SupportChineseFont = true
-            else
-                _MyG.SupportChineseFont = false
-            end
-        end
-
-        local loadChineseFont = false
-        if G_LangManager:isFirstStart() then
-            loadChineseFont = true
-        else
-            if G_LangManager:getLang() == G_LangManager.LANGUAGE.CH then
-                loadChineseFont = true
-            end
-        end
-
-        if loadChineseFont and _MyG.SupportChineseFont then
-            G_LangManager:setLang(G_LangManager.LANGUAGE.CH)
-        else
-            G_LangManager:setLang(G_LangManager.LANGUAGE.EN)
-        end
+	local ilayer = context:getIlayer()
+    ilayer:registerLuaHandle("onGUIBegin", function()
+        _MyG.IsOnGUI = true
+        G_SysEventEmitter:emit("onGUIBegin")
     end)
+
     ilayer:registerLuaHandle("onGUI", function()
         G_SysEventEmitter:emit("onGUI")
     end)
-    self:addChild(ilayer, 0xffffff)
-    self.ilayer = ilayer
+
+    ilayer:registerLuaHandle("onGUIEnd", function()
+        G_SysEventEmitter:emit("onGUIEnd")
+        _MyG.IsOnGUI = false
+    end)
+
+    
+    ilayer:registerLuaHandle("onInit", function()
+    	self:onGUI_Init()
+    end)
+
+    local rootNode = cc.Node:create()
+    ilayer:addChild(rootNode, -1)
+
+    _MyG.MainScene = self
+	_MyG.edContext = context
+	_MyG.MainScene.ilayer = ilayer
+	_MyG.MainScene.rootNode = rootNode
 end
 
-function MainScene:initWindow()
-    self.mainWindow = MainWindow.new()
+function MainScene:onGUI_Init()
+    local ilayer = self.ilayer
 
-    local content
+    local DocumentManager = require("app.imgui.DocumentManager")
+    _MyG.TopDocumentManager = DocumentManager.new()
+    _MyG.LeftDocumentManager = DocumentManager.new()
+    _MyG.RightDocumentManager = DocumentManager.new()
+    _MyG.BottomDocumentManager = DocumentManager.new()
+    _MyG.CenterDocumentManager = DocumentManager.new()
 
-    content = require("app.document.AssetContent").new("content")
-    _MyG.LeftDocumentManager:addDocument(content)
+	require("app.logic.GUI_Bottom")
+	require("app.logic.GUI_Center")
+	require("app.logic.GUI_Left")
+	require("app.logic.GUI_Right")
+	require("app.logic.GUI_Top")
+	require("app.logic.GUI_MenuBar")
 
-    content = require("app.document.CommonContent").new("common")
-    _MyG.LeftDocumentManager:addDocument(content)
-
-    content = require("app.document.CocosContent").new("cocos")
-    _MyG.LeftDocumentManager:addDocument(content)
-
-    content = require("app.document.WidgetContent").new()
-    _MyG.LeftDocumentManager:addDocument(content)
-
-
-    local log = require("app.document.Log").new()
-    _MyG.BottomDocumentManager:addDocument(log)
-
-    local node = require("app.document.NodeContent").new()
-    _MyG.BottomDocumentManager:addDocument(node)
-    self.NodeContent = node    
-
-    local attribute = require("app.document.AttributeContent").new()
-    _MyG.RightDocumentManager:addDocument(attribute)
-end
-
-function MainScene:initBGGrid()
-    local style = ImGui.GetStyle()
-    local visibleSize = cc.Director:getInstance():getVisibleSize()
-
-    local imgui_w = G_Helper.win_2_visible_x(MainWindow.getImguiWindowTotalWidth())
-    local imgui_h = G_Helper.win_2_visible_y(MainWindow.getImguiWindowTotalHeight())
-
-    local padding = G_Helper.win_2_visible_y(style.FramePadding.y + style.WindowPadding.y + style.ChildBorderSize * 3 + MainWindow.topWindow_h)
-
-    local bgSize = {}
-    bgSize.width = visibleSize.width - imgui_w
-    bgSize.height = visibleSize.height - imgui_h
-
-    self.Panel_BG = ccui.Layout:create()
-    self.Panel_BG:ignoreContentAdaptWithSize(false)
-    self.Panel_BG:setClippingEnabled(true)
-    self.Panel_BG:setContentSize(bgSize)
-    self.Panel_BG:setAnchorPoint(0.5000, 1.0)
-    self.Panel_BG:setPosition(visibleSize.width * 0.5, visibleSize.height - padding)
-    self:addChild(self.Panel_BG)
-
-    local gridNode = cc.Node:create()
-    self.Panel_BG:addChild(gridNode, -1)
-
-    local gridtemplate = cc.Sprite:create("Res/grid.png")
-    local size = gridtemplate:getContentSize()
-
-    local panelSize = bgSize
-    size.width = size.width * 5
-    size.height = size.height * 5
-
-    local count = 0
-    for i=0,panelSize.height / size.height do
-        for j = 0, panelSize.width / size.width do
-            count = count + 1
-            local grid = cc.Sprite:create("Res/grid.png")
-            grid:setPosition(j * size.width, i * size.height)
-            grid:setScale(5)
-            gridNode:addChild(grid)
+    if _MyG.UseSystemChineseFont then
+        if ilayer:setSystemChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
+            _MyG.SupportChineseFont = true
+        else
+            _MyG.SupportChineseFont = false
         end
+    else
+        if ilayer:setChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
+            _MyG.SupportChineseFont = true
+        else
+            _MyG.SupportChineseFont = false
+        end
+    end
+
+    local loadChineseFont = false
+    -- 首次启动默认选中文
+    if G_LangManager:isFirstStart() then
+        loadChineseFont = true
+    else
+        if G_LangManager:getLang() == G_LangManager.LANGUAGE.CN then
+            loadChineseFont = true
+        else
+            loadChineseFont = false
+        end
+    end
+
+    if loadChineseFont and _MyG.SupportChineseFont then
+        G_LangManager:setLang(G_LangManager.LANGUAGE.CN)
+    else
+        G_LangManager:setLang(G_LangManager.LANGUAGE.EN)
     end
 end
 

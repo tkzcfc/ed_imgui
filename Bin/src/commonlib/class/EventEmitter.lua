@@ -1,3 +1,17 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2019-10-17 21:26:05
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-04-06 13:24:22
+-- @Description: 事件派发
+
+-- 最大优先级
+local PRIORITY_LEVEL_MAX = 5
+-- 默认优先级
+local PRIORITY_LEVEL_DEFAULT = 3
+
+local table_remove = table.remove
+
 local EventEmitter = class("EventEmitter")
 
 function EventEmitter:ctor()
@@ -5,37 +19,72 @@ function EventEmitter:ctor()
 	self.doEmit_Map = {}
 end
 
-function EventEmitter:on(event, listener)
-	self:addListener(event, listener, -1)
+
+-- @brief 订阅事件
+-- @param event 事件key
+-- @param listener 监听者
+-- @param priority 派发优先级 默认3
+function EventEmitter:on(event, listener, priority)
+	self:addListener(event, listener, -1, priority)
 end
 
-function EventEmitter:once(event, listener)
-	self:addListener(event, listener, 1)
+-- 订阅一次事件
+function EventEmitter:once(event, listener, priority)
+	self:addListener(event, listener, 1, priority)
 end
 
-function EventEmitter:addListener(event, _listener, _count)
-	self.event_listenerMap[event] = self.event_listenerMap[event] or {}
-	local listenerTab = self.event_listenerMap[event]
+-- @brief 订阅事件
+-- @param event 事件key
+-- @param _listener 监听者
+-- @param _count 订阅次数
+-- @param priority 派发优先级 默认3
+function EventEmitter:addListener(event, _listener, _count, priority)
+	priority = priority or PRIORITY_LEVEL_DEFAULT
+	
+	if priority < 1 or priority > PRIORITY_LEVEL_MAX then
+		assert(false)
+		return
+	end
 
-	table.insert(listenerTab, {listener = _listener, count = _count})
-end
+	local listenerTabArr = self.event_listenerMap[event]
 
-function EventEmitter:removeListener(event, listener)
-	local listenerTab = self.event_listenerMap[event]
-	if listenerTab then
-		for k, v in pairs(listenerTab) do
-			if v.listener == listener then
-				v.count = 0
-			end
+	if listenerTabArr == nil then
+		listenerTabArr = {}
+		for i = 1, PRIORITY_LEVEL_MAX do
+			listenerTabArr[i] = {}
 		end
+		self.event_listenerMap[event] = listenerTabArr
+	end
 
-		if not self.doEmit_Map[event] then
-			repeat
-			until(not EventEmitter.removeOnce(listenerTab))
+	local listenerTab = listenerTabArr[priority]
+	listenerTab[#listenerTab + 1] = {listener = _listener, count = _count}
+
+	self:clearInvalid()
+end
+
+-- @brief 取消订阅事件
+-- @param event 事件key
+-- @param listener 监听者
+function EventEmitter:removeListener(event, listener)
+	local listenerTabArr = self.event_listenerMap[event]
+
+	if listenerTabArr then
+		for _, listenerTab in pairs(listenerTabArr) do
+			for k, v in pairs(listenerTab) do
+				if v.listener == listener then
+					v.count = 0
+				end
+			end
+
+			if not self.doEmit_Map[event] then
+				repeat
+				until(not EventEmitter.removeOnce(listenerTab))
+			end
 		end
 	end
 end
 
+-- @brief 取消订阅事件
 function EventEmitter:removeAllListeners(event)
 	if not self.doEmit_Map[event] then
 		self.event_listenerMap[event] = {}
@@ -53,13 +102,21 @@ function EventEmitter:clear()
 	self.event_listenerMap = {}
 end
 
+-- @brief 派发事件
+-- @param event 事件key
 function EventEmitter:emit(event, ...)
-	local listenerTab = self.event_listenerMap[event]
+	local listenerTabArr = self.event_listenerMap[event]
+
+	if listenerTabArr == nil then
+		return 0
+	end
+
 	local callCount = 0
+	local breakLoop = false
 
-	if listenerTab ~= nil then
-		self.doEmit_Map[event] = true
+	self.doEmit_Map[event] = true
 
+	for _, listenerTab in pairs(listenerTabArr) do
 		for k, v in pairs(listenerTab) do
 			if v.count ~= 0 then
 				if v.count > 0 then
@@ -67,37 +124,85 @@ function EventEmitter:emit(event, ...)
 				end
 				callCount = callCount + 1
 				if v.listener(...) == true then
+					breakLoop = true
 					break
 				end
 			end
 		end
 
+		if breakLoop then
+			break
+		end
+	end
+
+	self.doEmit_Map[event] = false
+
+	for _, listenerTab in pairs(listenerTabArr) do
 		repeat
 		until(not EventEmitter.removeOnce(listenerTab))
-
-		self.doEmit_Map[event] = false
 	end
+
+	self:clearInvalid()
 
 	return callCount
 end
 
+-- @brief 查询某个事件的订阅数量
+-- @param event 事件key
 function EventEmitter:listeners(event)
-	local listenerTab = self.event_listenerMap[event]
+	local listenerTabArr = self.event_listenerMap[event]
+
+	if listenerTabArr == nil then
+		return 0
+	end
+
 	local count = 0
-	for k, v in pairs(listenerTab) do
-		if v.count ~= 0 then
-			count = count + 1
+	
+	for _, listenerTab in pairs(listenerTabArr) do
+		for k, v in pairs(listenerTab) do
+			if v.count ~= 0 then
+				count = count + 1
+			end
 		end
 	end
+	
 	return count
 end
 
+function EventEmitter:clearInvalid()
+	if math.random(1, 200) ~= 1 then
+		return
+	end
+	repeat
+	until(not self:clearInvalidEx())
+end
+
 --------------------------------------------------------------------------------------------
+function EventEmitter:clearInvalidEx()
+	local del = true
+	for event, listenerTabArr in pairs(self.event_listenerMap) do
+		del = true
+		for _, listenerTab in pairs(listenerTabArr) do
+			for k,v in pairs(listenerTab) do
+				del = false
+				break
+			end
+			if not del then
+				break
+			end
+		end
+
+		if del then
+			self.event_listenerMap[event] = nil
+			return true
+		end
+	end
+end
 
 function EventEmitter.removeOnce(listenerTab)
 	for k, v in pairs(listenerTab) do
 		if v.count == 0 then
-			table.remove(listenerTab, k)
+			table_remove(listenerTab, k)
 			return true
 		end
 	end

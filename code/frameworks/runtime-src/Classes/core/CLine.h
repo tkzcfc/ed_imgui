@@ -41,6 +41,8 @@ public:
 
 	void debugDraw(DrawNode* pDrawNode, bool forcedDisplay = false);
 
+	void setAlpha(float alpha);
+
 	void setLineCorlor(unsigned int color);
 
 	void setNormalColor(unsigned int color);
@@ -71,4 +73,5 @@ protected:
 	float m_normalScale;
 
 	bool m_isVisible;
+	float m_alpha;
 };

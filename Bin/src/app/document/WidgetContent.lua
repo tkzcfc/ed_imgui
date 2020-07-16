@@ -13,7 +13,7 @@ function WidgetContent:ctor()
 	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/Sprite.png"), "WC_Sprite")
 	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/ImageFile.png"), "WC_Image")
 	-- 复活点
-	self:appendWidgetInfo(Tools:getImguiTextureID("Res/Default/RevivePoint.png"), "WC_RevivePoint")
+	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/RevivePoint.png"), "WC_RevivePoint")
 end
 
 function WidgetContent:appendWidgetInfo(_icon, _text)
@@ -39,9 +39,7 @@ function WidgetContent:onGUI()
 
 	if self.cache_drag_item == nil then
 		if self.cache_drag_item_last then
-			local pos = ImGui.GetIO().MousePos
-			pos = G_Helper.win_2_visible_pos(pos)
-			G_SysEventEmitter:emit("onDragPreWidget", pos, self.cache_drag_item_last.text)
+			G_SysEventEmitter:emit("onDragPreWidget", self.cache_drag_item_last.text)
 		end
 	end
 end

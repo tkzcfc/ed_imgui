@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{fc5cb953-2953-4968-83b3-39e3ff951754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="win32">
+      <UniqueIdentifier>{037a9a02-b906-4cc5-ad98-304acd4e25ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{2d1d0979-58cd-4ab6-b91c-13650158f1fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core">
+      <UniqueIdentifier>{906dbf65-bbf3-4cfe-ac5c-8a6b88cbc0ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\editor">
+      <UniqueIdentifier>{1d0cd1fc-4b96-4e3b-af85-2abe46f83f26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\core\type">
+      <UniqueIdentifier>{900bee28-7ac4-41f9-a2bd-8446f2b1d7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\ilayer">
+      <UniqueIdentifier>{c1cb2f72-7c30-4205-9066-3de29098f7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\imgui">
+      <UniqueIdentifier>{e0f66e8c-46be-4823-bcfb-dfd23daf2e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\log">
+      <UniqueIdentifier>{a6c34e2a-8d36-4f66-894e-7aea2a641f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\lua_function">
+      <UniqueIdentifier>{86328fd9-70a3-4b7e-b4f3-89e5bb15ed72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\lua-modules">
+      <UniqueIdentifier>{815eadd9-1d1a-4ac8-b2cd-82c63f895f5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\lua-modules\game">
+      <UniqueIdentifier>{df248dca-78b7-4153-8b54-4dff248c14cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\lua-modules\imgui_lua">
+      <UniqueIdentifier>{5446c780-808b-4012-a527-1daf9570db33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\lua-modules\lfs">
+      <UniqueIdentifier>{408ff0dc-6a57-415e-bd20-850523469c10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ide-support\CodeIDESupport.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ide-support\lua_debugger.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ide-support\RuntimeLuaImpl.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\gzip.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\Math.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\MathCom.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\Tools.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\CLine.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\CRect.h">
+      <Filter>Classes\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\type\LineValue.h">
+      <Filter>Classes\core\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\type\StringArray.h">
+      <Filter>Classes\core\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\core\type\Vec2Value.h">
+      <Filter>Classes\core\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\editor\EditorContext.h">
+      <Filter>Classes\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua-modules\game\lua_game.h">
+      <Filter>Classes\lua-modules\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua-modules\imgui_lua\imgui_tolua.h">
+      <Filter>Classes\lua-modules\imgui_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua-modules\lfs\lfs.h">
+      <Filter>Classes\lua-modules\lfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua-modules\lua_modules.h">
+      <Filter>Classes\lua-modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_function\LuaFunctionBond.h">
+      <Filter>Classes\lua_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_function\tolua_ext.h">
+      <Filter>Classes\lua_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_function\LuaFunction.h">
+      <Filter>Classes\lua_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\log\Logger.h">
+      <Filter>Classes\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imgui_internal.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_rectpack.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_textedit.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_truetype.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imconfig.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imgui.h">
+      <Filter>Classes\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ilayer\IRender.h">
+      <Filter>Classes\ilayer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ilayer\ILayer.h">
+      <Filter>Classes\ilayer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\editor\ScissorLayer.h">
+      <Filter>Classes\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="SimulatorWin.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ide-support\lua_debugger.c">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ide-support\RuntimeLuaImpl.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\Math.cpp">
+      <Filter>Classes\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\Tools.cpp">
+      <Filter>Classes\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\CLine.cpp">
+      <Filter>Classes\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\CRect.cpp">
+      <Filter>Classes\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\gzip.cpp">
+      <Filter>Classes\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\type\LineValue.cpp">
+      <Filter>Classes\core\type</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\type\StringArray.cpp">
+      <Filter>Classes\core\type</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\core\type\Vec2Value.cpp">
+      <Filter>Classes\core\type</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\editor\EditorContext.cpp">
+      <Filter>Classes\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua-modules\game\lua_game.cpp">
+      <Filter>Classes\lua-modules\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua-modules\imgui_lua\imgui_tolua.cpp">
+      <Filter>Classes\lua-modules\imgui_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua-modules\lfs\lfs.c">
+      <Filter>Classes\lua-modules\lfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua-modules\lua_modules.cpp">
+      <Filter>Classes\lua-modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua_function\LuaFunctionBond.cpp">
+      <Filter>Classes\lua_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua_function\tolua_ext.cpp">
+      <Filter>Classes\lua_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\lua_function\LuaFunction.cpp">
+      <Filter>Classes\lua_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\log\Logger.cpp">
+      <Filter>Classes\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_demo.cpp">
+      <Filter>Classes\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_draw.cpp">
+      <Filter>Classes\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_widgets.cpp">
+      <Filter>Classes\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui.cpp">
+      <Filter>Classes\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ilayer\IRender.cpp">
+      <Filter>Classes\ilayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ilayer\ILayer.cpp">
+      <Filter>Classes\ilayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\editor\ScissorLayer.cpp">
+      <Filter>Classes\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulatorWin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\game.ico" />
+  </ItemGroup>
+</Project>

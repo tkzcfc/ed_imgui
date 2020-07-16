@@ -8,6 +8,12 @@ function CLine:serialize()
 	t.isVisible = self:isVisible()
 	t.lineColor = self:getLineColor()
 	t.normalColor = self:getNormalColor()
+	t.userdata = self.userdata or {}
+
+	-- if _MyG.IsLocalizeMode then
+	-- 	t.publish = self:publish()
+	-- end
+	
 	return t
 end
 
@@ -15,6 +21,7 @@ function CLine:deserialize(data)
 	if data == nil then
 		return
 	end
+	self.userdata = data.userdata or {}
 	self:setPointCount(#data.points)
 	for idx, pos in pairs(data.points) do
 		self:setPointDataByIndex(idx - 1, pos.x, pos.y)
@@ -32,6 +39,7 @@ function CLine:publish()
 	local t = {}
 	t.points = self:getAllPoint()
 	t.normals = self:getAllNormal()
+	t.userdata = self.userdata or {}
 	return t
 end
 
@@ -48,6 +56,12 @@ function CRect:serialize()
 	t.skew = self:getSkew()
 	t.isVisible = self:isVisible()
 	t.color = self:getColor()
+	t.userdata = self.userdata or {}
+	
+	-- if _MyG.IsLocalizeMode then
+	-- 	t.publish = self:publish()
+	-- end
+
 	return t
 end
 
@@ -56,6 +70,7 @@ function CRect:deserialize(data)
 		return
 	end
 
+	self.userdata = data.userdata or {}
 	self:setAnchorPoint(data.anchorPoint.x, data.anchorPoint.y)
 	self:setContentSize(data.contentSize.x, data.contentSize.y)
 	self:setPoint(data.point.x, data.point.y)
@@ -76,5 +91,6 @@ function CRect:publish()
 	for i=1,self:getVertexCount() do
 		t.points[i] = self:getVertexByIndex(i - 1)
 	end
+	t.userdata = self.userdata or {}
 	return t
 end

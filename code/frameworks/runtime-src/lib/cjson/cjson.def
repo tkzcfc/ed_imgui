@@ -1,0 +1,3 @@
+EXPORTS
+luaopen_cjson
+lua_cjson_safe_new

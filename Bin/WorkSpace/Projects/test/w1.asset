@@ -1,0 +1,354 @@
+{
+    "type": "widget",
+    "data": {
+        "children": [
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -109.15618896484,
+                        "x": 220.90368652344
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/Loading.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_21",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 743.10009765625,
+                        "x": -19.268188476563
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/dpsglogo.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_22",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 758.72509765625,
+                        "x": 5.7318115234375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/dpsglogo.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_23",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 405.61584472656,
+                        "x": -249.20068359375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/DPSG_GradualChangeText.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_24",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 510.92199707031,
+                        "x": 1392.5029296875
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/Loading.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_25",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 71.940658569336,
+                        "x": 1800.5091552734
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/Loading.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_26",
+                    "opacity": 255
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -96.572883605957,
+                "x": -136.53816223145
+            },
+            "_renderScale": 0.30000001192093,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [],
+                    "show_rect": true,
+                    "rect_data": [
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 612.03643798828,
+                                "x": 1274.1153564453
+                            },
+                            "contentSize": {
+                                "y": 262.06787109375,
+                                "x": 79.86865234375
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 2,
+                                    "data": "xzczxc",
+                                    "name": "strRect1"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 71,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 275.09051513672,
+                                "x": 904.72644042969
+                            },
+                            "contentSize": {
+                                "y": 736.2919921875,
+                                "x": 708.83544921875
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 0,
+                                    "name": "intVar"
+                                },
+                                {
+                                    "type": 1,
+                                    "data": true,
+                                    "name": "boolVar2"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 376.98126220703,
+                                "x": 709.6845703125
+                            },
+                            "contentSize": {
+                                "y": 203.83099365234,
+                                "x": 145.59326171875
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 451.03771972656,
+                                "x": -352.32678222656
+                            },
+                            "contentSize": {
+                                "y": 639.57250976563,
+                                "x": 514.7802734375
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 602.34967041016,
+                                "x": 706.86547851563
+                            },
+                            "contentSize": {
+                                "y": 586.53356933594,
+                                "x": 505.42065429688
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        }
+                    ]
+                },
+                "PluginRefResources": [
+                    "Projects/test/Loading.png",
+                    "Projects/test/dpsglogo.png",
+                    "Projects/test/DPSG_GradualChangeText.png"
+                ]
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 26,
+                "CocostudioFile": 2,
+                "Image": 4
+            }
+        }
+    }
+}

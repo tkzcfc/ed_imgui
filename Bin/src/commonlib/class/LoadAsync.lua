@@ -1,3 +1,9 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2019-10-17 21:26:05
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-01-17 22:54:56
+-- @Description: 异步资源加载
 
 local LoadAsync = class("LoadAsync")
 
@@ -99,7 +105,7 @@ function LoadAsync:destroy()
 	self.releaseFiles = nil
 end
 
-------------------------------------------------------------public begin------------------------------------------------------------
+------------------------------------------------------------public end------------------------------------------------------------
 
 function LoadAsync:yield()
 	self:updatePercent()
@@ -114,6 +120,8 @@ function LoadAsync:clearAutoReleaseFile()
 end
 
 function LoadAsync:doLogic()
+	self:yield()
+	
 	self:calcuLogic()
 
 	self:releaseLogic()

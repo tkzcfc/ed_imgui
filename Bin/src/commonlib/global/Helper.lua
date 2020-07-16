@@ -1,3 +1,10 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2019-10-17 21:26:05
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-03-22 14:14:13
+-- @Description: helper相关
+
 local Helper = {}
 
 Helper.log = function(...)
@@ -16,6 +23,63 @@ function Helper.copyTable(tb)
 		end
 	end
 	return tab
+end
+
+
+--[[
+local tab = {name = 'AAA'}
+local ref = {count = 0}
+tab.ref1 = ref
+tab.ref2 = ref
+
+local m = wholeCloneNoRef(tab)
+m.ref1.count = 10
+
+print(m.ref1.count) -- 10
+print(m.ref2.count) -- 0
+]]
+function Helper.wholeCloneNoRef(orig)
+    local function _copy(orig)
+        if type(orig) ~= "table" then
+            return orig
+        end
+        local newObject = {}
+        for key, value in pairs(orig) do
+            newObject[_copy(key)] = _copy(value)
+        end
+        return newObject
+    end
+    return _copy(orig)
+end
+
+--[[
+local tab = {name = 'AAA'}
+local ref = {count = 0}
+tab.ref1 = ref
+tab.ref2 = ref
+
+local m = wholeClone(tab)
+m.ref1.count = 10
+
+print(m.ref1.count) -- 10
+print(m.ref2.count) -- 10
+]]
+function Helper.wholeClone(orig)
+    local lookup_table = {}
+    local function _copy(orig)
+        if type(orig) ~= "table" then
+            return orig
+        elseif lookup_table[orig] then
+            return lookup_table[orig]
+        end
+        local newObject = {}
+        lookup_table[orig] = newObject
+        for key, value in pairs(orig) do
+            newObject[_copy(key)] = _copy(value)
+        end
+        return newObject
+    end
+    return _copy(orig)
 end
 
 function Helper.findEleInTab(tb, ele)
@@ -47,6 +111,11 @@ function Helper.loadStudioFile(fileName, target)
             end
         end
     end)
+
+	if root and Helper.loadStudioFileEx then
+		Helper.loadStudioFileEx(root)
+	end
+
     return root
 end
 
@@ -177,7 +246,7 @@ function Helper.split(str, flag)
 	end
 	while true do
 		local n = string.find(str, flag)
-		print(n)
+		-- print(n)
 		if n then
 			local first = string.sub(str, 1, n-1) 
 			str = string.sub(str, n+flaglen, #str) 

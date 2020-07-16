@@ -89,18 +89,18 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="disk_1" ActionTag="1441384068" Tag="12" IconVisible="False" LeftMargin="-7.0294" RightMargin="1790.0293" TopMargin="560.1981" BottomMargin="374.8019" ctype="SpriteObjectData">
-            <Size X="137.0000" Y="145.0000" />
+          <AbstractNodeData Name="disk_1" ActionTag="1441384068" Tag="12" IconVisible="False" LeftMargin="-7.0294" RightMargin="1790.0294" TopMargin="560.1981" BottomMargin="374.8019" ctype="SpriteObjectData">
+            <Size X="46.0000" Y="46.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="61.4706" Y="447.3019" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.0320" Y="0.4142" />
             <PreSize X="0.0714" Y="0.1343" />
-            <FileData Type="Normal" Path="disk.png" Plist="" />
+            <FileData Type="Default" Path="Default/Sprite.png" Plist="" />
             <BlendFunc Src="1" Dst="771" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Image_1" ActionTag="-1391096960" Tag="13" IconVisible="False" LeftMargin="7.4878" RightMargin="1752.5122" TopMargin="363.3511" BottomMargin="556.6489" LeftEage="52" RightEage="52" TopEage="52" BottomEage="52" Scale9OriginX="52" Scale9OriginY="52" Scale9Width="56" Scale9Height="56" ctype="ImageViewObjectData">
+          <AbstractNodeData Name="Image_1" ActionTag="-1391096960" Tag="13" IconVisible="False" LeftMargin="7.4878" RightMargin="1752.5122" TopMargin="363.3511" BottomMargin="556.6489" LeftEage="52" RightEage="52" TopEage="52" BottomEage="52" Scale9OriginX="-6" Scale9OriginY="-6" Scale9Width="58" Scale9Height="58" ctype="ImageViewObjectData">
             <Size X="160.0000" Y="160.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="87.4878" Y="636.6489" />
@@ -108,9 +108,9 @@
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.0456" Y="0.5895" />
             <PreSize X="0.0833" Y="0.1481" />
-            <FileData Type="Normal" Path="file.png" Plist="" />
+            <FileData Type="Default" Path="Default/ImageFile.png" Plist="" />
           </AbstractNodeData>
-          <AbstractNodeData Name="baijixuanze_2" ActionTag="-1246368132" Tag="14" IconVisible="False" LeftMargin="319.5234" RightMargin="1532.4766" TopMargin="482.4360" BottomMargin="412.5639" ctype="SpriteObjectData">
+          <AbstractNodeData Name="baijixuanze_2" ActionTag="-1246368132" Tag="14" IconVisible="False" LeftMargin="319.5234" RightMargin="1532.4766" TopMargin="482.4361" BottomMargin="412.5639" ctype="SpriteObjectData">
             <Size X="68.0000" Y="185.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="353.5234" Y="505.0639" />
@@ -121,11 +121,11 @@
             <FileData Type="PlistSubImage" Path="baijixuanze.png" Plist="Res/selectrole.plist" />
             <BlendFunc Src="1" Dst="771" />
           </AbstractNodeData>
-          <AbstractNodeData Name="hua_4" ActionTag="2042840354" Tag="16" IconVisible="False" LeftMargin="315.9457" RightMargin="1535.0542" TopMargin="668.8782" BottomMargin="340.1218" ctype="SpriteObjectData">
+          <AbstractNodeData Name="hua_4" ActionTag="2042840354" Tag="16" IconVisible="False" LeftMargin="315.9456" RightMargin="1535.0544" TopMargin="668.8782" BottomMargin="340.1218" ctype="SpriteObjectData">
             <Size X="69.0000" Y="71.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="350.4457" Y="375.6218" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <Position X="350.4456" Y="375.6218" />
+            <Scale ScaleX="-1.0794" ScaleY="-0.0104" />
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.1825" Y="0.3478" />
             <PreSize X="0.0359" Y="0.0657" />
@@ -133,14 +133,14 @@
             <BlendFunc Src="1" Dst="771" />
           </AbstractNodeData>
           <AbstractNodeData Name="disk_5" ActionTag="-1020288740" Tag="17" IconVisible="False" LeftMargin="34.7828" RightMargin="1748.2172" TopMargin="591.4071" BottomMargin="343.5929" ctype="SpriteObjectData">
-            <Size X="137.0000" Y="145.0000" />
+            <Size X="46.0000" Y="46.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="103.2828" Y="416.0929" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.0538" Y="0.3853" />
             <PreSize X="0.0714" Y="0.1343" />
-            <FileData Type="Normal" Path="disk.png" Plist="" />
+            <FileData Type="Default" Path="Default/Sprite.png" Plist="" />
             <BlendFunc Src="1" Dst="771" />
           </AbstractNodeData>
         </Children>

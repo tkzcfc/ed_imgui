@@ -1,0 +1,108 @@
+{
+    "type": "layer",
+    "data": {
+        "children": [
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1461.1875,
+                        "x": 8.125
+                    },
+                    "aabb": {
+                        "y": 30.58349609375,
+                        "x": 8.125,
+                        "height": 2920.044921875,
+                        "width": 2979.1474609375
+                    },
+                    "assetFile": "Projects/test/haha/ww1.asset",
+                    "contentSize": {
+                        "height": 2920.044921875,
+                        "width": 2979.1474609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_1"
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -264.38333129883,
+                "x": -359.875
+            },
+            "_renderScale": 0.20000000298023,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [
+                        {
+                            "points": [
+                                {
+                                    "y": 0,
+                                    "x": 0
+                                },
+                                {
+                                    "y": 1516.0617675781,
+                                    "x": 100
+                                }
+                            ],
+                            "isLeftNormal": false,
+                            "userdata": [],
+                            "normalColor": 3355443455,
+                            "isVisible": true,
+                            "lineColor": 4278255360
+                        }
+                    ],
+                    "show_rect": true,
+                    "rect_data": [
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 0,
+                                "x": 0
+                            },
+                            "contentSize": {
+                                "y": 2913.9619140625,
+                                "x": 2995.087890625
+                            },
+                            "anchorPoint": {
+                                "y": 0,
+                                "x": 0
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        }
+                    ]
+                },
+                "PluginLayerSize": {
+                    "size": {
+                        "y": 750,
+                        "x": 1134,
+                        "z": 0,
+                        "w": 1
+                    },
+                    "color": {
+                        "r": 0,
+                        "b": 0,
+                        "a": 1,
+                        "g": 0
+                    }
+                }
+            },
+            "typeNameGenSeeds": {
+                "Widget": 1
+            }
+        }
+    }
+}

@@ -1,13 +1,20 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2019-10-17 21:26:05
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-04-08 20:53:25
+-- @Description: 多语言管理
+
 local LangManager = class("LangManager")
 
-local Lang = require("commonlib.lang.Lang") 
+local Lang = nil
 
 local LANGUAGE = {}
 LANGUAGE.EN = "en"
-LANGUAGE.CH = "ch"
+LANGUAGE.CN = "cn"
 
 local LANG_NAME = {}
-LANG_NAME[LANGUAGE.CH] = "简体中文"
+LANG_NAME[LANGUAGE.CN] = "简体中文"
 LANG_NAME[LANGUAGE.EN] = "English"
 
 LangManager.LANGUAGE = LANGUAGE
@@ -18,8 +25,8 @@ local curLanguage
 function LangManager:ctor()
 end
 
-function LangManager:initWithTextRoot(textRoot, defaultLang)
-	self.textRoot = textRoot
+function LangManager:initWithTextRoot(langFile, defaultLang)
+	Lang = require(langFile)
 	self.initTag = true
 	self.firstStartTag = true
 
@@ -47,7 +54,7 @@ function LangManager:setLang(lang)
 	
 	self.language = lang
 	curLanguage = lang
-	Lang:loadText(self.textRoot, lang)
+
 	cc.UserDefault:getInstance():setStringForKey("lang", lang)
 end
 
@@ -56,12 +63,12 @@ function LangManager:isFirstStart()
 end
 
 function LangManager.getLangByCode(lang_code)
-    local lang_str = "ch"
-    -- if lang_code == cc.LANGUAGE_ENGLISH then
-    --     lang_str = "en"
-    -- elseif lang_code == cc.LANGUAGE_CHINESE then
-    --     lang_str = "ch"
-    -- end
+    local lang_str = "cn"
+    if lang_code == cc.LANGUAGE_ENGLISH then
+        lang_str = "en"
+    elseif lang_code == cc.LANGUAGE_CHINESE then
+        lang_str = "cn"
+    end
     return lang_str
 end
 
@@ -89,32 +96,24 @@ function LangManager:setLangByName(languageName)
 end
 
 ------------------------------------------------------------------------------------------------
-
+local returnValue = nil
 if G_MAC.DEBUG then
-	STR = function(key)
+	cc.exports.STR = function(key)
 		assert(curLanguage)
-	
-		local t = Lang[curLanguage]
-		if t == nil then
+		returnValue = Lang.getItem(key, curLanguage)
+		if returnValue == nil then
 			print(string.format("警告：语言%q未定义", curLanguage))
-			return key
+			return tostring(key)
 		end
-		if t[key] then
-			return t[key]
-		end
-		print(string.format("警告：Lang文件中不存在含有%q的字段", key))
-		return key
+		return returnValue
 	end
 else
-	STR = function(key)
-		local t = Lang[curLanguage]
-		if t == nil then
-			return key
+	cc.exports.STR = function(key)
+		returnValue = Lang.getItem(key, curLanguage)
+		if returnValue == nil then
+			return tostring(key)
 		end
-		if t[key] then
-			return t[key]
-		end
-		return key
+		return returnValue
 	end
 end
 

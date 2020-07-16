@@ -1,0 +1,8 @@
+{
+    "publishDir": "publish/",
+    "openFolderStatusCache": {
+        "Projects/alpha/": true,
+        "Projects/alpha/pic": false
+    },
+    "projName": "alpha"
+}

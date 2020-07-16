@@ -11,9 +11,17 @@ function Document:destroy()
 end
 
 function Document:onGUI()
+	if not self.__isVisibleTag then
+		self.__isVisibleTag = true
+		self:onShow()
+	end
 end
 
 function Document:onHide()
+	self.__isVisibleTag = false
+end
+
+function Document:onShow()
 end
 
 function Document:save()

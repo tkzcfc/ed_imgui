@@ -260,6 +260,10 @@ bool ILayer::init()
 		return false;
 	}
 
+	m_defaultWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoSavedSettings |
+		ImGuiWindowFlags_NoBringToFrontOnFocus;
+
 	this->setAnchorPoint(Vec2::ZERO);
 	this->setContentSize(Director::getInstance()->getVisibleSize());
 	return true;
@@ -511,6 +515,26 @@ bool ILayer::isEngulfAllTouchs()
 	return m_engulfAllTouchs;
 }
 
+void ILayer::setDrawDefaultWindow(bool draw)
+{
+	m_drawDefaultWindow = draw;
+}
+
+void ILayer::setDefaultWindowFlags(ImGuiWindowFlags flags)
+{
+	m_defaultWindowFlags = flags;
+}
+
+void ILayer::setGUIBeginCall(const std::function<void()>& call)
+{
+	m_beginCall = call;
+}
+
+void ILayer::setGUIEndCall(const std::function<void()>& call)
+{
+	m_endCall = call;
+}
+
 void ILayer::onExit()
 {
 	//for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
@@ -532,13 +556,28 @@ void ILayer::onExit()
 
 void ILayer::updateImGUI()
 {
+	auto handle = this->getLuaHandle("onGUIBegin");
+	if (handle)
+	{
+		handle->ppush();
+		handle->pcall();
+	}
+
 	auto iter = m_callPiplines.begin();
 	for (; iter != m_callPiplines.end(); ++iter)
 	{
 		iter->second();
 	}
 
-	auto handle = this->getLuaHandle("onGUI");
+	handle = this->getLuaHandle("onGUI");
+	if (handle)
+	{
+		handle->ppush();
+		handle->pcall();
+	}
+
+
+	handle = this->getLuaHandle("onGUIEnd");
 	if (handle)
 	{
 		handle->ppush();
@@ -581,7 +620,28 @@ void ILayer::update(float delta)
 	irender->ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 
+	if (m_beginCall)
+	{
+		m_beginCall();
+	}
+	if (m_drawDefaultWindow)
+	{
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::SetNextWindowSize(io.DisplaySize);
+		ImGui::Begin("Content", nullptr, ImVec2(0, 0), 0.0f, m_defaultWindowFlags);
+	}
+
 	this->updateImGUI();
+
+	if (m_drawDefaultWindow)
+	{
+		ImGui::End();
+	}
+
+	if (m_endCall)
+	{
+		m_endCall();
+	}
 
 	m_drawFinish = true;
 }

@@ -1,3 +1,11 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-12 13:52:08
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-05-07 22:21:50
+-- @Description: 文件选择弹框
+
+
 require("lfs")
 
 local M = class("FileDialog")

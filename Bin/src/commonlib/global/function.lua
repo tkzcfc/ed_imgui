@@ -1,4 +1,9 @@
--- 全局函数定义
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2019-10-17 21:26:05
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-02-29 21:45:09
+-- @Description: 全局函数定义
 
 local M = {}
 
@@ -42,6 +47,65 @@ function M.read_only(inputTable)
         return travelled_tables[tbl]
     end
     return __read_only(inputTable)
+end
+
+local set_msg_new_tab_mt = nil
+function M.set_msg_new_tab(tabData, msgName)
+
+    local msgName = msgName or tabData.__MsgName__
+
+	if type(msgName) ~= "string" then error("消息tab 没有消息名称:" .. tostring(msgName)) end
+
+	if not set_msg_new_tab_mt then
+	    set_msg_new_tab_mt = { }
+
+		set_msg_new_tab_mt.__index = function(tab, key)
+			error("消息[" .. msgName .. "] 访问不存在的成员变量:" .. key)
+		end
+
+		set_msg_new_tab_mt.__newindex = function(tab, key, val)
+			if type(key) == "number" then
+				rawset(tab, key, val)
+			else
+				error("消息[" .. msgName .. "] 写入不存在的成员变量:" .. key)
+			end
+		end
+	end
+
+    setmetatable(tabData, set_msg_new_tab_mt)
+
+    for k, v in pairs(tabData) do
+        if (type(v) == "table") then
+            set_msg_new_tab(v, msgName .. "::" .. k )
+        end
+    end
+end
+
+function M.set_on_msg_tab(tabData, msgName)
+
+    local msgName = msgName or tabData.__MsgName__
+
+	if type(msgName) ~= "string" then error("消息tab 没有消息名称" .. tostring(msgName)) end
+
+	if not set_on_msg_tab_mt then
+	    set_on_msg_tab_mt = { }
+
+		set_on_msg_tab_mt.__index = function(tab, key)
+			error("消息[" .. msgName .. "] 访问不存在的成员变量:" .. key)
+		end
+
+		set_on_msg_tab_mt.__newindex = function(tab, key, val)
+				error("消息[" .. msgName .. "] 写入不存在的成员变量:" .. key)
+		end
+	end
+
+    setmetatable(tabData, set_on_msg_tab_mt)
+
+    for k, v in pairs(tabData) do
+        if (type(v) == "table") then
+            set_on_msg_tab(v, msgName .. "::" .. k )
+        end
+    end
 end
 
 -- 格式化lua值
@@ -101,6 +165,15 @@ function M.print_lua_value(inValue)
 	end
 end
 
+-- 退出游戏
+function M.appExit()
+    G_SysEventEmitter:emit("event_appWillExit")
+    if G_MAC.IS_IOS then
+        os.exit(0)
+    else
+        cc.Director:getInstance():endToLua()
+    end
+end
 
 -------------------------------------------------------------------------------------------------------------
 

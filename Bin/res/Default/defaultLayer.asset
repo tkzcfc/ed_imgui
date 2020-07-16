@@ -1,0 +1,27 @@
+{
+    "type": "layer",
+    "data": {
+        "children": [],
+        "context": {
+            "_renderScale": 1,
+            "plugins": {
+                "PluginLayerSize": {
+                    "size": {
+                        "y": 750,
+                        "x": 1134
+                    },
+                    "color": {
+                        "r": 0,
+                        "b": 0,
+                        "a": 1,
+                        "g": 0
+                    }
+                }
+            },
+            "_renderPos": {
+                "y": 0,
+                "x": 0
+            }
+        }
+    }
+}

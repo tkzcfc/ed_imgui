@@ -1,3 +1,8 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-12 13:52:08
+-- @Description: 分析 cocostudio 导出的lua文件里面的资源引用
+
 local function AnalyResource(str, regEx, out)
 	local func = string.gmatch(str, regEx)
 	local tmp
@@ -25,7 +30,7 @@ end
 function M:doAnalyResource(filepath)
 	local content = cc.FileUtils:getInstance():getStringFromFile(filepath)
 	if content == nil or content == "" then
-		return ""
+		return {}
 	end
 
 	local out = {}

@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "type/StringArray.h"
 #include "imgui.h"
+#include "lua_function/LuaFunction.h"
 
 using namespace cocos2d;
 
@@ -41,6 +42,8 @@ public:
 
 	static void* getImguiTextureID(const std::string& key, bool isPlist = false);
 
+	static void* getImguiTextureIDByTexture(Texture2D* texture);
+
 	static int getImguiTextureWidth(const std::string& key, bool isPlist = false);
 
 	static int getImguiTextureHeight(const std::string& key, bool isPlist = false);
@@ -74,4 +77,20 @@ public:
 	static const ImVec4& getStyleColor(int type);
 
 	static bool copyFile(const std::string& srcFile, const std::string& dstFile);
+
+	static void enumerateChildren(cocos2d::Node* node, const std::string& name, LuaFunction& handle);
+
+	static std::string prettyJson(const char* json);
+
+	static int imguiComboUserdata(const char* label, int current_item);
+
+	static bool imguiComboBool(const char* label, bool current_item);
+
+	static void helpMarker(const char* desc);
+
+	static std::vector<std::string> splitPlist(const std::string& plist);
+
+public:
+
+	static std::map<std::string, std::vector<std::string> > cache_plistSubs;
 };

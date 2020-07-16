@@ -1,0 +1,1078 @@
+{
+    "type": "layer",
+    "data": {
+        "children": [
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 670.44360351563,
+                        "x": 831.71099853516
+                    },
+                    "aabb": {
+                        "y": 466.49200439453,
+                        "x": 283.70819091797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417114258
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_118"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 676.69360351563,
+                        "x": 503.58599853516
+                    },
+                    "aabb": {
+                        "y": 472.74200439453,
+                        "x": -44.416809082031,
+                        "height": 557.90936279297,
+                        "width": 1174.4417114258
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_120"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 667.31860351563,
+                        "x": 522.33599853516
+                    },
+                    "aabb": {
+                        "y": 463.36700439453,
+                        "x": -25.666809082031,
+                        "height": 557.90936279297,
+                        "width": 1174.4417114258
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_122"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 667.31860351563,
+                        "x": 756.71099853516
+                    },
+                    "aabb": {
+                        "y": 463.36700439453,
+                        "x": 208.70819091797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417114258
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_123"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 667.31860351563,
+                        "x": 1409.8359375
+                    },
+                    "aabb": {
+                        "y": 463.36700439453,
+                        "x": 861.83312988281,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_124"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 898.56860351563,
+                        "x": 1969.2109375
+                    },
+                    "aabb": {
+                        "y": 694.61700439453,
+                        "x": 1421.2081298828,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_125"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1251.6936035156,
+                        "x": 2462.9609375
+                    },
+                    "aabb": {
+                        "y": 1047.7419433594,
+                        "x": 1914.9581298828,
+                        "height": 557.90942382813,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_126"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1176.685546875,
+                        "x": 3531.7106933594
+                    },
+                    "aabb": {
+                        "y": 972.73394775391,
+                        "x": 2983.7080078125,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_127"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1386.0686035156,
+                        "x": 3359.8356933594
+                    },
+                    "aabb": {
+                        "y": 1182.1169433594,
+                        "x": 2811.8330078125,
+                        "height": 557.90942382813,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_128"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1492.3186035156,
+                        "x": 3591.0856933594
+                    },
+                    "aabb": {
+                        "y": 1288.3669433594,
+                        "x": 3043.0830078125,
+                        "height": 557.90942382813,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_129"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 883.4052734375,
+                        "x": 3661.9975585938
+                    },
+                    "aabb": {
+                        "y": 486.24908447266,
+                        "x": 2900.796875,
+                        "height": 1314.7719116211,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_130"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 305.59320068359,
+                        "x": 3553.7102050781
+                    },
+                    "aabb": {
+                        "y": -91.56298828125,
+                        "x": 2792.5095214844,
+                        "height": 1314.7719726563,
+                        "width": 3073.7102050781
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_131"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 458.49945068359,
+                        "x": 3275.8920898438
+                    },
+                    "aabb": {
+                        "y": 61.34326171875,
+                        "x": 2514.69140625,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_132"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1232.9436035156,
+                        "x": 3597.3356933594
+                    },
+                    "aabb": {
+                        "y": 1028.9919433594,
+                        "x": 3049.3330078125,
+                        "height": 557.90942382813,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_133"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1023.5686035156,
+                        "x": 3678.5856933594
+                    },
+                    "aabb": {
+                        "y": 626.41241455078,
+                        "x": 2917.3850097656,
+                        "height": 1314.7719116211,
+                        "width": 3073.7097167969
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_134"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 1104.8186035156,
+                        "x": 3247.3356933594
+                    },
+                    "aabb": {
+                        "y": 900.86700439453,
+                        "x": 2699.3330078125,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_135"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 761.06860351563,
+                        "x": 3016.0856933594
+                    },
+                    "aabb": {
+                        "y": 363.91241455078,
+                        "x": 2254.8850097656,
+                        "height": 1314.7719116211,
+                        "width": 3073.7097167969
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_136"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 826.69360351563,
+                        "x": 1754.7110595703
+                    },
+                    "aabb": {
+                        "y": 429.53741455078,
+                        "x": 993.51037597656,
+                        "height": 1314.7719116211,
+                        "width": 3073.7098388672
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_137"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 336.71768188477,
+                        "x": 4344.1088867188
+                    },
+                    "aabb": {
+                        "y": 132.76608276367,
+                        "x": 3796.1059570313,
+                        "height": 557.90933227539,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_138"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -10.806274414063,
+                        "x": 3264.4189453125
+                    },
+                    "aabb": {
+                        "y": -407.96246337891,
+                        "x": 2503.2182617188,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_139"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -52.472961425781,
+                        "x": 2989.4189453125
+                    },
+                    "aabb": {
+                        "y": -256.42456054688,
+                        "x": 2441.416015625,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_140"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 205.8603515625,
+                        "x": 3162.3354492188
+                    },
+                    "aabb": {
+                        "y": 1.9087524414063,
+                        "x": 2614.3325195313,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_141"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -748.72290039063,
+                        "x": 3901.2939453125
+                    },
+                    "aabb": {
+                        "y": -1145.8791503906,
+                        "x": 3140.0932617188,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_142"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -795.59790039063,
+                        "x": 3220.0439453125
+                    },
+                    "aabb": {
+                        "y": -999.54949951172,
+                        "x": 2672.041015625,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_143"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -319.42810058594,
+                        "x": 3900.5766601563
+                    },
+                    "aabb": {
+                        "y": -523.37969970703,
+                        "x": 3352.5737304688,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_144"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -641.92810058594,
+                        "x": 4050.5766601563
+                    },
+                    "aabb": {
+                        "y": -1039.0842285156,
+                        "x": 3289.3759765625,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_145"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -734.42810058594,
+                        "x": 4075.5766601563
+                    },
+                    "aabb": {
+                        "y": -1131.5842285156,
+                        "x": 3314.3759765625,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_146"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -849.51525878906,
+                        "x": 4235.5073242188
+                    },
+                    "aabb": {
+                        "y": -1053.466796875,
+                        "x": 3687.5043945313,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_147"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -1356.9281005859,
+                        "x": 3595.5766601563
+                    },
+                    "aabb": {
+                        "y": -1560.8796386719,
+                        "x": 3047.5737304688,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_148"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -1201.9281005859,
+                        "x": 4215.576171875
+                    },
+                    "aabb": {
+                        "y": -1405.8796386719,
+                        "x": 3667.5732421875,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_149"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -834.42810058594,
+                        "x": 3773.0766601563
+                    },
+                    "aabb": {
+                        "y": -1038.3796386719,
+                        "x": 3225.0737304688,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_150"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -1021.9281005859,
+                        "x": 3618.0766601563
+                    },
+                    "aabb": {
+                        "y": -1225.8796386719,
+                        "x": 3070.0737304688,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_151"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -1039.4281005859,
+                        "x": 4135.576171875
+                    },
+                    "aabb": {
+                        "y": -1436.5842285156,
+                        "x": 3374.3754882813,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_152"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -986.92810058594,
+                        "x": 4153.076171875
+                    },
+                    "aabb": {
+                        "y": -1190.8796386719,
+                        "x": 3605.0732421875,
+                        "height": 557.90936279297,
+                        "width": 1174.4418945313
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_153"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -501.92810058594,
+                        "x": 1738.0769042969
+                    },
+                    "aabb": {
+                        "y": -899.08428955078,
+                        "x": 976.87622070313,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_154"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -424.42810058594,
+                        "x": 1718.0769042969
+                    },
+                    "aabb": {
+                        "y": -628.37969970703,
+                        "x": 1170.0740966797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_155"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -461.92810058594,
+                        "x": 1533.0769042969
+                    },
+                    "aabb": {
+                        "y": -665.87969970703,
+                        "x": 985.07409667969,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_156"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -664.42810058594,
+                        "x": 1978.0769042969
+                    },
+                    "aabb": {
+                        "y": -1061.5842285156,
+                        "x": 1216.8762207031,
+                        "height": 1314.7719726563,
+                        "width": 3073.7097167969
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_157"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -501.92810058594,
+                        "x": 1683.0769042969
+                    },
+                    "aabb": {
+                        "y": -899.08428955078,
+                        "x": 921.87622070313,
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_158"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -739.42810058594,
+                        "x": 1898.0769042969
+                    },
+                    "aabb": {
+                        "y": -943.37969970703,
+                        "x": 1350.0740966797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_159"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -719.42810058594,
+                        "x": 2150.5769042969
+                    },
+                    "aabb": {
+                        "y": -923.37969970703,
+                        "x": 1602.5740966797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_160"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -506.92810058594,
+                        "x": 1750.5769042969
+                    },
+                    "aabb": {
+                        "y": -710.87969970703,
+                        "x": 1202.5740966797,
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "assetFile": "Projects/test/test1.asset",
+                    "contentSize": {
+                        "height": 557.90936279297,
+                        "width": 1174.4417724609
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_161"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": -496.92810058594,
+                        "x": 1888.0769042969
+                    },
+                    "aabb": {
+                        "y": -894.08428955078,
+                        "x": 1126.8762207031,
+                        "height": 1314.7719726563,
+                        "width": 3073.7097167969
+                    },
+                    "assetFile": "Projects/test/w1.asset",
+                    "contentSize": {
+                        "height": 1314.7719726563,
+                        "width": 3073.7099609375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_162"
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -73.380798339844,
+                "x": -666.7373046875
+            },
+            "_renderScale": 0.20000001788139,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [],
+                    "show_rect": true,
+                    "rect_data": []
+                },
+                "PluginRefResources": [
+                    "Projects/test/dpsglogo.png",
+                    "Projects/test/Loading.png",
+                    "Projects/test/DPSG_GradualChangeText.png"
+                ],
+                "PluginLayerSize": {
+                    "size": {
+                        "y": 750,
+                        "x": 7000,
+                        "z": 0,
+                        "w": 1
+                    },
+                    "color": {
+                        "r": 0.91150426864624,
+                        "b": 1,
+                        "a": 1,
+                        "g": 0
+                    }
+                }
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 20,
+                "Image": 1,
+                "Widget": 162
+            }
+        }
+    }
+}

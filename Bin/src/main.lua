@@ -3,6 +3,7 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 cc.FileUtils:getInstance():addSearchPath("src/")
 cc.FileUtils:getInstance():addSearchPath("res/")
 
+-- require("LuaPanda").start("127.0.0.1",8818)
 require "config"
 require "cocos.init"
 
@@ -26,3 +27,5 @@ local status, msg = xpcall(main, __G__TRACKBACK__)
 if not status then
     logE(msg)
 end
+
+

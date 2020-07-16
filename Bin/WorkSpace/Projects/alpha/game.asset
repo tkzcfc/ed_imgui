@@ -1,0 +1,106 @@
+{
+    "type": "layer",
+    "data": {
+        "children": [
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 0,
+                        "x": 2411
+                    },
+                    "aabb": {
+                        "y": -4.0624389648438,
+                        "x": 2411,
+                        "height": 629.21185302734,
+                        "width": 2542.375
+                    },
+                    "assetFile": "Projects/alpha/w1.asset",
+                    "contentSize": {
+                        "height": 629.21185302734,
+                        "width": 2542.375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_2"
+                },
+                "child": []
+            },
+            {
+                "type": "Widget",
+                "data": {
+                    "position": {
+                        "y": 0,
+                        "x": 0
+                    },
+                    "aabb": {
+                        "y": -4.0624389648438,
+                        "x": 0,
+                        "height": 629.21185302734,
+                        "width": 2542.375
+                    },
+                    "assetFile": "Projects/alpha/w1.asset",
+                    "contentSize": {
+                        "height": 629.21185302734,
+                        "width": 2542.375
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "Widget_1"
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -104.08172607422,
+                "x": -370.44592285156
+            },
+            "_renderScale": 0.30000001192093,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": false,
+                    "line_data": [],
+                    "show_rect": false,
+                    "rect_data": []
+                },
+                "PluginRefResources": {
+                    "refs": [
+                        "Projects/alpha/pic/D1.png",
+                        "Projects/alpha/pic/C2.png",
+                        "king.plist",
+                        "arg1",
+                        "arg2",
+                        "Projects/alpha/pic/a1.png",
+                        "Projects/alpha/pic/D2.png",
+                        "xxxxxxxxxxxxx"
+                    ],
+                    "userdata": [
+                        {
+                            "type": 0,
+                            "data": 0,
+                            "name": ""
+                        }
+                    ]
+                },
+                "PluginLayerSize": {
+                    "size": {
+                        "y": 750,
+                        "x": 5000,
+                        "z": 0,
+                        "w": 1
+                    },
+                    "color": {
+                        "r": 0.83185839653015,
+                        "b": 0.14355076849461,
+                        "a": 1,
+                        "g": 0.14355076849461
+                    }
+                }
+            },
+            "typeNameGenSeeds": {
+                "Widget": 2
+            }
+        }
+    }
+}

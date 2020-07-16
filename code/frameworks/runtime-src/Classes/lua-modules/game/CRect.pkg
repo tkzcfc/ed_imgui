@@ -41,6 +41,8 @@ public:
 	int getVertexCount();
 	
 	void debugDraw(cc.DrawNode* pDrawNode);
+	
+	void setAlpha(float alpha);
 
 	void setVisible(bool value);
 

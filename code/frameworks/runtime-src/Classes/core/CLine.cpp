@@ -3,6 +3,7 @@
 
 CLine::CLine()
 {
+	m_alpha = 1.0f;
 	m_pointArr.reserve(10);
 
 	m_isdirty = false;
@@ -141,15 +142,25 @@ void CLine::debugDraw(DrawNode* pDrawNode, bool forcedDisplay/* = false*/)
 		return;
 	}
 
+	Color4F lineColor = m_lineColor;
+	lineColor.a *= m_alpha;
+
 	for (auto i = 1U; i < m_pointArr.size(); ++i)
 	{
-		pDrawNode->drawLine(m_pointArr[i - 1], m_pointArr[i], m_lineColor);
+		pDrawNode->drawLine(m_pointArr[i - 1], m_pointArr[i], lineColor);
 	}
 
+	Color4F normalColor = m_normalColor;
+	normalColor.a *= m_alpha;
 	for (auto i = 0U; i < m_normalCount; ++i)
 	{
-		pDrawNode->drawLine(Vec2(m_normalLines[i].x1, m_normalLines[i].y1), Vec2(m_normalLines[i].x2, m_normalLines[i].y2), m_lineColor);
+		pDrawNode->drawLine(Vec2(m_normalLines[i].x1, m_normalLines[i].y1), Vec2(m_normalLines[i].x2, m_normalLines[i].y2), normalColor);
 	}
+}
+
+void CLine::setAlpha(float alpha)
+{
+	m_alpha = alpha;
 }
 
 void CLine::setLineCorlor(unsigned int color)

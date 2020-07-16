@@ -1,0 +1,8 @@
+
+$#include "editor/ScissorLayer.h"
+
+class ScissorLayer : cc.Layer
+{
+public:
+	static ScissorLayer* create();
+}

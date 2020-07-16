@@ -1,15 +1,16 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-12 13:52:08
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-05-07 22:22:42
+-- @Description: 通用UI
+
+
 local MsgBoxShowTag = false
 local LoadingShowTag = false
 
-local function tryDisEnableEngulfAllTouchs()
-	if not MsgBoxShowTag and not LoadingShowTag then
-		_MyG.MainScene.ilayer:setEngulfAllTouchs(false)
-	end
-end
 
-
-
--- loading
+-- @brief loading 绘制逻辑
 local loadingWindowFlag = ImGuiWindowFlags_NoTitleBar
 loadingWindowFlag = Tools:bor_int32(loadingWindowFlag, ImGuiWindowFlags_NoMove)
 loadingWindowFlag = Tools:bor_int32(loadingWindowFlag, ImGuiWindowFlags_AlwaysAutoResize)
@@ -25,14 +26,13 @@ local function drawLoading()
 
     if not LoadingShowTag then
         G_SysEventEmitter:removeListener("onGUI", drawLoading)
-        tryDisEnableEngulfAllTouchs()
     end
 end
 
 
 
 
--- message box
+-- @brief  message box 绘制逻辑
 local msgWindowFlag = 0
 msgWindowFlag = Tools:bor_int32(msgWindowFlag, ImGuiWindowFlags_NoMove)
 msgWindowFlag = Tools:bor_int32(msgWindowFlag, ImGuiWindowFlags_AlwaysAutoResize)
@@ -92,22 +92,19 @@ end
 
 
 
-
-
-local LoadingUI = require("app.views.Loading").create()
-LoadingUI:retain()
+-- @brief 显示通用loading
 _MyG.ShowLoading = function()
     LoadingShowTag = true
-    _MyG.MainScene.ilayer:setEngulfAllTouchs(true)
     G_SysEventEmitter:on("onGUI", drawLoading)
 end
 
+-- @brief 隐藏通用loading
 _MyG.HideLoading = function()
     LoadingShowTag = false
 end
 
 
-
+-- @brief 弹出选项框
 _MyG.ShowBox = function(content, okcall, cancelcall, defaultcall)
     if defaultcall then
         if cancelcall then
@@ -124,6 +121,7 @@ _MyG.ShowBox = function(content, okcall, cancelcall, defaultcall)
     end
 end
 
+-- @brief 显示三个选项的选项框
 _MyG.ShowThreeButton = function(content, oneButtontext, twoButtontext, threeButtontext, onecall, twocall, threecall, defaultcall)
     content = "\t" .. content .. "\t"
     msgbox_args = {}
@@ -150,13 +148,12 @@ _MyG.ShowThreeButton = function(content, oneButtontext, twoButtontext, threeButt
 
     G_SysEventEmitter:on("onGUI", drawMsgbox)
     MsgBoxShowTag = true
-    _MyG.MainScene.ilayer:setEngulfAllTouchs(true)
 end
 
+-- @brief 隐藏弹出框
 _MyG.HideBox = function()
     G_SysEventEmitter:removeListener("onGUI", drawMsgbox)
     MsgBoxShowTag = false
-	tryDisEnableEngulfAllTouchs()
 end
 
 

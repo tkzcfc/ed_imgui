@@ -14,6 +14,7 @@
 #endif
 
 #include "lua-modules/lua_modules.h"
+#include "lua_function/LuaFunction.h"
 
 using namespace CocosDenshion;
 
@@ -64,6 +65,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto engine = LuaEngine::getInstance();
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     lua_State* L = engine->getLuaStack()->getLuaState();
+
+	LuaFunction::setGlobalLuaState(L);
+
     lua_module_register(L);
 
 	preload_lua_modules(L);

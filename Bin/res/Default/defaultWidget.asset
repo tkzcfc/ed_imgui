@@ -1,0 +1,19 @@
+{
+    "type": "widget",
+    "data": {
+        "children": [],
+        "context": {
+            "_renderScale": 1,
+            "plugins": {
+                "PluginLineRect": {
+                    "rect_data": [],
+                    "line_data": []
+                }
+            },
+            "_renderPos": {
+                "y": 0,
+                "x": 0
+            }
+        }
+    }
+}

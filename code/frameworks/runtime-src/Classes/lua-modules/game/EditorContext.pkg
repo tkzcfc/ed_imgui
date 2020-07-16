@@ -1,0 +1,30 @@
+$#include "editor/EditorContext.h"
+
+class EditorContext : public cc.Node
+{
+public:
+
+	static EditorContext* create();
+
+	ILayer* getIlayer();
+	
+	cc.Node* getBackgroundNode();
+	
+	float getLeftPaneWidth() { return m_leftPaneWidth; }
+	float getCenterPaneWidth() { return m_centerPaneWidth; }
+	float getRightPaneWidth() { return m_rightPaneWidth; }
+
+	float getTopPanelHeight() { return m_topPanelHeight; }
+	float getBottomPanelHeight() { return m_bottomPanelHeight; }
+	float getCenterPaneHeight() { return m_centerPaneHeight; }
+	
+	float getSplitterThickness();
+	
+	/// LuaFunctionBond
+	void registerLuaHandle(std::string name, LUA_FUNCTION handle);
+
+	void unregisterLuaHandle(std::string name);
+
+	void clearLuaHandle();
+
+};

@@ -1,0 +1,276 @@
+{
+    "type": "widget",
+    "data": {
+        "children": [
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 145.18756103516,
+                        "x": -330.50280761719
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/dpsglogo.png",
+                    "userdata": [
+                        {
+                            "type": 0,
+                            "data": 0,
+                            "name": "agewrwe"
+                        },
+                        {
+                            "type": 1,
+                            "data": false,
+                            "name": "zgfdfad"
+                        },
+                        {
+                            "type": 2,
+                            "data": "adadasdasdasdasdsa",
+                            "name": "zczxcz"
+                        },
+                        {
+                            "type": 3,
+                            "data": 30,
+                            "name": "zxczxc"
+                        }
+                    ],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_1",
+                    "opacity": 255
+                },
+                "child": [
+                    {
+                        "type": "Sprite",
+                        "data": {
+                            "rotation": 0,
+                            "position": {
+                                "y": 208.77020263672,
+                                "x": 573.23645019531
+                            },
+                            "color": {
+                                "r": 255,
+                                "b": 255,
+                                "g": 255
+                            },
+                            "plistFileName": "",
+                            "textureName": "Projects/test/dpsglogo.png",
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 1,
+                                    "name": ""
+                                },
+                                {
+                                    "type": 2,
+                                    "data": "",
+                                    "name": ""
+                                }
+                            ],
+                            "scaleY": 1,
+                            "isOpenFolder": true,
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "scaleX": 1,
+                            "isPlist": false,
+                            "name": "Sprite_2",
+                            "opacity": 255
+                        },
+                        "child": [
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": -95.823211669922,
+                                        "x": 601.20532226563
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "",
+                                    "textureName": "Projects/test/dpsglogo.png",
+                                    "userdata": [
+                                        {
+                                            "type": 0,
+                                            "data": 2,
+                                            "name": ""
+                                        },
+                                        {
+                                            "type": 3,
+                                            "data": 0,
+                                            "name": ""
+                                        }
+                                    ],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": false,
+                                    "name": "Sprite_3",
+                                    "opacity": 255
+                                },
+                                "child": []
+                            },
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": -223.66334533691,
+                                        "x": 588.06524658203
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "",
+                                    "textureName": "Projects/test/dpsglogo.png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": false,
+                                    "name": "Sprite_4",
+                                    "opacity": 255
+                                },
+                                "child": [
+                                    {
+                                        "type": "Sprite",
+                                        "data": {
+                                            "rotation": 0,
+                                            "position": {
+                                                "y": 63.513977050781,
+                                                "x": -369.51397705078
+                                            },
+                                            "color": {
+                                                "r": 255,
+                                                "b": 255,
+                                                "g": 255
+                                            },
+                                            "plistFileName": "",
+                                            "textureName": "Projects/test/dpsglogo.png",
+                                            "userdata": [],
+                                            "scaleY": 1,
+                                            "isOpenFolder": true,
+                                            "anchorPoint": {
+                                                "y": 0.5,
+                                                "x": 0.5
+                                            },
+                                            "scaleX": 1,
+                                            "isPlist": false,
+                                            "name": "Sprite_6",
+                                            "opacity": 255
+                                        },
+                                        "child": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 80.920669555664,
+                        "x": 49.785636901855
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/dpsglogo.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_5",
+                    "opacity": 255
+                },
+                "child": [
+                    {
+                        "type": "Sprite",
+                        "data": {
+                            "rotation": 0,
+                            "position": {
+                                "y": -112.87228393555,
+                                "x": 234.3092956543
+                            },
+                            "color": {
+                                "r": 255,
+                                "b": 255,
+                                "g": 255
+                            },
+                            "plistFileName": "",
+                            "textureName": "Projects/test/dpsglogo.png",
+                            "userdata": [],
+                            "scaleY": 1,
+                            "isOpenFolder": true,
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "scaleX": 1,
+                            "isPlist": false,
+                            "name": "Sprite_7",
+                            "opacity": 255
+                        },
+                        "child": []
+                    }
+                ]
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": 233.88333129883,
+                "x": 11.10871887207
+            },
+            "_renderScale": 0.29999992251396,
+            "plugins": {
+                "PluginLineRect": {
+                    "line_data": [],
+                    "rect_data": []
+                },
+                "PluginRefResources": [
+                    "Projects/test/dpsglogo.png"
+                ]
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 7
+            }
+        }
+    }
+}

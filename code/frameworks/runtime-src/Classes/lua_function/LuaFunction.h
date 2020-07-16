@@ -10,57 +10,81 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#include <string>
+
 #include "tolua_ext.h"
 
-class LuaRef {
+
+class LuaRetValue
+{
 public:
-	LuaRef();
 
-	LuaRef(lua_State* aL, int index);
+	LuaRetValue();
 
-	LuaRef(const LuaRef& other);
+	virtual ~LuaRetValue();
 
-	LuaRef& operator=(const LuaRef& rhs);
+	void setString(const char* value);
 
-	LuaRef(LuaRef&& other);
+	void setNumber(lua_Number value);
 
-	LuaRef& operator=(LuaRef&& rhs);
+	void setBool(bool value);
 
-	virtual ~LuaRef();
+	void setUserdata(void* value);
 
-	explicit operator bool() const;
+	void setNil();
 
-	void reset(lua_State* aL, int index);
+	std::string getString();
 
-	void push() const;
+	int getInt();
 
-	inline lua_State* state() const;
+	float getFloat();
 
-protected:
+	double getDouble();
 
-	void unref() const;
+	void* getUserdata();
 
-protected:
+	bool isNil();
 
-	lua_State* L;
+	bool getBool();
 
-	int m_ref;
+private:
+
+	void reset();
+
+	union Value
+	{
+		std::string* svalue;
+		lua_Number nvalue;
+		bool bvalue;
+		void* userdata;
+	};
+
+	/*
+	#define LUA_TNONE		(-1)
+	#define LUA_TNIL		0
+	#define LUA_TBOOLEAN		1
+	#define LUA_TLIGHTUSERDATA	2
+	#define LUA_TNUMBER		3
+	#define LUA_TSTRING		4
+	#define LUA_TUSERDATA		7
+	*/
+	int m_type;
+	union Value m_value;
 };
 
-lua_State* LuaRef::state() const
-{
-	return L;
-}
-
-
-
-class LuaFunction : public LuaRef
+class LuaFunction
 {
 public:
+	static lua_State* G_L;
+
+	static void setGlobalLuaState(lua_State* L);
+
+public:
+
 	LuaFunction();
 
-	LuaFunction(lua_State* aL, int index, int);
+	LuaFunction(lua_State* aL, int index, int def);
+
+	LuaFunction(int ref);
 
 	LuaFunction(const LuaFunction& other);
 
@@ -72,12 +96,21 @@ public:
 
 	virtual ~LuaFunction();
 
-
 	void operator()();
 
 	void ppush();
 
-	void pcall(int nresults = 0);
+	bool pcall(LuaRetValue* retarr = NULL, int nresults = 0);
+
+	inline bool isvalid();
+
+	inline void invalid();
+
+	void ref(int handle);
+
+	void unref();
+
+	void push() const;
 
 	template<typename...Args>
 	void operator()(Args&...args)
@@ -112,80 +145,26 @@ public:
 	template<typename T>
 	void pushusertype(void* v, const char* type)
 	{
-		tolua_ext_object_to_luaval<T>(L, v, type);
+#if IS_IN_COCOS2D_X_LUA
+		tolua_ext_object_to_luaval<T>(G_L, v, type);
+#else
+		tolua_pushusertype(G_L, v, type);
+#endif
 	}
 	
-	bool retbool(int index = 0, bool defaultvalue = false);
-
-	int retint(int index = 0, int defaultvalue = 0);
-
-	std::string retstring(int index = 0, const std::string& defaultvalue = "");
-
-	void* retuserdata(int index = 0);
-
-	void* retlightuserdata(int index = 0);
-
-	int checktype(int index = 0);
-
-	inline int retcount();
-
-	inline bool isvalid();
-
-	inline void invalid();
-
 private:
-
-	void clear_ret();
-
-private:
-	mutable int m_trackback;
-
-	const static unsigned int MAX_RET_ARGS_COUNT = 5;
-
-	union LuaRetValue
-	{
-		std::string* stringValue;
-		int numberValue;
-		bool boolValue;
-		void* userdata;
-	};
-	struct LuaRetData
-	{
-		LuaRetData()
-		{
-			type = LUA_TNONE;
-		}
-		union LuaRetValue value;
-		
-		/*
-		#define LUA_TNONE		(-1)
-		#define LUA_TNIL		0
-		#define LUA_TBOOLEAN		1
-		#define LUA_TLIGHTUSERDATA	2
-		#define LUA_TNUMBER		3
-		#define LUA_TSTRING		4
-		#define LUA_TUSERDATA		7
-		*/
-		int type;
-	};
-	LuaRetData m_retValues[MAX_RET_ARGS_COUNT];
-	int m_retCount;
-
-	bool m_isValid;
+	int m_trackback;
+	int m_ref;
 };
-
-int LuaFunction::retcount()
-{
-	return m_retCount;
-}
 
 bool LuaFunction::isvalid()
 {
-	return (m_isValid && m_ref != LUA_NOREF);
+	return (m_ref > 0);
 }
 
 void LuaFunction::invalid()
 {
-	m_isValid = false;
+	this->unref();
 }
+
 

@@ -36,6 +36,8 @@ public:
 	void setNormalScale(float scale);
 	
 	void debugDraw(cc.DrawNode* pDrawNode, bool forcedDisplay = false);
+	
+	void setAlpha(float alpha);
 
 	void setLineCorlor(unsigned int color);
 

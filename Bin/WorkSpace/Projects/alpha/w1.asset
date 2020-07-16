@@ -1,0 +1,633 @@
+{
+    "type": "widget",
+    "data": {
+        "children": [
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 175.56256103516,
+                        "x": 1876.875
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/a1.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_1",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 172.43756103516,
+                        "x": 669.0625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/a1.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_2",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 409.77404785156,
+                        "x": 224.77673339844
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/C2.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_3",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 412.89904785156,
+                        "x": 756.02697753906
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/D2.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_4",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 400.39892578125,
+                        "x": 1318.5268554688
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/D2.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_6",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 456.6494140625,
+                        "x": 2166.4443359375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/alpha/pic/D1.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_7",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 308.21038818359,
+                        "x": 193.53430175781
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_1",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 299.70123291016,
+                        "x": 783.37475585938
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_2",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 308.62982177734,
+                        "x": 901.23187255859
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_3",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 296.72479248047,
+                        "x": 1135.1604003906
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_8",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 312.50115966797,
+                        "x": 575.93603515625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_11",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 307.44171142578,
+                        "x": 1500.9340820313
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_12",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 327.23345947266,
+                        "x": 1761.6508789063
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_13",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 314.73345947266,
+                        "x": 2057.4841308594
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_14",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 323.06665039063,
+                        "x": 2319.9838867188
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scriptFile": "CustomFile.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_15",
+                    "opacity": 255
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -209.02279663086,
+                "x": -897.60583496094
+            },
+            "_renderScale": 0.90000230073929,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [
+                        {
+                            "points": [
+                                {
+                                    "y": 107.71917724609,
+                                    "x": -134.91192626953
+                                },
+                                {
+                                    "y": -219.24255371094,
+                                    "x": 199.53723144531
+                                },
+                                {
+                                    "y": -174.31774902344,
+                                    "x": 1929.1962890625
+                                },
+                                {
+                                    "y": -151.85540771484,
+                                    "x": 2693.8427734375
+                                },
+                                {
+                                    "y": 192.57818603516,
+                                    "x": 2958.404296875
+                                },
+                                {
+                                    "y": 392.25305175781,
+                                    "x": 3108.1606445313
+                                }
+                            ],
+                            "isLeftNormal": false,
+                            "userdata": [
+                                {
+                                    "type": 2,
+                                    "data": "zxczxczxczx",
+                                    "name": "strName"
+                                }
+                            ],
+                            "normalColor": 3355443455,
+                            "isVisible": true,
+                            "lineColor": 4278255360
+                        }
+                    ],
+                    "show_rect": true,
+                    "rect_data": [
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 138.99276733398,
+                                "x": 401.53955078125
+                            },
+                            "contentSize": {
+                                "y": 321.97125244141,
+                                "x": 633.95446777344
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 1,
+                                    "name": "iName"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 182.67077636719,
+                                "x": 1318.78125
+                            },
+                            "contentSize": {
+                                "y": 244.59619140625,
+                                "x": 741.27923583984
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 2,
+                                    "name": "iName"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 182.67074584961,
+                                "x": 2011.3922119141
+                            },
+                            "contentSize": {
+                                "y": 214.64630126953,
+                                "x": 409.33081054688
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 3,
+                                    "name": "iName"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 198.89239501953,
+                                "x": 2502.3559570313
+                            },
+                            "contentSize": {
+                                "y": 242.10266113281,
+                                "x": 454.25561523438
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [
+                                {
+                                    "type": 0,
+                                    "data": 4,
+                                    "name": "iName"
+                                }
+                            ],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        }
+                    ]
+                },
+                "PluginRefResources": {
+                    "refs": [
+                        "Projects/alpha/pic/D1.png",
+                        "king.plist",
+                        "Projects/alpha/pic/a1.png",
+                        "Projects/alpha/pic/D2.png",
+                        "Projects/alpha/pic/C2.png"
+                    ],
+                    "userdata": [
+                        {
+                            "type": 2,
+                            "data": "xxxxxxxxxxxxx",
+                            "name": "arg1"
+                        },
+                        {
+                            "type": 0,
+                            "data": 2,
+                            "name": "arg2"
+                        }
+                    ]
+                }
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 7,
+                "CocostudioFile": 15
+            }
+        }
+    }
+}

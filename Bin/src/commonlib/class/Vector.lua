@@ -110,9 +110,10 @@ function Vector:eraseObject(obj)
 				release(self[key])
 			end
 			table.remove(self, key)
-			break
+			return true
 		end
 	end
+	return false
 end
 
 return Vector

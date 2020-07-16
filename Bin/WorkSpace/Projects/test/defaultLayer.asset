@@ -1,0 +1,68 @@
+{
+    "type": "layer",
+    "data": {
+        "children": [
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 288,
+                        "x": 512
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "aabb": {
+                        "y": 0,
+                        "x": 0,
+                        "height": 576,
+                        "width": 1024
+                    },
+                    "plistFileName": "",
+                    "textureName": "Projects/test/Loading.png",
+                    "scaleY": 1,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "scaleX": 1,
+                    "isPlist": false,
+                    "name": "Sprite_1",
+                    "opacity": 255
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -263.22381591797,
+                "x": -385.48211669922
+            },
+            "_renderScale": 0.80000007152557,
+            "plugins": {
+                "PluginLayerSize": {
+                    "size": {
+                        "y": 750,
+                        "x": 1145,
+                        "z": 0,
+                        "w": 1
+                    },
+                    "color": {
+                        "r": 0,
+                        "b": 0,
+                        "a": 1,
+                        "g": 0
+                    }
+                }
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 1
+            }
+        }
+    }
+}

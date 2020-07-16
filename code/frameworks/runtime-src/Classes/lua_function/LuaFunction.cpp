@@ -1,114 +1,191 @@
 ﻿#include "LuaFunction.h"
 #include <assert.h>
 
-LuaRef::LuaRef() 
-	: L(nullptr)
-	, m_ref(LUA_NOREF)
+lua_State* LuaFunction::G_L = NULL;
+
+void LuaFunction::setGlobalLuaState(lua_State* L)
 {
+	G_L = L;
 }
 
-LuaRef::LuaRef(lua_State* aL, int index) 
-	: L(aL)
-	, m_ref(LUA_NOREF)
+////////////////////////////////////////////////////////////////////////////////////////////
+
+LuaRetValue::LuaRetValue()
+	: m_type(LUA_TNONE)
 {
-	lua_pushvalue(L, index);
-	m_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+	memset(&m_value, 0, sizeof(union Value));
 }
 
-LuaRef::~LuaRef()
+LuaRetValue::~LuaRetValue()
 {
-	unref();
+	reset();
 }
 
-LuaRef::LuaRef(const LuaRef& other) 
-	: L(nullptr)
-	, m_ref(LUA_NOREF)
+void LuaRetValue::reset()
 {
-	*this = other;
-}
-
-LuaRef& LuaRef::operator=(const LuaRef& rhs)
-{
-	if (this != &rhs)
+	if (m_type == LUA_TSTRING && m_value.svalue != NULL)
 	{
-		rhs.push();
-		reset(rhs.L, -1);
-		lua_pop(L, 1);
+		delete m_value.svalue;
+		memset(&m_value, 0, sizeof(union Value));
 	}
-	return *this;
+	m_type = LUA_TNONE;
 }
 
-LuaRef::LuaRef(LuaRef&& other) 
-	: L(nullptr)
-	, m_ref(LUA_NOREF)
+void LuaRetValue::setString(const char* value)
 {
-	*this = std::move(other);
+	reset();
+	m_value.svalue = new std::string(value);
+	m_type = LUA_TSTRING;
 }
 
-LuaRef& LuaRef::operator=(LuaRef&& rhs)
+void LuaRetValue::setNumber(lua_Number value)
 {
-	if (this != &rhs)
+	reset();
+	m_value.nvalue = value;
+	m_type = LUA_TNUMBER;
+}
+
+void LuaRetValue::setBool(bool value)
+{
+	reset();
+	m_value.bvalue = value;
+	m_type = LUA_TBOOLEAN;
+}
+
+void LuaRetValue::setUserdata(void* value)
+{
+	reset();
+	m_value.userdata = value;
+	m_type = LUA_TUSERDATA;
+}
+
+void LuaRetValue::setNil()
+{
+	reset();
+	m_type = LUA_TNIL;
+}
+
+
+std::string LuaRetValue::getString()
+{
+	if (m_type == LUA_TSTRING)
 	{
-		unref();
-
-		L = rhs.L;
-		m_ref = rhs.m_ref;
-
-		rhs.L = nullptr;
-		rhs.m_ref = LUA_NOREF;
+		return *m_value.svalue;
 	}
-	return *this;
-}
-
-LuaRef::operator bool() const
-{
-	return m_ref != LUA_NOREF;
-}
-
-void LuaRef::reset(lua_State* aL, int index)
-{
-	unref();
-	if (aL != nullptr) 
+	else
 	{
-		L = aL;
-		lua_pushvalue(L, index);
-		m_ref = luaL_ref(L, LUA_REGISTRYINDEX);
-	}
-}
-
-void LuaRef::push() const
-{
-	lua_rawgeti(L, LUA_REGISTRYINDEX, m_ref);
-}
-
-void LuaRef::unref() const
-{
-	if (L && m_ref != LUA_NOREF && m_ref != LUA_REFNIL)
-	{
-		luaL_unref(L, LUA_REGISTRYINDEX, m_ref);
+		assert(m_type == LUA_TNIL);
+		return "";
 	}
 }
 
+int LuaRetValue::getInt()
+{
+	if (m_type == LUA_TNUMBER)
+	{
+		return (int)m_value.nvalue;
+	}
+	else
+	{
+		assert(m_type == LUA_TNIL);
+		return 0;
+	}
+}
 
+float LuaRetValue::getFloat()
+{
+	if (m_type == LUA_TNUMBER)
+	{
+		return (float)m_value.nvalue;
+	}
+	else
+	{
+		assert(m_type == LUA_TNIL);
+		return 0.0f;
+	}
+}
+
+double LuaRetValue::getDouble()
+{
+	if (m_type == LUA_TNUMBER)
+	{
+		return (double)m_value.nvalue;
+	}
+	else
+	{
+		assert(m_type == LUA_TNIL);
+		return 0.0;
+	}
+}
+
+void* LuaRetValue::getUserdata()
+{
+	if (m_type == LUA_TUSERDATA)
+	{
+		return m_value.userdata;
+	}
+	else
+	{
+		assert(m_type == LUA_TNIL);
+		return 0;
+	}
+}
+
+bool LuaRetValue::isNil()
+{
+	if (m_type == LUA_TNIL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool LuaRetValue::getBool()
+{
+	if (m_type == LUA_TBOOLEAN)
+	{
+		return m_value.bvalue;
+	}
+	else
+	{
+		assert(m_type == LUA_TNIL);
+		return false;
+	}
+}
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 LuaFunction::LuaFunction()
-	: LuaRef()
-	, m_trackback(0)
-	, m_isValid(true)
+	: m_trackback(0)
+	, m_ref(0)
 {
 }
 
-LuaFunction::LuaFunction(lua_State* aL, int index, int) 
-	: LuaRef(aL, index)
-	, m_trackback(0)
-	, m_isValid(true)
+LuaFunction::LuaFunction(lua_State* aL, int index, int def)
+	: m_trackback(0)
 {
-	luaL_checktype(aL, index, LUA_TFUNCTION);
+	assert(index > 0);
+	m_ref = tolua_ext_ref_function(aL, index, def);
 }
 
-LuaFunction::LuaFunction(const LuaFunction& other) 
-	: LuaRef()
-	, m_isValid(true)
+LuaFunction::LuaFunction(int ref)
+	: m_trackback(0)
+	, m_ref(ref)
+{
+}
+
+LuaFunction::LuaFunction(const LuaFunction& other)
+	: m_trackback(0)
+	, m_ref(0)
 {
 	*this = other;
 }
@@ -117,43 +194,41 @@ LuaFunction& LuaFunction::operator=(const LuaFunction& rhs)
 {
 	if (this != &rhs)
 	{
-		rhs.push();
-		luaL_checktype(rhs.L, -1, LUA_TFUNCTION);
-		reset(rhs.L, -1);
-		lua_pop(L, 1);
-
-		m_isValid = rhs.m_isValid;
+		if (rhs.m_ref > 0)
+		{
+			auto top = lua_gettop(G_L);
+			rhs.push();
+			this->ref(tolua_ext_ref_function(G_L, lua_gettop(G_L), 0));
+			lua_settop(G_L, top);
+		}
+		else
+		{
+			this->unref();
+		}
 	}
 	return *this;
 }
 
-LuaFunction::LuaFunction(LuaFunction&& other) 
-	: LuaRef()
-	, m_isValid(true)
+LuaFunction::LuaFunction(LuaFunction&& other)
+	: m_trackback(0)
+	, m_ref(0)
 {
 	*this = std::move(other);
-}
-
-LuaFunction::~LuaFunction()
-{
-	clear_ret();
 }
 
 LuaFunction& LuaFunction::operator=(LuaFunction&& rhs)
 {
 	if (this != &rhs)
 	{
-		unref();
-
-		L = rhs.L;
-		m_ref = rhs.m_ref;
-
-		rhs.L = nullptr;
-		rhs.m_ref = LUA_NOREF;
-
-		m_isValid = rhs.m_isValid;
+		this->ref(rhs.m_ref);
+		rhs.m_ref = 0;
 	}
 	return *this;
+}
+
+LuaFunction::~LuaFunction()
+{
+	unref();
 }
 
 void LuaFunction::operator()()
@@ -162,59 +237,79 @@ void LuaFunction::operator()()
 	pcall();
 }
 
-void LuaFunction::ppush()
+void LuaFunction::ref(int handle)
 {
-	lua_getglobal(L, "__G__TRACKBACK__");
-	m_trackback = lua_gettop(L);
-	push();
-	luaL_checktype(L, -1, LUA_TFUNCTION);
+	unref();
+	m_ref = handle;
 }
 
-void LuaFunction::pcall(int nresults/* = 0*/)
+void LuaFunction::unref()
 {
-	assert(nresults <= MAX_RET_ARGS_COUNT);
-	clear_ret();
+	if (m_ref > 0)
+	{
+		tolua_ext_remove_function_by_refid(G_L, m_ref);
+		m_ref = 0;
+	}
+}
 
-	int argc = lua_gettop(L) - m_trackback - 1;
-	int r = lua_pcall(L, argc, nresults, m_trackback);
+void LuaFunction::push() const
+{
+	tolua_ext_get_function_by_refid(G_L, m_ref);
+}
 
-	m_retCount = nresults;
-	if (r == 0 && nresults > 0)
+void LuaFunction::ppush()
+{
+	assert(m_ref > 0);
+
+	lua_getglobal(G_L, "__G__TRACKBACK__");
+	m_trackback = lua_gettop(G_L);
+	
+	this->push();
+	luaL_checktype(G_L, -1, LUA_TFUNCTION);
+}
+
+bool LuaFunction::pcall(LuaRetValue* retarr/* = NULL*/, int nresults/* = 0*/)
+{
+	int argc = lua_gettop(G_L) - m_trackback - 1;
+	int error = lua_pcall(G_L, argc, nresults, m_trackback);
+
+	if (error)
+	{
+		lua_settop(G_L, m_trackback - 1);
+		return false;
+	}
+
+	if (retarr != 0 && nresults > 0)
 	{
 		int index = 0;
 		for (int i = -nresults; i < 0; ++i)
 		{
-			int type = lua_type(L, i);
+			int type = lua_type(G_L, i);
 			switch (type)
 			{
 			case LUA_TNIL: 
 			{
-				m_retValues[index].type = type;
+				retarr[index].setNil();
 			}break;
 			case LUA_TBOOLEAN: 
 			{
-				m_retValues[index].type = type;
-				m_retValues[index].value.boolValue = (bool)lua_toboolean(L, i);
+				retarr[index].setBool((bool)lua_toboolean(G_L, i));
 			}break;
 			case LUA_TLIGHTUSERDATA:
 			{
-				m_retValues[index].type = type;
-				m_retValues[index].value.userdata = *((void**)lua_touserdata(L, i));
+				retarr[index].setUserdata(*((void**)lua_touserdata(G_L, i)));
 			}break;
 			case LUA_TNUMBER: 
 			{
-				m_retValues[index].type = type;
-				m_retValues[index].value.numberValue = lua_tonumber(L, i);
+				retarr[index].setNumber(lua_tonumber(G_L, i));
 			}break;
 			case LUA_TSTRING: 
 			{
-				m_retValues[index].type = type;
-				m_retValues[index].value.stringValue = new std::string(lua_tostring(L, i));
+				retarr[index].setString(lua_tostring(G_L, i));
 			}break;
 			case LUA_TUSERDATA:
 			{
-				m_retValues[index].type = type;
-				m_retValues[index].value.userdata = *((void**)lua_touserdata(L, i));
+				retarr[index].setUserdata(*((void**)lua_touserdata(G_L, i)));
 			}break;
 			default:
 				assert(0);
@@ -225,138 +320,47 @@ void LuaFunction::pcall(int nresults/* = 0*/)
 	}
 
 	// remove trackback and any thing above it.
-	lua_settop(L, m_trackback - 1); 
+	lua_settop(G_L, m_trackback - 1);
+	
+	return true;
 }
 
 void LuaFunction::pusharg(bool v)
 {
-	lua_pushboolean(L, v);
+	lua_pushboolean(G_L, v);
 }
 
 void LuaFunction::pusharg(float v)
 {
-	lua_pushnumber(L, v);
+	lua_pushnumber(G_L, v);
 }
 
 void LuaFunction::pusharg(double v)
 {
-	lua_pushnumber(L, v);
+	lua_pushnumber(G_L, v);
 }
 
 void LuaFunction::pusharg(int v)
 {
-	lua_pushinteger(L, v);
+	lua_pushinteger(G_L, v);
 }
 
 void LuaFunction::pusharg(unsigned int v)
 {
-	lua_pushinteger(L, v);
+	lua_pushinteger(G_L, v);
 }
 
 void LuaFunction::pusharg(const std::string& v)
 {
-	lua_pushlstring(L, v.data(), v.size());
+	lua_pushlstring(G_L, v.data(), v.size());
 }
 
 void LuaFunction::pusharg(const char* v)
 {
-	lua_pushstring(L, v);
+	lua_pushstring(G_L, v);
 }
 
 void LuaFunction::pushlstring(const char* v, unsigned int len)
 {
-	lua_pushlstring(L, v, len);
-}
-
-void LuaFunction::clear_ret()
-{
-	for (int i = 0; i < MAX_RET_ARGS_COUNT; ++i)
-	{
-		if (m_retValues[i].type == LUA_TSTRING)
-		{
-			delete m_retValues[i].value.stringValue;
-		}
-		m_retValues[i].type = LUA_TNONE;
-	}
-	m_retCount = 0;
-}
-
-bool LuaFunction::retbool(int index/* = 0*/, bool defaultvalue/* = false*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	if (index >= m_retCount)
-	{
-		return defaultvalue;
-	}
-	if (m_retValues[index].type == LUA_TBOOLEAN)
-	{
-		return m_retValues[index].value.boolValue;
-	}
-	if (m_retValues[index].type == LUA_TNIL)
-	{
-		return false;
-	}
-	return defaultvalue;
-}
-
-int LuaFunction::retint(int index/* = 0*/, int defaultvalue/* = 0*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	if (index >= m_retCount)
-	{
-		return defaultvalue;
-	}
-	if (m_retValues[index].type == LUA_TNUMBER)
-	{
-		return m_retValues[index].value.numberValue;
-	}
-	return defaultvalue;
-}
-
-std::string LuaFunction::retstring(int index/* = 0*/, const std::string& defaultvalue/* = ""*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	if (index >= m_retCount)
-	{
-		return defaultvalue;
-	}
-	if (m_retValues[index].type == LUA_TSTRING)
-	{
-		return *m_retValues[index].value.stringValue;
-	}
-	return defaultvalue;
-}
-
-void* LuaFunction::retuserdata(int index/* = 0*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	if (index >= m_retCount)
-	{
-		return NULL;
-	}
-	if (m_retValues[index].type == LUA_TUSERDATA)
-	{
-		return m_retValues[index].value.userdata;
-	}
-	return NULL;
-}
-
-void* LuaFunction::retlightuserdata(int index/* = 0*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	if (index >= m_retCount)
-	{
-		return NULL;
-	}
-	if (m_retValues[index].type == LUA_TLIGHTUSERDATA)
-	{
-		return m_retValues[index].value.userdata;
-	}
-	return NULL;
-}
-
-int LuaFunction::checktype(int index/* = 0*/)
-{
-	assert(index < MAX_RET_ARGS_COUNT && index >= 0);
-	return m_retValues[index].type;
+	lua_pushlstring(G_L, v, len);
 }

@@ -1,6 +1,10 @@
 #include "Tools.h"
+#include "json/rapidjson.h"
+#include "json/prettywriter.h"
+#include "json/document.h"
 #include <Windows.h>
 
+std::map<std::string, std::vector<std::string> > Tools::cache_plistSubs;
 
 std::wstring Tools::stringToWString(const std::string& InStr) {
 	int num = MultiByteToWideChar(CP_UTF8, 0, InStr.c_str(), -1, NULL, 0);
@@ -186,6 +190,11 @@ std::string Tools::getFilename(const std::string& InPath)
 
 bool Tools::isInRect(Node* InNode, const float InX, const float InY)
 {
+	if (InNode == NULL)
+	{
+		return false;
+	}
+
 	Rect rect;
 	rect.size = InNode->getContentSize();
 	return isScreenPointInRect(Vec2(InX, InY), Camera::getDefaultCamera(), InNode->getWorldToNodeTransform(), rect, NULL);
@@ -289,10 +298,19 @@ void* Tools::getImguiTextureID(const std::string& key, bool isPlist)
 	}
 	if (texture == NULL)
 	{
-		assert(0);
+		//assert(0);
 		return 0;
 	}
 	return (void*)texture->getName();
+}
+
+void* Tools::getImguiTextureIDByTexture(Texture2D* texture)
+{
+	if (texture)
+	{
+		return (void*)texture->getName();
+	}
+	return NULL;
 }
 
 int Tools::getImguiTextureWidth(const std::string& key, bool isPlist)
@@ -300,7 +318,11 @@ int Tools::getImguiTextureWidth(const std::string& key, bool isPlist)
 	Texture2D* texture = NULL;
 	if (isPlist)
 	{
-		SpriteFrameCache::getInstance()->getSpriteFrameByName(key)->getTexture();
+		auto sf = SpriteFrameCache::getInstance()->getSpriteFrameByName(key);
+		if (sf)
+		{
+			return (int)sf->getRect().size.width;
+		}
 	}
 	else
 	{
@@ -308,7 +330,7 @@ int Tools::getImguiTextureWidth(const std::string& key, bool isPlist)
 	}
 	if (texture == NULL)
 	{
-		assert(0);
+		//assert(0);
 		return 0;
 	}
 	return texture->getPixelsWide();
@@ -319,7 +341,11 @@ int Tools::getImguiTextureHeight(const std::string& key, bool isPlist)
 	Texture2D* texture = NULL;
 	if (isPlist)
 	{
-		SpriteFrameCache::getInstance()->getSpriteFrameByName(key)->getTexture();
+		auto sf = SpriteFrameCache::getInstance()->getSpriteFrameByName(key);
+		if (sf)
+		{
+			return (int) sf->getRect().size.height;
+		}
 	}
 	else
 	{
@@ -327,7 +353,7 @@ int Tools::getImguiTextureHeight(const std::string& key, bool isPlist)
 	}
 	if (texture == NULL)
 	{
-		assert(0);
+		//assert(0);
 		return 0;
 	}
 	return texture->getPixelsHigh();
@@ -500,3 +526,88 @@ bool Tools::copyFile(const std::string& srcFile, const std::string& dstFile)
 	return FileUtilsPtr->writeDataToFile(data, dstFile);
 }
 
+void Tools::enumerateChildren(cocos2d::Node* node, const std::string& name, LuaFunction& handle)
+{
+	if (node != NULL && handle.isvalid())
+	{
+		node->enumerateChildren(name, [&](cocos2d::Node* cur)->bool
+		{
+			handle.ppush();
+			handle.pushusertype<Node>(cur, "cc.Node");
+			handle.pcall();
+			return false;
+		});
+	}
+}
+
+std::string Tools::prettyJson(const char* json)
+{
+	rapidjson::Document docu;
+	docu.Parse(json);
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+
+	docu.Accept(writer);
+
+	return buffer.GetString();
+}
+
+int Tools::imguiComboUserdata(const char* label, int current_item)
+{
+	const static char* items[] = { "int", "bool", "string", "float" };
+	ImGui::Combo(label, &current_item, items, IM_ARRAYSIZE(items));
+	return current_item;
+}
+
+bool Tools::imguiComboBool(const char* label, bool current_item)
+{
+	int item = (int)current_item;
+
+	const static char* items[] = { "false", "true" };
+	ImGui::Combo(label, &item, items, IM_ARRAYSIZE(items));
+	return (bool)item;
+}
+
+void Tools::helpMarker(const char* desc)
+{
+	ImGui::TextDisabled("(?)");
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(desc);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
+}
+
+std::vector<std::string> Tools::splitPlist(const std::string& plist)
+{
+	auto it = cache_plistSubs.find(plist);
+	if (it != cache_plistSubs.end())
+	{
+		return it->second;
+	}
+
+	std::vector<std::string> frameNames;
+
+	std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
+	ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+
+	if (dict["frames"].getType() != cocos2d::Value::Type::MAP)
+	{
+		cache_plistSubs[plist] = frameNames;
+		return frameNames;
+	}
+
+	ValueMap& framesDict = dict["frames"].asValueMap();
+	for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
+	{
+		ValueMap& frameDict = iter->second.asValueMap();
+		frameNames.push_back(iter->first);
+	}
+
+	cache_plistSubs[plist] = frameNames;
+	return frameNames;
+}

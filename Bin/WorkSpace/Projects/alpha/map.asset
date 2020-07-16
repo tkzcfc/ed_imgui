@@ -1,0 +1,92 @@
+{
+    "type": "map",
+    "data": {
+        "children": [
+            {
+                "type": "Layer",
+                "data": {
+                    "position": {
+                        "y": 0,
+                        "x": 0
+                    },
+                    "assetFile": "Projects/alpha/game.asset",
+                    "contentSize": {
+                        "height": 0,
+                        "width": 0
+                    },
+                    "isOpenFolder": true,
+                    "userdata": [],
+                    "name": "gameLayer"
+                },
+                "child": []
+            }
+        ],
+        "context": {
+            "_renderScale": 0.60000002384186,
+            "plugins": {
+                "PluginMapLayer": {
+                    "foregroundAssets": [
+                        "Projects/alpha/flayer.asset"
+                    ],
+                    "backgroundAssets": [
+                        "Projects/alpha/blayer.asset",
+                        ""
+                    ],
+                    "gameLayerAsset": "Projects/alpha/game.asset"
+                },
+                "PluginRevivePoint": {
+                    "revivePoints": [
+                        {
+                            "y": 410.77087402344,
+                            "x": 229.72235107422
+                        },
+                        {
+                            "y": 237.33343505859,
+                            "x": 426.59735107422
+                        },
+                        {
+                            "y": 290.45843505859,
+                            "x": 728.15979003906
+                        },
+                        {
+                            "y": 377.95837402344,
+                            "x": 1027.6390380859
+                        }
+                    ],
+                    "userdata": [
+                        {
+                            "type": 0,
+                            "data": 0,
+                            "name": "value"
+                        }
+                    ]
+                },
+                "PluginRefResources": {
+                    "refs": [
+                        "xxxxxxxxxxxxx",
+                        "plist_test.plist",
+                        "Projects/alpha/pic/D1.png",
+                        "king.plist",
+                        "arg1",
+                        "Projects/alpha/pic/BGA2.png",
+                        "Default/ImageFile.png",
+                        "Projects/alpha/pic/a1.png",
+                        "Default/Sprite.png",
+                        "Res/selectrole.plist",
+                        "Projects/alpha/pic/C2.png",
+                        "Projects/alpha/pic/D2.png",
+                        "Projects/alpha/pic/bg.png",
+                        "plist/battle.plist",
+                        "Projects/alpha/pic/BGA1.png",
+                        "arg2"
+                    ],
+                    "userdata": []
+                }
+            },
+            "_renderPos": {
+                "y": -273.00738525391,
+                "x": -1014.3601074219
+            }
+        }
+    }
+}

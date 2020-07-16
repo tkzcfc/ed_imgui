@@ -1,0 +1,958 @@
+{
+    "type": "widget",
+    "data": {
+        "children": [
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 151.5,
+                        "x": -305.625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_VS.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_1",
+                    "opacity": 255
+                },
+                "child": [
+                    {
+                        "type": "Sprite",
+                        "data": {
+                            "rotation": 0,
+                            "position": {
+                                "y": -34.75,
+                                "x": -294.375
+                            },
+                            "color": {
+                                "r": 255,
+                                "b": 255,
+                                "g": 255
+                            },
+                            "plistFileName": "plist/battle.plist",
+                            "textureName": "batt_icon_03.png",
+                            "userdata": [],
+                            "scaleY": 1,
+                            "isOpenFolder": true,
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "scaleX": 1,
+                            "isPlist": true,
+                            "name": "Sprite_2",
+                            "opacity": 255
+                        },
+                        "child": [
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": -237.25,
+                                        "x": 1.875
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "plist/battle.plist",
+                                    "textureName": "batt_bg_01.png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": true,
+                                    "name": "Sprite_3",
+                                    "opacity": 255
+                                },
+                                "child": [
+                                    {
+                                        "type": "Sprite",
+                                        "data": {
+                                            "rotation": 0,
+                                            "position": {
+                                                "y": -14.75,
+                                                "x": 13.125
+                                            },
+                                            "color": {
+                                                "r": 255,
+                                                "b": 255,
+                                                "g": 255
+                                            },
+                                            "plistFileName": "plist/battle.plist",
+                                            "textureName": "batt_button_01_1.png",
+                                            "userdata": [],
+                                            "scaleY": 1,
+                                            "isOpenFolder": true,
+                                            "anchorPoint": {
+                                                "y": 0.5,
+                                                "x": 0.5
+                                            },
+                                            "scaleX": 1,
+                                            "isPlist": true,
+                                            "name": "Sprite_4",
+                                            "opacity": 255
+                                        },
+                                        "child": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": 55.25,
+                                        "x": -84.375
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "plist/battle.plist",
+                                    "textureName": "batt_bg_01.png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": true,
+                                    "name": "Sprite_5",
+                                    "opacity": 255
+                                },
+                                "child": []
+                            },
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": -41,
+                                        "x": -321.875
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "plist/battle.plist",
+                                    "textureName": "batt_point_01 .png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": true,
+                                    "name": "Sprite_6",
+                                    "opacity": 255
+                                },
+                                "child": []
+                            },
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": -222.25,
+                                        "x": -526.875
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "plist/battle.plist",
+                                    "textureName": "batt_icon_05.png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": true,
+                                    "name": "Sprite_7",
+                                    "opacity": 255
+                                },
+                                "child": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -226,
+                        "x": -213.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_point_01 .png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_8",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -168.5,
+                        "x": 518.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_hero_frame01.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_9",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 14,
+                        "x": 295.625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_fram_blood08.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_10",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -74.75,
+                        "x": -261.875
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_fram_blood02.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_11",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -189.75,
+                        "x": -219.375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_fram_blood06.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_12",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 92.75,
+                        "x": -486.875
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_icon_time.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_13",
+                    "opacity": 255
+                },
+                "child": [
+                    {
+                        "type": "Sprite",
+                        "data": {
+                            "rotation": 0,
+                            "position": {
+                                "y": -42.25,
+                                "x": -559.375
+                            },
+                            "color": {
+                                "r": 255,
+                                "b": 255,
+                                "g": 255
+                            },
+                            "plistFileName": "plist/battle.plist",
+                            "textureName": "batt_point_06 .png",
+                            "userdata": [],
+                            "scaleY": 1,
+                            "isOpenFolder": true,
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "scaleX": 1,
+                            "isPlist": true,
+                            "name": "Sprite_15",
+                            "opacity": 255
+                        },
+                        "child": [
+                            {
+                                "type": "Sprite",
+                                "data": {
+                                    "rotation": 0,
+                                    "position": {
+                                        "y": 22.75,
+                                        "x": -495.625
+                                    },
+                                    "color": {
+                                        "r": 255,
+                                        "b": 255,
+                                        "g": 255
+                                    },
+                                    "plistFileName": "plist/battle.plist",
+                                    "textureName": "batt_jiao.png",
+                                    "userdata": [],
+                                    "scaleY": 1,
+                                    "isOpenFolder": true,
+                                    "anchorPoint": {
+                                        "y": 0.5,
+                                        "x": 0.5
+                                    },
+                                    "scaleX": 1,
+                                    "isPlist": true,
+                                    "name": "Sprite_14",
+                                    "opacity": 255
+                                },
+                                "child": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -43.5,
+                        "x": -410.625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_point_04 .png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_16",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -188.5,
+                        "x": -418.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "test/king/loading_04.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_17",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -99.75,
+                        "x": -208.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "test/king/loading_02.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_18",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -188.5,
+                        "x": 355.625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "king.plist",
+                    "textureName": "loading_03.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_19",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -8.5,
+                        "x": 165.625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "king.plist",
+                    "textureName": "loading_02.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_20",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 120.25,
+                        "x": -184.375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "king.plist",
+                    "textureName": "loading_03.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_21",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -112.25,
+                        "x": 406.875
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "test/king/loading_11.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_22",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -219.75,
+                        "x": -79.375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "disk.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_23",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": -238.5,
+                        "x": 264.375
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "file.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_24",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Sprite",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 656.5,
+                        "x": 268.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "plistFileName": "plist_test.plist",
+                    "textureName": "folder.png",
+                    "userdata": [],
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Sprite_25",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "Image",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 249,
+                        "x": -278.125
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "userdata": [],
+                    "plistFileName": "plist/battle.plist",
+                    "textureName": "batt_icon_energy_01.png",
+                    "ignoreContent": true,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.5,
+                        "x": 0.5
+                    },
+                    "scaleX": 1,
+                    "isPlist": true,
+                    "name": "Image_1",
+                    "opacity": 255
+                },
+                "child": []
+            },
+            {
+                "type": "CocostudioFile",
+                "data": {
+                    "rotation": 0,
+                    "position": {
+                        "y": 162.74768066406,
+                        "x": 1683.5400390625
+                    },
+                    "color": {
+                        "r": 255,
+                        "b": 255,
+                        "g": 255
+                    },
+                    "scaleX": 1,
+                    "scaleY": 1,
+                    "isOpenFolder": true,
+                    "anchorPoint": {
+                        "y": 0.34716773033142,
+                        "x": 0.13677467405796
+                    },
+                    "scriptFile": "TestScene.lua",
+                    "userdata": [],
+                    "name": "CocostudioFile_1",
+                    "opacity": 255
+                },
+                "child": [
+                    {
+                        "type": "CocostudioFile",
+                        "data": {
+                            "rotation": 0,
+                            "position": {
+                                "y": 1244.9908447266,
+                                "x": 152.33703613281
+                            },
+                            "color": {
+                                "r": 255,
+                                "b": 255,
+                                "g": 255
+                            },
+                            "scaleX": 1,
+                            "scaleY": 1,
+                            "isOpenFolder": true,
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "scriptFile": "CustomFile.lua",
+                            "userdata": [],
+                            "name": "CocostudioFile_2",
+                            "opacity": 255
+                        },
+                        "child": []
+                    }
+                ]
+            }
+        ],
+        "context": {
+            "_renderPos": {
+                "y": -96.363815307617,
+                "x": -316.72082519531
+            },
+            "_renderScale": 0.20000000298023,
+            "plugins": {
+                "PluginLineRect": {
+                    "show_line": true,
+                    "line_data": [
+                        {
+                            "points": [
+                                {
+                                    "y": 1134.9045410156,
+                                    "x": 302.48217773438
+                                },
+                                {
+                                    "y": 1047.55078125,
+                                    "x": 876.5322265625
+                                },
+                                {
+                                    "y": 1176.5034179688,
+                                    "x": 1633.6242675781
+                                },
+                                {
+                                    "y": 814.59814453125,
+                                    "x": 1854.0920410156
+                                },
+                                {
+                                    "y": 465.171875,
+                                    "x": 1787.5407714844
+                                },
+                                {
+                                    "y": 207.26684570313,
+                                    "x": 1579.5520019531
+                                },
+                                {
+                                    "y": -34.003540039063,
+                                    "x": 1250.9165039063
+                                },
+                                {
+                                    "y": -63.123291015625,
+                                    "x": 739.26220703125
+                                },
+                                {
+                                    "y": -63.123291015625,
+                                    "x": 86.17041015625
+                                }
+                            ],
+                            "isLeftNormal": false,
+                            "userdata": [],
+                            "normalColor": 3355443455,
+                            "isVisible": true,
+                            "lineColor": 4278255360
+                        }
+                    ],
+                    "show_rect": true,
+                    "rect_data": [
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 556.68994140625,
+                                "x": -9.5067138671875
+                            },
+                            "contentSize": {
+                                "y": 341.10888671875,
+                                "x": 607.33129882813
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        },
+                        {
+                            "scale": {
+                                "y": 1,
+                                "x": 1
+                            },
+                            "color": 4280440551,
+                            "point": {
+                                "y": 471.41436767578,
+                                "x": 601.986328125
+                            },
+                            "contentSize": {
+                                "y": 461.74401855469,
+                                "x": 673.8828125
+                            },
+                            "anchorPoint": {
+                                "y": 0.5,
+                                "x": 0.5
+                            },
+                            "userdata": [],
+                            "isVisible": true,
+                            "rotation": 0,
+                            "skew": {
+                                "y": 0,
+                                "x": 0
+                            }
+                        }
+                    ]
+                },
+                "PluginRefResources": {
+                    "refs": [
+                        "plist_test.plist",
+                        "Res/selectrole.plist",
+                        "king.plist",
+                        "plist/battle.plist",
+                        "Default/ImageFile.png",
+                        "Default/Sprite.png"
+                    ],
+                    "userdata": [
+                        {
+                            "type": 0,
+                            "data": 1000000,
+                            "name": "arg1"
+                        }
+                    ]
+                }
+            },
+            "typeNameGenSeeds": {
+                "Sprite": 25,
+                "Image": 1,
+                "CocostudioFile": 2
+            }
+        }
+    }
+}

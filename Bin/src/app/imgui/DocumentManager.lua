@@ -1,3 +1,11 @@
+-- @Author: fangcheng
+-- @URL: github.com/tkzcfc
+-- @Date:   2020-04-12 13:52:08
+-- @Last Modified by:   fangcheng
+-- @Last Modified time: 2020-05-07 22:22:00
+-- @Description: 
+
+
 local Document = require("app.imgui.Document")
 local DocumentManager = class("DocumentManager", Document)
 
@@ -26,6 +34,10 @@ end
 
 function DocumentManager:count()
 	return #self.documents
+end
+
+function DocumentManager:getDocuments()
+	return self.documents
 end
 
 function DocumentManager:tryHideTitle(isHide)
@@ -198,6 +210,10 @@ function DocumentManager:closeDocument(document)
 				v.ownerDocument = nil
 				v:destroy()
 				table.remove(self.documents, k)
+
+				if v == self.curShowDoc then
+					self.curShowDoc = nil
+				end
 				return
 			end
 		end
