@@ -1,9 +1,0 @@
-{
-    "publishDir": "publishDir",
-    "openFolderStatusCache": {
-        "Projects/test/test": true,
-        "Projects/test/haha": true,
-        "Projects/test/": true
-    },
-    "projName": "test"
-}
