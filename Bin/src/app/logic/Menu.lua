@@ -37,6 +37,7 @@ local function showMainMenuBar()
             isShowImguiDemo = not isShowImguiDemo
         end
         if ImGui.MenuItem(STR("Publish")) then
+            G_SysEventEmitter:emit("Menu/File/SaveAll")
             _MyG.Functions:publishResource()
         end
         G_SysEventEmitter:emit("onGUI_MainMenuBar_Tool")

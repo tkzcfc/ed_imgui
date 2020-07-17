@@ -112,39 +112,26 @@ function CenterWindow:updateRenderSize()
 end
 
 function CenterWindow:updateBGGrid()
-    if self.gridRender == nil then
-        self.gridRender = cc.Node:create()
-        self.render:addChild(self.gridRender, 0)
+    local gridRender = self.gridRender
+    if gridRender == nil then
+        gridRender = cc.Sprite:create("Res/grid.png")
+        gridRender:getTexture():setTexParameters(GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT)
+        self.render:addChild(gridRender, 0)
 
-        self.gridRender.cache_width = 0
-        self.gridRender.cache_height = 0
+        gridRender.cache_width = 0
+        gridRender.cache_height = 0
+
+        self.gridRender = gridRender
     end
 
-    if self.gridRender.cache_width < self.senderSize.width or self.gridRender.cache_height < self.senderSize.height then
-        self.gridRender:removeAllChildren()
+    if gridRender.cache_width < self.senderSize.width or gridRender.cache_height < self.senderSize.height then
+        gridRender:setPosition(self.senderSize.width * 0.5, self.senderSize.height * 0.5)
 
-        local gridtemplate = cc.Sprite:create("Res/grid.png")
-        local size = gridtemplate:getContentSize()
-        local panelSize = cc.size(self.senderSize.width, self.senderSize.height)
-        local scale = 2
+        local textureRect = cc.rect(0, 0, self.senderSize.width, self.senderSize.height)
+        gridRender:setTextureRect(textureRect)
 
-        size.width = size.width * scale
-        size.height = size.height * scale
-
-        local xcount = math.floor(panelSize.width / size.width) + 1
-        local ycount = math.floor(panelSize.height / size.height) + 1
-
-        for i=0, ycount do
-            for j = 0, xcount do
-                local grid = cc.Sprite:create("Res/grid.png")
-                grid:setPosition(j * size.width, i * size.height)
-                grid:setScale(scale)
-                self.gridRender:addChild(grid)
-            end
-        end
-
-        self.gridRender.cache_width = xcount * size.width
-        self.gridRender.cache_height = ycount * size.height
+        gridRender.cache_width = self.senderSize.width
+        gridRender.cache_height = self.senderSize.height
     end
 end
 
