@@ -10,6 +10,14 @@ end
 function Document:destroy()
 end
 
+function Document:dataDirty()
+	self.dirty = true
+end
+
+function Document:isDirty()
+	return self.dirty
+end
+
 function Document:onGUI()
 	if not self.__isVisibleTag then
 		self.__isVisibleTag = true
@@ -24,6 +32,10 @@ end
 function Document:onShow()
 end
 
+function Document:isVisible()
+	return self.__isVisibleTag
+end
+
 function Document:save()
 	return true
 end
@@ -34,6 +46,10 @@ end
 
 function Document:getClearName()
 	-- return string.match(self.filename, "(%w+%.*%w*)$")
+	return self.filename
+end
+
+function Document:getFullName()
 	return self.filename
 end
 

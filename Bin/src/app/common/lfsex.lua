@@ -10,7 +10,7 @@ if logE then
 end
 
 local function fmtpath(path, isdir)
-	path = string.gsub(path, "\\", "/")
+    path = Tools:replaceString(path, "\\", "/")
 	if isdir then
 		if string.sub(path, -1, -1) == "/" then
 			return path
@@ -160,8 +160,58 @@ function os.copyfile(sourcePath, targetPath)
     return true
 end
 
+local cache_currentdir = fmtpath(lfs.currentdir(), true)
+
 function os.currentdir()
-	return fmtpath(lfs.currentdir(), true)
+	return cache_currentdir
+end
+
+
+-- @brief 遍历文件夹
+-- @param rootpath 文件夹路径
+-- @param recursion 是否递归遍历
+-- @param filter 自定义过滤
+function os.seek_dir(dir, recursion, filter)
+    local outList = {}
+
+    -- 默认递归
+    if recursion == nil then recursion = true end
+
+    local function do_seek(rootpath)
+        
+        local dirs = {}
+        rootpath = os.fmtpath(rootpath, true)
+
+        for entry in lfs.dir(rootpath) do  
+            if entry ~= '.' and entry ~= '..' then
+                local path = rootpath .. entry  
+                local attr = lfs.attributes(path)
+                
+                path = os.fmtpath(path)
+                local isdir = attr.mode == "directory"
+
+                if filter == nil or filter(path, isdir) then
+                    table.insert(outList, {
+                        path = path,
+                        isdir = isdir
+                    })
+                    if isdir then
+                        table.insert(dirs, path)
+                    end
+                end
+            end  
+        end
+
+        if recursion then
+            for _, v in pairs(dirs) do
+                do_seek(v)
+            end
+        end
+    end
+
+    do_seek(os.fmtpath(dir, true))
+
+    return outList
 end
 
 -- for k,v in pairs(lfs) do

@@ -3,7 +3,7 @@
 -- @remark : 带有本地缓存的stack
 
 -- require("lfsex")
-local json = require("cjson")
+local cjson = require("cjson")
 
 
 local FileUtilsInstance = cc.FileUtils:getInstance()
@@ -11,7 +11,9 @@ local FileUtilsInstance = cc.FileUtils:getInstance()
 local lstack = {}
 
 lstack.__index = lstack
+-- 单个文件最大存储数量(分片大小)
 lstack.fragmentSize = 100
+-- 缓存阈值
 lstack.cacheSize = 50
 
 function lstack.new(...)
@@ -26,10 +28,13 @@ function lstack:ctor(name, enable, cachadir)
 	end
 
 	self.name = name
+	-- 是否启用本地缓存
 	self.enableLocal = enable
+	-- 缓存目录
 	self.cachadir = cachadir or ".cache"
 	self.cachadir = os.fmtpath(self.cachadir, true)
 
+	-- 缓存文件名称
 	if self.name == nil or self.name == "" then
 		self.name = tostring(self)
 	end
@@ -37,12 +42,14 @@ function lstack:ctor(name, enable, cachadir)
 	self:clear()
 end
 
+-- @brief 数据入栈
 function lstack:push(data)
 	self.curOpIdx = self.curOpIdx + 1
 	self.stack[#self.stack + 1] = data
 	self:writeLocal()
 end
 
+-- @brief 返回最后一个数据,并且将其弹出栈
 function lstack:pop()
 	local idx = self.curOpIdx - 1
 	if idx < 0 then
@@ -65,6 +72,7 @@ function lstack:pop()
 	return data
 end
 
+-- @brief 清除所有
 function lstack:clear()
 	self.curOpIdx = 0
 	self.stack = {}
@@ -75,6 +83,7 @@ function lstack:clear()
 	end
 end
 
+-- @brief 写入本地文件
 function lstack:writeLocal()
 	if not self.enableLocal then
 		return
@@ -95,7 +104,7 @@ function lstack:writeLocal()
 			end
 		end
 
-		if os.writefile(self:cacheFile(idx), json.encode(stack1)) then
+		if os.writefile(self:cacheFile(idx), cjson.encode(stack1)) then
 			self.stack = stack2
 		else
 			self.enableLocal = false
@@ -103,13 +112,14 @@ function lstack:writeLocal()
 	end
 end
 
+-- @brief 读取本地文件
 function lstack:readLocal()
 	if #self.stack <= 0 then
 		local idx = self.curOpIdx
 		idx = math.floor(idx / self.fragmentSize)
 
 		local content = os.readfile(self:cacheFile(idx))
-		self.stack = json.decode(content)
+		self.stack = cjson.decode(content)
 	end
 end
 

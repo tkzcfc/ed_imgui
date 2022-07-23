@@ -94,3 +94,85 @@ function CRect:publish()
 	t.userdata = self.userdata or {}
 	return t
 end
+
+
+
+-- polygon
+function CPolygon:serialize()
+	local t = {}
+	t.color = self:getColor()
+	t.userdata = self.userdata or {}
+	t.vertex = {}
+
+	for i = 1, self:getVertexCount() do
+		t.vertex[i] = self:getVertex(i - 1)
+	end
+
+	return t
+end
+
+function CPolygon:deserialize(data)
+	if data == nil then
+		return
+	end
+
+	self.userdata = data.userdata or {}
+	self:setVertexCount(#data.vertex)
+	self:setColor(data.color)
+	self:setAlpha(0.8)
+
+	for i = 1, #data.vertex do
+		self:setVertex(data.vertex[i], i - 1)
+	end
+end
+
+
+function CPolygon:publish()
+	local t = {}
+
+	t.vertex = {}
+	for i = 1, self:getVertexCount() do
+		t.vertex[i] = self:getVertex(i - 1)
+	end
+	
+	t.userdata = self.userdata or {}
+	return t
+end
+
+
+
+-- circle
+function CCircle:serialize()
+	local t = {}
+	t.center = self:getCenter()
+	t.radius = self:getRadius()
+	t.color = self:getColor()
+	t.userdata = self.userdata or {}
+	
+	-- if _MyG.IsLocalizeMode then
+	-- 	t.publish = self:publish()
+	-- end
+
+	return t
+end
+
+function CCircle:deserialize(data)
+	if data == nil then
+		return
+	end
+
+	self.userdata = data.userdata or {}
+	self:setCenter(data.center.x, data.center.y)
+	self:setRadius(data.radius)
+	self:setColor(data.color)
+end
+
+
+function CCircle:publish()
+	local t = {}
+	t.center = self:getCenter()
+	t.radius = self:getRadius()
+	t.color = self:getColor()
+	t.userdata = self.userdata or {}
+	return t
+end

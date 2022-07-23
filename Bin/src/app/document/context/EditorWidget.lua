@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-12 14:13:28
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-30 22:04:47
 -- @Description: widget编辑
 
 local BaseEditorCocos = import(".BaseEditorCocos")

@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-15 22:07:43
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-07 22:16:50
 -- @Description: 元素工厂
 
 local ElementFactory = class("ElementFactory")

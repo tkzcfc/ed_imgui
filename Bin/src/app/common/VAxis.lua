@@ -1,7 +1,7 @@
 -- @Author : fangcheng
 -- @Date   : 2020-06-03 13:45:20
--- @remark : 
 
+-- @remark : 坐标轴绘制
 local VAxis = class("VAxis", cc.DrawNode)
 
 -- 边框线段颜色

@@ -1,6 +1,6 @@
 local GlobalData = class("GlobalData")
 
-require "lfs"
+require "app.common.lfsex"
 
 local function file_exists(path)
   local file = io.open(path, "rb")
@@ -10,13 +10,13 @@ end
 
 --全局数据
 function GlobalData:ctor()
-	self.WorkSpaceDirName = "WorkSpace"
-	self.ProjectsDirName = "Projects"
-	self.CocosResourceDirName = "Cocos"
+	self.WorkSpaceDirName = "workspace"
+	self.ProjectsDirName = "assets"
+	self.CocosResourceDirName = "cocos"
 
 	self.ProjectExtension = "edproj"
 
-	self.RootWritePath = lfs.currentdir() .. "/" ..self.WorkSpaceDirName.."/"
+	self.RootWritePath = os.currentdir() .. "/" ..self.WorkSpaceDirName.."/"
 	self.ProjectsPath = self.RootWritePath..self.ProjectsDirName.."/"
 	self.CocosResourcePath = self.RootWritePath..self.CocosResourceDirName.."/"
 
@@ -40,7 +40,7 @@ function GlobalData:initDir()
     self:createDir(self.CocosResourcePath)
 
     local paths = cc.FileUtils:getInstance():getSearchPaths()
-    table.insert(paths, self.RootWritePath)
+    table.insert(paths, self.ProjectsPath)
     table.insert(paths, self.CocosResourcePath)
     cc.FileUtils:getInstance():setSearchPaths(paths)
 
@@ -66,7 +66,6 @@ function GlobalData:updateProjectList()
             	else
             		logI("警告:", path .. "是非法工程文件")
             	end
-
             end
         end  
     end

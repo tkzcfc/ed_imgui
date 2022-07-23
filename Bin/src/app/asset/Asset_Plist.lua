@@ -18,7 +18,7 @@ function Asset_Plist:init(fullPath)
 	
 	self.property.extension 		= ""
 	self.property.showFolderMode 	= true
-	self.property.thumbnail 		= "res/plist.png"
+	self.property.thumbnailTexture 		= EditorIconContent:get(EditorIcon.THUMBNAIL_PLIST)
 	self.property.resType 			= Asset.ResType.PLIST
 
 	self.property.isOpenFolder = self.assetManager:getOpenFolderStatus(self)

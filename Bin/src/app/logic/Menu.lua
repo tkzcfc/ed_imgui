@@ -1,51 +1,51 @@
 local FileDialog = require("app.imgui.FileDialog")
 
-
--- imgui demo
-local isShowImguiDemo = false
-G_SysEventEmitter:on("onGUI", function()
-    if isShowImguiDemo then
-        isShowImguiDemo = ImGui.ShowDemoWindow(isShowImguiDemo)
-    end
-end)
-
 local function showMainMenuBar()
     if ImGui.BeginMenu(STR("File")) then
 		if ImGui.BeginMenu(STR("New")) then
-            G_SysEventEmitter:emit("onGUI_MainMenuBar_File_New")
+            G_SysEventEmitter:emit(SysEvent.ON_GUI_MAIN_MENUBAR_FILE_NEW)
             ImGui.EndMenu()
         end
 
         if ImGui.BeginMenu(STR("Open")) then
-            G_SysEventEmitter:emit("onGUI_MainMenuBar_File_Open")
+            G_SysEventEmitter:emit(SysEvent.ON_GUI_MAIN_MENUBAR_FILE_OPEN)
             ImGui.EndMenu()
         end
 
         if ImGui.MenuItem(STR("Save")) then
-            G_SysEventEmitter:emit("Menu/File/Save")
+            G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_SAVE)
         end
 
         if ImGui.MenuItem(STR("SaveAll")) then
-            G_SysEventEmitter:emit("Menu/File/SaveAll")
+            G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_SAVEALL)
         end
-        G_SysEventEmitter:emit("onGUI_MainMenuBar_File")
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_MAIN_MENUBAR_FILE)
         ImGui.EndMenu()
     end
 
     if ImGui.BeginMenu(STR("Tool")) then
-        if ImGui.MenuItem("ImguiDemo", "", isShowImguiDemo, true) then
-            isShowImguiDemo = not isShowImguiDemo
-        end
         if ImGui.MenuItem(STR("Publish")) then
-            G_SysEventEmitter:emit("Menu/File/SaveAll")
+            G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_SAVEALL)
             _MyG.Functions:publishResource()
         end
-        G_SysEventEmitter:emit("onGUI_MainMenuBar_Tool")
+        if ImGui.MenuItem(STR("Relaunch")) then
+            Tools:relaunch()
+        end
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_MAIN_MENUBAR_TOOL)
+        ImGui.EndMenu()
+    end
+
+    if ImGui.BeginMenu(STR("Windows")) then
+        for k, win in pairs(_MyG.WindowManager:getWindows()) do
+            if ImGui.MenuItem(win:getWinName(), "", win:isWindowVisible(), true) then
+                win:setWindowVisible(not win:isWindowVisible())
+            end
+        end
         ImGui.EndMenu()
     end
 
     if ImGui.BeginMenu(STR("Project")) then
-        G_SysEventEmitter:emit("onGUI_MainMenuBar_Project")
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_MAIN_MENUBAR_PROJECT)
         ImGui.EndMenu()
     end
 
@@ -57,42 +57,62 @@ local function showMainMenuBar()
             for k, v in pairs(G_LangManager.LANG_NAME) do
                 if ImGui.MenuItem(v, "", G_LangManager:getLanguageName() == v, true) then
                     G_LangManager:setLangByName(v)
+                    G_SysEventEmitter:emit(SysEvent.ON_CHANGE_LANG)
                 end
             end
         end
 
         ImGui.EndMenu()
     end
+
+    if ImGui.BeginMenu(STR("settings")) then
+        if ImGui.MenuItem(STR("ZoomSettings")) then
+            _MyG.WindowManager:showWindow(WinTag.GLOBAL_SCALE, true)
+        end
+        if ImGui.MenuItem(STR("FontSettings")) then
+            _MyG.WindowManager:showWindow(WinTag.FONT_SETTING, true)
+        end
+        ImGui.EndMenu()
+    end
+
+    if ImGui.BeginMenu(STR("Theme")) then
+        for k, v in pairs(_MyG.ThemeManager:getNames()) do
+            if ImGui.MenuItem(v, "", _MyG.ThemeManager:isSelect(v), true) then
+                _MyG.ThemeManager:select(v)
+            end
+        end
+        ImGui.EndMenu()
+    end
 end
-G_SysEventEmitter:on("onGUI_MainMenuBar", showMainMenuBar)
+G_SysEventEmitter:on(SysEvent.ON_GUI_MAIN_MENUBAR, showMainMenuBar, SysEvent.TAG)
 
 
 
-G_SysEventEmitter:on("onGUI_MainMenuBar_File_Open", function()
+G_SysEventEmitter:on(SysEvent.ON_GUI_MAIN_MENUBAR_FILE_OPEN, function()
     if ImGui.BeginMenu(STR("Project")) then
         if ImGui.MenuItem(STR("Other")) then
-            G_SysEventEmitter:emit("Menu/File/Open/Project")
+            G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_OPEN_PROJECT)
         end
         
         local nameArr = _MyG.GlobalData.ProjectNameArr
         for k, v in pairs(nameArr) do
             if ImGui.MenuItem(v) then
-                G_SysEventEmitter:emit("Menu/File/Open/Project", _MyG.GlobalData.ProjectsPath .. "/" .. v)
+                G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_OPEN_PROJECT, _MyG.GlobalData.ProjectsPath .. "/" .. v)
             end
         end
         ImGui.EndMenu()
     end
-end)
+end, SysEvent.TAG)
 
-G_SysEventEmitter:on("onGUI_MainMenuBar_File_New", function()
+G_SysEventEmitter:on(SysEvent.ON_GUI_MAIN_MENUBAR_FILE_NEW, function()
     if ImGui.MenuItem(STR("Project")) then
-        G_SysEventEmitter:emit("Menu/File/New/Project", _MyG.GlobalData.ProjectsDirName)
+        G_SysEventEmitter:emit(SysEvent.ON_MENU_FILE_NEW_PROJECT, _MyG.GlobalData.ProjectsDirName)
     end
-end)
+end, SysEvent.TAG)
 
 
-G_SysEventEmitter:on("onGUI_MainMenuBar_Project", function()
+G_SysEventEmitter:on(SysEvent.ON_GUI_MAIN_MENUBAR_PROJECT, function()
     if ImGui.MenuItem(STR("Project settings"), "", false, _MyG.EditorProject:isValid()) then
-        G_SysEventEmitter:emit("Menu/Project/Project settings")
+        G_SysEventEmitter:emit(SysEvent.ON_MENU_PROJECT_PROJECT_SETTINGS)
     end
-end)
+end, SysEvent.TAG)

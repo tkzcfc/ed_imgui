@@ -1,34 +1,25 @@
 require("lfs")
 
-local visibleSize = cc.Director:getInstance():getVisibleSize()
-local winSize = Tools:getWindowSize()
+local director = cc.Director:getInstance()
+
+
 
 G_Helper.win_2_visible_x = function(value)
-	local scale = visibleSize.width / winSize.width
-	return value * scale
+    -- 底层在窗口大小改变时会自动将设计分辨率设置为当前窗口分辨率,此处直接返回值即可
+    return value
+ --    local visibleSize = director:getVisibleSize()
+ --    local winSize = Tools:getWindowSize()
+	-- local scale = visibleSize.width / winSize.width
+	-- return value * scale
 end
 
 G_Helper.win_2_visible_y = function(value)
-	local scale = visibleSize.height / winSize.height
-	return value * scale
-end
-
-G_Helper.visible_2_win_x = function(value)
-	local scale = winSize.width / visibleSize.width
-	return value * scale
-end
-
-G_Helper.visible_2_win_y = function(value)
-	local scale = winSize.height / visibleSize.height
-	return value * scale
-end
-
-
-G_Helper.win_2_visible_pos = function(pos)
-	pos.y = winSize.height - pos.y
-	pos.x = G_Helper.win_2_visible_x(pos.x)
-	pos.y = G_Helper.win_2_visible_x(pos.y)
-	return pos
+    -- 底层在窗口大小改变时会自动将设计分辨率设置为当前窗口分辨率,此处直接返回值即可
+    return value
+ --    local visibleSize = director:getVisibleSize()
+ --    local winSize = Tools:getWindowSize()
+	-- local scale = visibleSize.height / winSize.height
+	-- return value * scale
 end
 
 G_Helper.fmtPath = function(path)
@@ -37,6 +28,18 @@ G_Helper.fmtPath = function(path)
 	return path
 end
 
+G_Helper.fmtDirPath = function(path)
+    if path == "" then return path end
+    
+    path = G_Helper.fmtPath(path)
+    if string.sub(path, -1) ~= "/" then
+        return path .. "/"
+    end
+    return path
+end
+
+-- @brief 获取扩展名，且返回小写
+-- @example xxx.ExportJson -> exportjson
 G_Helper.getExtension = function(path)
 	local ext = string.match(path, "%.(%w+)$")
     if ext == nil then
@@ -45,6 +48,30 @@ G_Helper.getExtension = function(path)
 	return string.lower(ext)
 end
 
+-- @brief 获取文件名称
+-- Abc.png -> Abc
+G_Helper.getFileClsName = function(filename)
+    local ext = string.match(filename, "(.+)%.%w+$")
+    if ext == nil then
+        assert(0)
+    end
+    return ext
+end
+
+-- @brief 获取文件目录
+-- a/b/c/d.png -> a/b/c/   d.png
+G_Helper.getFileDir = function(filePath)
+	filePath = filePath:reverse()
+	local sp = string.find(filePath, "[/\\]")
+	if sp then
+		local dir = string.sub(filePath, sp):reverse()
+		local name = string.sub(filePath, 1, sp - 1):reverse()
+        return dir, name
+    end
+end
+
+-- @brief 获取路径中包含的最后的名称
+-- a/b/c/d/e.png -> e.png
 G_Helper.getLastName = function(path)
     path = string.reverse(path)
     local begin = string.find(path, "/")
@@ -59,14 +86,14 @@ G_Helper.doString = function(script)
 	local func, errorstr = loadstring(script)
 	if func == nil then
 		logE(errorstr)
-		_MyG.ShowBox("文件加载失败,请在控制台查看详细信息")
+		_MyG.ShowTipBox("File loading failed. Please check the error information on the console")
 		return
 	end
 	return func
 end
 
 G_Helper.curDir = function()
-    return G_Helper.fmtPath(lfs.currentdir())
+    return G_Helper.fmtPath(os.currentdir())
 end
 
 G_Helper.getClearDirPath = function(str)

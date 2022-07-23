@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-12 13:52:08
 -- @Description: 分析 cocostudio 导出的lua文件里面的资源引用
 

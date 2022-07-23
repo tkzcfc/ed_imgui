@@ -1,0 +1,143 @@
+//tolua++ -L basic.lua -o lua_uvtcp.cpp uvtcp.pkg
+
+
+$#include "core/shape/CLine.h"
+$#include "core/shape/CRect.h"
+$#include "core/Tools.h"
+$#include "lua_function/tolua_ext.h"
+$#include "MugenHelper.h"
+
+
+class CLine
+{
+public:
+    CLine();
+
+    ~CLine();
+    
+    void setPointDataByIndex(int index, float x, float y);
+
+    int getPointCount();
+
+    void setPointCount(int count);
+
+    void removePointByIndex(int index);
+
+    int getNormalCount();
+
+    std::vector<Vec2> getAllNormal();
+
+    std::vector<Vec2> getAllPoint();
+
+    Vec2 getLastPoint();
+
+    Vec2 getPointByIndex(int index);
+
+    void apply();
+
+    void setNormalLeft(bool isLeft);
+
+    bool isLeftNormal();
+
+    void setNormalScale(float scale);
+
+    //void debugDraw(DrawNode* pDrawNode, bool forcedDisplay = false);
+
+    void setAlpha(float alpha);
+
+    void setLineCorlor(unsigned int color);
+
+    void setNormalColor(unsigned int color);
+
+    unsigned int getLineColor() { return m_lineColor_Uint; }
+
+    unsigned int getNormalColor() { return m_normalColor_Uint; }
+
+    void setVisible(bool value);
+
+    bool isVisible();
+};
+
+
+
+
+class CRect
+{
+public:
+
+    CRect();
+
+    ~CRect();
+
+    void setAnchorPoint(float x, float y);
+
+    Vec2 getAnchorPoint();
+
+    void setContentSize(float w, float h);
+
+    Vec2 getContentSize();
+
+    void setPoint(float x, float y);
+
+    Vec2 getPoint();
+
+    void setScale(float scalex, float scaley);
+
+    Vec2 getScale();
+
+    void setRotation(float _angle);
+
+    float getRotation();
+
+    void setSkewX(float skewx);
+
+    void setSkewY(float skewy);
+
+    Vec2 getSkew();
+
+    void apply();
+
+    Vec2 getVertexByIndex(int index);
+
+    inline int getVertexCount() { return 4; }
+
+    //void debugDraw(DrawNode* pDrawNode);
+
+    void setAlpha(float alpha);
+
+    void setVisible(bool value);
+
+    bool isVisible();
+
+    void setColor(unsigned int color);
+
+    unsigned int getColor() { return m_color_Uint; }
+};
+
+
+
+
+class Tools
+{
+public:
+
+	static bool copyFile(const char* existingFileName, const char* newFileName);
+};
+
+
+
+
+class MugenHelper
+{
+public:
+
+	static bool serializeRoleToFile(const char* content, const char* filename);
+
+	static std::vector<std::string> errors();
+	
+	static std::vector<std::string> warings();
+
+};
+
+
+

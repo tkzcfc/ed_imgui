@@ -98,10 +98,13 @@ function Helper.lerp(x, y, alpha)
 	return ret
 end
 
+local function defaultStudioFileCall(sender, ...)
+end
+
 function Helper.loadStudioFile(fileName, target)
 	local root = require(fileName).create(function (path, node, funcName)
 		if target == nil then
-			return
+			return defaultStudioFileCall
 		end
         return function(...) 
             if target[funcName] and type(target[funcName]) == "function" then

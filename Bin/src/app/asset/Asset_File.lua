@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-11 14:28:58
 -- @Description: 
 
@@ -12,30 +11,25 @@ function Asset_File:destroy()
 end
 
 function Asset_File:clearPopupGUIHandle()
-	if self.popup_gui_handle then
-		G_SysEventEmitter:removeListener("onGUI", self.popup_gui_handle)
-		self.popup_gui_handle = nil
-	end
+	G_SysEventEmitter:offByTag(self)
 end
 
 -- 鼠标右键单击
 function Asset_File:_onRightClick()
 	self:clearPopupGUIHandle()
 
-	self.popup_gui_handle = function()
+	G_SysEventEmitter:once(SysEvent.ON_GUI, function()
+		ImGui.OpenPopup("assetContent_popup")
+	end, self)
+
+	G_SysEventEmitter:on(SysEvent.ON_GUI, function()
 		if ImGui.BeginPopup("assetContent_popup") then
-			G_SysEventEmitter:emit("asset_Menu_OnGUI", self)
+			G_SysEventEmitter:emit(SysEvent.ASSET_MENU_ONGUI, self)
 			ImGui.EndPopup()
 		else
 			self:clearPopupGUIHandle()
 		end
-	end
-
-	G_SysEventEmitter:once("onGUI", function()
-		ImGui.OpenPopup("assetContent_popup")
-	end)
-
-	G_SysEventEmitter:on("onGUI", self.popup_gui_handle)
+	end, self)
 end
 
 return Asset_File

@@ -72,7 +72,7 @@ function PluginMapLayer:updateGameLayer()
 	gameLayerEle:changeAssetLayerByFileName(self.gameLayerAsset)
 	if self.gameLayerAsset ~= gameLayerEle.assetFile then
 		self.gameLayerAsset = gameLayerEle.assetFile
-		self:onAttributeChange("change_bg_layer_asset")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_BG_LAYER_ASSET)
 	end
 end
 
@@ -82,20 +82,20 @@ function PluginMapLayer:onAttributeGUI()
 	for k, v in pairs(self.backgroundAssets) do
 		newFile = self:onGUI_Child(v, STR("EA_RESOURCE_MAP_BG_LAYER") .. k)
 		if newFile then
-			self:onAttributeChange("change_bg_layer_asset")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_BG_LAYER_ASSET)
 			self.backgroundAssets[k] = newFile
 		end
 	end
 
 	if #self.backgroundAssets > 1 then
 		if ImGui.SmallButton("-##bg_layer_sub") then
-			self:onAttributeChange("change_bg_layer_asset")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_BG_LAYER_ASSET)
 			self.backgroundAssets[#self.backgroundAssets] = nil
 		end
 		ImGui.SameLine()
 	end
 	if ImGui.SmallButton("+##bg_layer_add") then
-		self:onAttributeChange("change_bg_layer_asset")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_BG_LAYER_ASSET)
 		self.backgroundAssets[#self.backgroundAssets + 1] = ""
 	end
 
@@ -106,7 +106,7 @@ function PluginMapLayer:onAttributeGUI()
 		if self.gameLayerAsset == "" then
 			self.context:dataDirty()
 		else
-			self:onAttributeChange("change_gm_layer_asset")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_GM_LAYER_ASSET)
 		end
 		self.gameLayerAsset = newFile
 		self:updateGameLayer()
@@ -116,19 +116,19 @@ function PluginMapLayer:onAttributeGUI()
 	for k, v in pairs(self.foregroundAssets) do
 		newFile = self:onGUI_Child(v, STR("EA_RESOURCE_MAP_FG_LAYER") .. k)
 		if newFile then
-			self:onAttributeChange("change_fg_layer_asset")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_FG_LAYER_ASSET)
 			self.foregroundAssets[k] = newFile
 		end
 	end
 	if #self.foregroundAssets > 1 then
 		if ImGui.SmallButton("-##fg_layer_sub") then
-			self:onAttributeChange("change_fg_layer_asset")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_FG_LAYER_ASSET)
 			self.foregroundAssets[#self.foregroundAssets] = nil
 		end
 		ImGui.SameLine()
 	end
 	if ImGui.SmallButton("+##fg_layer_add") then
-		self:onAttributeChange("change_fg_layer_asset")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_FG_LAYER_ASSET)
 		self.foregroundAssets[#self.foregroundAssets + 1] = ""
 	end
 end

@@ -16,23 +16,23 @@ function KeyboardStateMng:ctor()
         end
 
         -- Ctrl + S
-        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_S) then
-            G_SysEventEmitter:emit("onKeyBoardSave")
+        if self:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and self:keyCodeIsPressed(cc.KeyCode.KEY_S) then
+            G_SysEventEmitter:emit(SysEvent.ON_KEY_BOARD_SAVE)
         end
 
         -- Ctrl + Z
-        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_Z) then
-            G_SysEventEmitter:emit("onKeyBoardUndo")
+        if self:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and self:keyCodeIsPressed(cc.KeyCode.KEY_Z) then
+            G_SysEventEmitter:emit(SysEvent.ON_KEY_BOARD_UNDO)
         end
 
         -- Ctrl + A
-        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_A) then
-            G_SysEventEmitter:emit("onKeyBoardAll")
+        if self:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) and self:keyCodeIsPressed(cc.KeyCode.KEY_A) then
+            G_SysEventEmitter:emit(SysEvent.ON_KEY_BOARD_ALL)
         end
 
         -- 删除键
-        if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_DELETE) then
-            G_SysEventEmitter:emit("onKeyBoardDelete")
+        if self:keyCodeIsPressed(cc.KeyCode.KEY_DELETE) then
+            G_SysEventEmitter:emit(SysEvent.ON_KEY_BOARD_DELETE)
         end
     end  
   
@@ -45,7 +45,7 @@ function KeyboardStateMng:ctor()
         end
 
         if not self:haskeyCodePressed() then
-            G_SysEventEmitter:emit("onKeyBoard_Single", keyCode)
+            G_SysEventEmitter:emit(SysEvent.ON_KEY_BOARD_SINGLE_PRESSED, keyCode)
         end
     end  
   
@@ -85,6 +85,12 @@ end
 
 function KeyboardStateMng:setKeyCodePressed(keyCode, isPressed)
     self.stateMap[keyCode] = isPressed
+end
+
+-- @brief 是否可以缩放编辑区域内容
+function KeyboardStateMng:canScrollEditContext()
+    -- return not self:haskeyCodePressed()
+    return true
 end
 
 return KeyboardStateMng

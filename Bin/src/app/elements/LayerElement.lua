@@ -12,10 +12,6 @@ local LayerElement = class("LayerElement", WidgetElement)
 
 local FileUtilsInstance = cc.FileUtils:getInstance()
 
-local function Error_hook(err)
-	logE(debug.traceback(err, 3))
-end
-
 LayerElement.type = "Layer"
 LayerElement.defaultFileName = "Default/defaultLayer.asset"
 
@@ -68,22 +64,10 @@ function LayerElement:deserializeFromFile(filename)
 
 	self.referenceResources = {}
 
-	-- 解析json
-	local jsonData = nil
-	local suc = xpcall(function()
-		local content = FileUtilsInstance:getStringFromFile(filename)
-		if content == "" then
-			jsonData = {}
-		else
-			jsonData = json.decode(content)
-		end
-	end, Error_hook)
-
-	if not suc then
+	local ok, jsonData = _MyG.Functions:getJsonDataByAssetFile(filename)
+	if not ok then
 		return
 	end
-
-	jsonData = jsonData or {}
 
 	if jsonData.type ~= "layer" then
 		logE(string.format("Illegal type %q, expected type %q", tostring(jsonData.type), "layer"))
@@ -95,13 +79,10 @@ function LayerElement:deserializeFromFile(filename)
 		return false
 	end
 
-	if jsonData.data.context and jsonData.data.context.plugins then
-		local refResources = jsonData.data.context.plugins.PluginRefResources or {}
-		local refs = {}
-		G_Helper.getTableStringValue(refs, refResources)
-		for k,v in pairs(refs) do
-			self.referenceResources[v] = true
-		end
+	local refs = {}
+	G_Helper.getTableStringValue(refs, _MyG.Functions:getRefResourcesByAssetJsonData(jsonData))
+	for k,v in pairs(refs) do
+		self.referenceResources[v] = true
 	end
 
 	-- 根据json数据创建节点
@@ -153,22 +134,10 @@ end
 function LayerElement:spawn_Widget(rootNode, data)
 	local filename = WidgetElement:checkResource(data.assetFile)
 
--- 解析json
-	local jsonData = nil
-	local suc = xpcall(function()
-		local content = FileUtilsInstance:getStringFromFile(filename)
-		if content == "" then
-			jsonData = {}
-		else
-			jsonData = json.decode(content)
-		end
-	end, Error_hook)
-
-	if not suc then
+	local ok, jsonData = _MyG.Functions:getJsonDataByAssetFile(filename)
+	if not ok then
 		return
 	end
-
-	jsonData = jsonData or {}
 
 	if jsonData.type ~= "widget" then
 		logE(string.format("Illegal type %q, expected type %q", tostring(jsonData.type), "widget"))
@@ -197,17 +166,29 @@ end
 -- @brief 切换资源
 function LayerElement:changeAssetLayer(dragData)
 	local asset = _MyG.Functions:getAssetByID(dragData)
+	G_SysEventEmitter:emit(SysEvent.DO_CHANGE_ASSET, self, asset, true)
+end
 
-	if asset then
-		local property = asset.property
-		if property.relativePath == self.assetFile then
-			return
-		end
-		self:onAttributeChange("change_PrefabResource")
-
-		self.assetFile = property.relativePath
-		self:deserializeFromFile(self.assetFile)
+-- @brief override 资源对比
+function LayerElement:isAssetEqual(asset)
+	-- 资源相同
+	local property = asset.property
+	if property.relativePath == self.assetFile then
+		return true
 	end
+	return false
+end
+
+-- @brief override 资源切换
+function LayerElement:onDoChangeAsset(asset, canUndo)
+	LayerElement.super.onDoChangeAsset(self, assert, canUndo)
+	if canUndo then
+		self:onAttributeChange(EditorEvent.ON_CHANGE_PREFABRESOURCE)
+	end
+
+	local property = asset.property
+	self.assetFile = property.relativePath
+	self:deserializeFromFile(self.assetFile)
 end
 
 function LayerElement:changeAssetLayerByFileName(filename)
@@ -246,7 +227,7 @@ function LayerElement:onNodeContentGUI(nodeContent)
 end
 
 function LayerElement:doPartMementoGen(attributeName)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		return self.assetFile
 	else
 		return LayerElement.super.doPartMementoGen(self, attributeName)
@@ -255,7 +236,7 @@ end
 
 -- @brief 撤销属性改变
 function LayerElement:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		self.assetFile = data
 		self:deserializeFromFile(self.assetFile)
 	else

@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-11 14:29:16
 -- @Description: 
 
@@ -7,8 +6,15 @@
 local Asset_File = import(".Asset_File")
 local Asset_Texture = class("Asset_Texture", Asset_File)
 
-local cache = {}
 
+function Asset_Texture:init(fullPath)
+	Asset_Texture.super.init(self, fullPath)
+	
+	self.property.thumbnailTexture 		= EditorIconContent:get(EditorIcon.ICON_TEXTURE)
+end
+
+
+local cache = {}
 function Asset_Texture:_onItemHovered()
 	local fullPath = self.property.fullPath
 	local textureID = Tools:getImguiTextureID(fullPath)
@@ -17,6 +23,12 @@ function Asset_Texture:_onItemHovered()
 	end
 
 	if cache.textureID ~= textureID then
+		if cache.textureID ~= nil then
+			Tools:freeImageuiTexture(cache.textureID)
+		end
+		Tools:retainImageuiTexture(textureID)
+		textureCleanup()
+
 		local imageW = Tools:getImguiTextureWidth(fullPath)
 		local imageH = Tools:getImguiTextureHeight(fullPath)
 		local showTextureInfo = string.format("%d*%d", imageW, imageH)
@@ -35,10 +47,6 @@ function Asset_Texture:_onItemHovered()
 	ImGui.Text(cache.textureInfo)
 	ImGui.Image(cache.textureID, cache.imageSize)
 	ImGui.EndTooltip()
-end
-
-function Asset_Texture:_onLeftDoubleClick()
-	_MyG.Functions:openImage(self:getFilePath(), false)
 end
 
 return Asset_Texture

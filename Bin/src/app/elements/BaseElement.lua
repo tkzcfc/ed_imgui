@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-05 18:55:10
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-06-01 22:16:47
 -- @Description: 
 
 local G_uniqueSeed = 0
@@ -48,8 +45,18 @@ function BaseElement:ctor(context)
 	self.worldAnchorPoint = cc.p(0, 0)
 
 	self.onUserdataValueChange = function()
-		self:onAttributeChange("change_userdata")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_USERDATA)
 	end
+
+	-- 事件监听
+	-- 更改资源
+	G_SysEventEmitter:on(SysEvent.DO_CHANGE_ASSET, function(target, asset, canUndo)
+		if not asset then return end
+
+		if target == self and not self:isAssetEqual(asset) then
+			self:onDoChangeAsset(asset, canUndo)
+		end
+	end, self)
 end
 
 -- @brief 设置渲染节点
@@ -93,6 +100,8 @@ function BaseElement:onDestroy()
 	end
 
 	self.context = nil
+
+	G_SysEventEmitter:offByTag(self)
 end
 
 -- @brief 获取碰撞区域AABB
@@ -228,6 +237,17 @@ function BaseElement:getReferenceResources()
 	return {}
 end
 
+-- @brief 资源对比
+function BaseElement:isAssetEqual(asset)
+	assert(false)
+end
+
+-- @brief 资源切换
+function BaseElement:onDoChangeAsset(asset, canUndo)
+end
+
+--------------------------------------------------------- 属性更改/撤销相关 begin ---------------------------------------------------------
+
 -- @brief 属性改变时调用
 function BaseElement:onAttributeChange(attributeName)
 	local mem = self:doPartMementoGen(attributeName)
@@ -239,18 +259,25 @@ function BaseElement:onAttributeChange(attributeName)
 	end
 end
 
+-- @brief 保存局部快照时,此函数返回改变属性要存储的数据
+-- 如果返回为nil则Context保存全局快照
 function BaseElement:doPartMementoGen(attributeName)
-	if attributeName == "change_userdata" then
+	if attributeName == EditorEvent.ON_CHANGE_USERDATA then
 		return self.userdata or {}
 	end
 end
 
 -- @brief 撤销属性改变
+-- 撤销的属性改变是保存的局部快照时,根据 data 字段对元素进行还原操作
+-- @param attributeName 改变的属性名称
+-- @param data doPartMementoGen 返回的局部快照数据
 function BaseElement:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_userdata" then
+	if attributeName == EditorEvent.ON_CHANGE_USERDATA then
 		self.userdata = data
 	end
 end
+
+--------------------------------------------------------- 属性更改/撤销相关 end ---------------------------------------------------------
 
 -- @brief 获取子节点元素
 function BaseElement:getChildByName(name)

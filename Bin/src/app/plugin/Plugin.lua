@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-05 16:23:42
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-30 21:34:24
 -- @Description: 插件
 
 local Plugin = class("Plugin")
@@ -11,7 +8,7 @@ Plugin.isPluginType = true
 
 function Plugin:ctor()
 	self.onUserdataValueChange = function()
-		self:onAttributeChange("change_userdata")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_USERDATA)
 	end
 end
 
@@ -86,7 +83,7 @@ function Plugin:onAttributeChange(attributeName)
 end
 
 function Plugin:doPartMementoGen(attributeName)
-	if attributeName == "change_userdata" then
+	if attributeName == EditorEvent.ON_CHANGE_USERDATA then
 		return self.userdata or {}
 	else
 		return self:serialize()
@@ -95,7 +92,7 @@ end
 
 -- @brief 撤销属性改变
 function Plugin:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_userdata" then
+	if attributeName == EditorEvent.ON_CHANGE_USERDATA then
 		self.userdata = data
 	else
 		return self:deserialize(data)

@@ -1,9 +1,6 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-05 17:44:30
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-30 22:52:07
--- @Description: 
+-- @Description: 编辑器cocos相关
 
 
 -- 边框线段颜色
@@ -41,10 +38,8 @@ function BaseEditorCocos:ctor(name, asset)
 
     self.axisCache = {}
 
-    self.routine = oRoutine.new()
     self.render:onUpdate(function()
         if self:contextVisible() then
-            self.routine:update()
             self:onEditorDraw()
         end
     end)
@@ -56,27 +51,27 @@ end
 function BaseEditorCocos:initEvent()
     BaseEditorCocos.super.initEvent(self)
 
-    self.sysRecipient:on("onAssetDragEnd", function(assetItem)
+    self.sysRecipient:on(SysEvent.ON_ASSET_DRAG_END, function(assetItem)
         if _MyG.CenterWindow:isContainMouse() and self.render:isVisible() then
             local curPos = self.render:convertToNodeSpace(_MyG.MouseEventDispatcher:getCursorPos())
             self:onAssetDragEnd(assetItem, curPos)
         end
     end)
 
-    self.sysRecipient:on("onDragPreWidget", function(typeName)
+    self.sysRecipient:on(SysEvent.ON_DRAG_PRE_WIDGET, function(typeName)
         if self.render:isVisible() and _MyG.CenterWindow:checkMouseIsContain() then
             local curPos = self.render:convertToNodeSpace(_MyG.MouseEventDispatcher:getCursorPos())
             self:onDragPreWidgetDragEnd(typeName, curPos)
         end
     end)
 
-    self.sysRecipient:on("onAttributeContent_GUI", function()
+    self.sysRecipient:on(SysEvent.ON_ATTRIBUTE_CONTENT_GUI, function()
         if self.render:isVisible() then
             self:onAttributeContent_GUI()
         end
     end)
 
-    self.sysRecipient:on("onNodeContentGUI", function(nodeContent)
+    self.sysRecipient:on(SysEvent.ON_NODE_CONTENT_GUI, function(nodeContent)
         self:onNodeContentGUI(nodeContent)
     end)
 end
@@ -377,42 +372,7 @@ function BaseEditorCocos:onMouseScroll(event)
         end
     end
 
-    -- --没有按键按下，进行整体缩放(有动画效果)
-    -- if not _MyG.KeyboardStateMng:haskeyCodePressed() then
-    --     if self.co_root_scale then
-    --         self.routine:skill(self.co_root_scale)
-    --         self.co_root_scale = nil
-    --     end
-
-    --     local function lerp(t1,t2,alpha)
-    --         return (t1 * (1 - alpha)) + t2 * alpha
-    --     end
-
-    --     local pos = cc.p(event:getCursorX(), event:getCursorY())
-    --     local convertpos = self.render:convertToNodeSpace(pos)
-    
-    --     local beginScale = self.render:getScale()
-    --     local endScale = beginScale - event:getScrollY() * 0.1
-    --     endScale = math.max(endScale, 0.2)
-    --     endScale = math.min(endScale, 3.0)
-
-    --     local moveScale = endScale - beginScale
-    --     local beginPos  = cc.p(self.render:getPosition())
-    --     local endPos    = cc.p(self.render:getPositionX() - convertpos.x * moveScale, self.render:getPositionY() - convertpos.y * moveScale)
-
-    --     local scale_cycle = function(percent)
-    --         self.render:setScale(lerp(beginScale, endScale, percent))
-    --         self.render:setPosition(cc.pLerp(beginPos, endPos, percent))
-    --     end
-
-    --     self.co_root_scale = self.routine(o_once(function() 
-    --         o_cycle(0.1, scale_cycle)
-    --     end))
-    -- end
-
-
-    --没有按键按下，进行整体缩放(无动画效果)
-    if not _MyG.KeyboardStateMng:haskeyCodePressed() then
+    if _MyG.KeyboardStateMng:canScrollEditContext() then
         local pos = cc.p(event:getCursorX(), event:getCursorY())
         local convertpos = self.render:convertToNodeSpace(pos)
     
@@ -425,6 +385,10 @@ function BaseEditorCocos:onMouseScroll(event)
         local moveScale = scale - oldscale
         self.render:setPositionX(self.render:getPositionX() - convertpos.x * moveScale)
         self.render:setPositionY(self.render:getPositionY() - convertpos.y * moveScale)
+
+        G_SysEventEmitter:emit(SysEvent.ON_EDIT_CONTENT_SCALE, self, scale)
+
+        self:onRenderScaleChange(scale)
     end
 end
 
@@ -673,10 +637,19 @@ function BaseEditorCocos:onAssetDragEnd(assetItem, pos)
         self:genElement(function()
             local data = {
                 position = pos,
+                scriptFile = property.relativePath,
             }
-            data.scriptFile = property.relativePath
     
             return _MyG.ElementFactory:spawn("CocostudioFile", {data = data}, self)
+        end)
+    elseif resType == Asset.ResType.EXPORTJSON or resType == Asset.ResType.SPINE then
+        self:genElement(function()
+            local data = {
+                position = pos,
+                resFile = property.relativePath,
+            }
+    
+            return _MyG.ElementFactory:spawn("ArmatureFile", {data = data}, self)
         end)
     end
 end
@@ -684,7 +657,7 @@ end
 -- @brief 预制体拖拽
 function BaseEditorCocos:onDragPreWidgetDragEnd(typeName, pos)
 
-    print("onDragPreWidgetDragEnd", typeName, pos.x, pos.y)
+    -- print("onDragPreWidgetDragEnd", typeName, pos.x, pos.y)
 
     for k,v in pairs(self.plugins) do
         if v:onDragPreWidgetDragEnd(typeName, pos) then
@@ -720,6 +693,10 @@ function BaseEditorCocos:onNodeContentGUI(nodeContent)
             v:onNodeContentGUI(nodeContent)
         end
     end
+end
+
+-- @brief 画布缩放发生改变
+function BaseEditorCocos:onRenderScaleChange(scale)
 end
 
 -- @brief 元素拖动回调

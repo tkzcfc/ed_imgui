@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-12 13:52:08
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-07 22:21:50
 -- @Description: 文件选择弹框
 
 
@@ -21,9 +18,9 @@ local ListType =
 	FILE = 3,
 }
 
-local diskIcon = Tools:getImguiTextureID("res/disk.png")
-local fileIcon = Tools:getImguiTextureID("res/file.png")
-local folderIcon = Tools:getImguiTextureID("res/folder.png")
+local diskIcon = EditorIconContent:get(EditorIcon.THUMBNAIL_DISK)
+local fileIcon = EditorIconContent:get(EditorIcon.THUMBNAIL_FILE)
+local folderIcon = EditorIconContent:get(EditorIcon.THUMBNAIL_FOLDER)
 
 local getIconByType = function(_type)
 	if _type == ListType.DISK then
@@ -117,7 +114,7 @@ function M:onGUI()
 	local visible, call_ok, enter_true
 	visible, self.isOpen = ImGui.BeginPopupModal(self.dlgName, self.isOpen, ImGuiWindowFlags_AlwaysAutoResize)
 	if visible then
-		ImGui.Text(STR("路径"))
+		ImGui.Text(STR("Path"))
 		ImGui.SameLine()
 		ImGui.PushItemWidth(280)
 		if self.pathConstraint then
@@ -131,28 +128,31 @@ function M:onGUI()
 		ImGui.PopItemWidth()
 
 		ImGui.SameLine()
-		if ImGui.ArrowButton(STR("向上"), ImGuiDir_Up) then
+		if ImGui.ArrowButton(STR("Upward"), ImGuiDir_Up) then
 			self:up()
 		end
 
 		ImGui.SameLine()
-		if ImGui.Button(STR("新建")) then
+		if ImGui.Button(STR("New")) then
 			self.newFolderName = ""
 			ImGui.OpenPopup("##create folder")
 		end
 
 		-- 新建文件夹窗口逻辑
 		if ImGui.BeginPopupModal("##create folder", true, ImGuiWindowFlags_AlwaysAutoResize) then
-			ImGui.Text(STR("文件夹名字"))
+			ImGui.Text(STR("FolderName"))
 			ImGui.SameLine()
 			enter_true, self.newFolderName = Tools:imgui_inputText("", self.newFolderName, 64, 0)
 			ImGui.Spacing()
 			ImGui.Separator()
 
-			local width = ImGui.GetContentRegionAvailWidth()
+			if self.contentRegionAvailWidth == nil then
+				self.contentRegionAvailWidth = ImGui.GetContentRegionAvailWidth()
+			end
+			local width = self.contentRegionAvailWidth
 			ImGui.BeginHorizontal("h1", {x = width, y = 40}, 0.5)
 
-			if ImGui.Button(STR("确定"), {x = width / 2, y = 0}) and #self.newFolderName > 0 then
+			if ImGui.Button(STR("Yes"), {x = width / 2, y = 0}) and #self.newFolderName > 0 then
 				local path = self.curDir .. "/" .. Tools:UTS(self.newFolderName)
 				local ret, err = lfs.mkdir(path)
 				if ret then
@@ -162,7 +162,7 @@ function M:onGUI()
 					print("err", err)
 				end
 			end
-			if ImGui.Button(STR("取消"), {x = width / 2, y = 0}) then
+			if ImGui.Button(STR("Cancel"), {x = width / 2, y = 0}) then
 				ImGui.CloseCurrentPopup()
 			end
 
@@ -218,19 +218,19 @@ function M:onGUI()
 		local buttonW = childWidth / 2
 
 		if self.usage == M.FileDialogUsage_OpenFolder then
-			if ImGui.Button(STR("打开"), {x = buttonW, y = 0}) then
+			if ImGui.Button(STR("Open"), {x = buttonW, y = 0}) then
 				self:do_callback()
 				call_ok = true
 				self.isOpen = false
 			end
 		elseif self.usage == M.FileDialogUsage_OpenFile then
-			if ImGui.Button(STR("打开"), {x = buttonW, y = 0}) then
+			if ImGui.Button(STR("Open"), {x = buttonW, y = 0}) then
 				self:do_callback()
 				call_ok = true
 				self.isOpen = false
 			end
 		else
-			if ImGui.Button(STR("保存"), {x = buttonW, y = 0}) then
+			if ImGui.Button(STR("Save"), {x = buttonW, y = 0}) then
 				if self.curEditFileName ~= "" then
 					-- 判断文件后缀
 					local validExt = false
@@ -259,7 +259,7 @@ function M:onGUI()
 			end
 		end
 
-		if ImGui.Button(STR("取消"), {x = buttonW, y = 0}) then
+		if ImGui.Button(STR("Cancel"), {x = buttonW, y = 0}) then
 			self.isOpen = false
 		end
 
@@ -274,9 +274,9 @@ function M:onGUI()
 			visible, self.file_exists_tag = ImGui.BeginPopupModal("##file_exists tip", true, ImGuiWindowFlags_AlwaysAutoResize)
 			if visible then
 				if self.isCanOverlap then
-					ImGui.Text(STR("文件已经存在，是否替换"))
+					ImGui.Text(STR("OverwriteFileTip"))
 					ImGui.Separator()
-					if ImGui.Button(STR("是"), {x = 60, y = 24}) then
+					if ImGui.Button(STR("Yes"), {x = 60, y = 24}) then
 						self.file_exists_tag = false
 						ImGui.CloseCurrentPopup()
 						self:do_callback()
@@ -284,14 +284,14 @@ function M:onGUI()
 						self.isOpen = false
 					end
 					ImGui.SameLine()
-					if ImGui.Button(STR("否"), {x = 60, y = 24}) then
+					if ImGui.Button(STR("No"), {x = 60, y = 24}) then
 						self.file_exists_tag = false
 						ImGui.CloseCurrentPopup()
 					end
 				else
-					ImGui.Text(STR("文件已经存在"))
+					ImGui.Text(STR("FileAlreadyExists"))
 					ImGui.Separator()
-					if ImGui.Button(STR("是"), {x = 60, y = 24}) then
+					if ImGui.Button(STR("Yes"), {x = 60, y = 24}) then
 						self.file_exists_tag = false
 						ImGui.CloseCurrentPopup()
 					end
@@ -532,7 +532,7 @@ end
 -----------------------------------------------------------------------------------------------
 
 function M.getCurrentDir()
-	return M.changePath(lfs.currentdir())
+	return M.changePath(os.currentdir())
 end
 
 function M.changePath(path)

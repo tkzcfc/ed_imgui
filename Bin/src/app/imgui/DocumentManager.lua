@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-12 13:52:08
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-07 22:22:00
 -- @Description: 
 
 
@@ -62,7 +59,7 @@ end
 
 function DocumentManager:setCurShowDocumentByName(docName)
 	for k, v in pairs(self.documents) do
-		if v.filename == docName then
+		if v:getFullName() == docName then
 			self.willShowDocument = v
 			return
 		end
@@ -70,7 +67,9 @@ function DocumentManager:setCurShowDocumentByName(docName)
 end
 
 function DocumentManager:setCurShowDocument(doc)
-	self.willShowDocument = doc
+	if self.curShowDoc ~= doc then
+		self.willShowDocument = doc
+	end
 end
 
 function DocumentManager:draw()
@@ -101,8 +100,14 @@ function DocumentManager:draw()
 					self.curShowDoc:onHide()
 				end
 				document:onGUI()
-				self.curShowDoc = document
 				ImGui.EndTabItem()
+				
+				if self.curShowDoc ~= document then
+					self.curShowDoc = document
+					if  self.onClickDocCall then
+						self.onClickDocCall(self.curShowDoc)
+					end
+				end
 			end
 			if not isOpenTag and isOpenTag ~= document.isOpen then
 				table.insert(self.waitCloseQue, document)
@@ -113,6 +118,12 @@ function DocumentManager:draw()
 
 	self:closeLogic()
 end
+
+-- @brief 加入关闭队列
+function DocumentManager:addCloseQueue(document)
+	table.insert(self.waitCloseQue, document)
+end
+
 
 local buttonSize = {x = 80, y = 0}
 
@@ -125,6 +136,7 @@ function DocumentManager:closeLogic()
 	if not curDoc.dirty then
 		table.remove(self.waitCloseQue, 1)
 		self:closeDocument(curDoc)
+		G_SysEventEmitter:emit(SysEvent.ON_DUCUMENT_CLOSED, curDoc)
 		return
 	end
 
@@ -142,8 +154,10 @@ function DocumentManager:closeLogic()
 		if curDoc:save() then
 			table.remove(self.waitCloseQue, 1)
 			self:closeDocument(curDoc)
+			G_SysEventEmitter:emit(SysEvent.ON_DUCUMENT_CLOSED, curDoc)
 		else
 			self.waitCloseQue = {}
+			G_SysEventEmitter:emit(SysEvent.ON_DUCUMENT_CLOSE_CANCEL, curDoc)
 		end
 		self.showBoxTag = false
 	end
@@ -152,15 +166,22 @@ function DocumentManager:closeLogic()
 		self.showBoxTag = false
 		table.remove(self.waitCloseQue, 1)
 		self:closeDocument(curDoc)
+		G_SysEventEmitter:emit(SysEvent.ON_DUCUMENT_CLOSED, curDoc)
 	end
 
 	local cancel_call = function()
 		self.waitCloseQue = {}
 		self.showBoxTag = false
+		G_SysEventEmitter:emit(SysEvent.ON_DUCUMENT_CLOSE_CANCEL, curDoc)
 	end
 
-	_MyG.ShowThreeButton(STR("DLG_IS_SVAE_ITEM"), STR("Yes"), STR("No"), STR("Cancel"), save_call, no_call, cancel_call, cancel_call)
-
+	local msgBox = require("app.imgui.popup.MessageBox").new()
+    msgBox:setContent(STR("DLG_IS_SVAE_ITEM"))
+    msgBox:addBtn(STR("Yes"), save_call)
+    msgBox:addBtn(STR("No"), no_call)
+    msgBox:addBtn(STR("Cancel"), cancel_call)
+    msgBox:setDefaultCloseCall(cancel_call)
+    _MyG.PopupManager:addPopup(msgBox)
 
 
 
@@ -236,6 +257,7 @@ function DocumentManager:addDocument(doc)
 	table.insert(self.documents, doc)
 
 	self:updateName()
+	return doc
 end
 
 function DocumentManager:hasDocument(docName)
@@ -296,6 +318,10 @@ function DocumentManager:updateName()
 			end
 		end
 	end
+end
+
+function DocumentManager:setClickDocumentCall(call)
+	self.onClickDocCall = call
 end
 
 return DocumentManager

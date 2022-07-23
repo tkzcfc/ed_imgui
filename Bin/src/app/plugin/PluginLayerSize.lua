@@ -50,12 +50,12 @@ end
 
 function PluginLayerSize:onAttributeGUI()
 	if ImGui.DragFloat2(STR("EA_WORK_SPACE"), self.workSpace_Imgui, 1) then
-		self:onAttributeChange("change_work_space")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_WORK_SPACE)
 		self:setWorkSpaceSize(cc.p(self.workSpace_Imgui[1], self.workSpace_Imgui[2]))
     end
 
     if ImGui.ColorEdit4(STR("EA_WORK_SPACE_COLOR"), self.workSpaceRectColor_Imgui) then
-    	self:onAttributeChange("change_work_space_color")
+    	self:onAttributeChange(EditorEvent.ON_CHANGE_WORK_SPACE_COLOR)
     	local color = cc.c4f(self.workSpaceRectColor_Imgui[1], self.workSpaceRectColor_Imgui[2], self.workSpaceRectColor_Imgui[3], self.workSpaceRectColor_Imgui[4])
     	self:setWorkSpaceRectColor(color)
     end

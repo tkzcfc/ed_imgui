@@ -1,12 +1,15 @@
 -- @Author: fangcheng
 -- @URL: github.com/tkzcfc
 -- @Date:   2019-10-17 21:26:05
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-02-28 21:26:16
 -- @Description: commonlib初始化
 
+cc.exports.com_log = function(...)
+    print("[commonlib]:", ...)
+end
+
+
 -- 全局函数导入
-require("commonlib.global.function")
+require("commonlib.global.functions")
 
 -- 宏定义
 cc.exports.G_MAC = require("commonlib.global.GameMacros")
@@ -33,6 +36,9 @@ class.Recipient = require("commonlib.class.Recipient")
 class.LoadAsync = require("commonlib.class.LoadAsync")
 class.Vector = require("commonlib.class.Vector")
 class.PopView = require("commonlib.class.PopView")
+class.Task = require("commonlib.class.Task")
+class.TaskFlowPipe = require("commonlib.class.TaskFlowPipe")
+class.StorageObject = require("commonlib.class.StorageObject")
 -- class.MsgListen = require("commonlib.msg.MsgListen")		-- 监听消息继承此类
 
 cc.exports.G_Class = class

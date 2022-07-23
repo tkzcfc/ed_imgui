@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-30 22:10:45
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-06-01 22:34:32
 -- @Description: cocostudio
 
 local NodeElement = import(".NodeElement")
@@ -135,7 +132,7 @@ function CocoStudioElement:onGUI_Base()
     tmpTabNumArr[1] = positionx
     tmpTabNumArr[2] = positiony
     if ImGui.DragFloat2(STR("EA_POS"), tmpTabNumArr, 1) then
-    	self:onAttributeChange("change_position")
+    	self:onAttributeChange(EditorEvent.ON_CHANGE_POSITION)
     	self.renderNode:setPosition(tmpTabNumArr[1], tmpTabNumArr[2])
     end
 
@@ -147,18 +144,29 @@ end
 -- @brief 切换图片资源
 function CocoStudioElement:changeAssetLua(dragData)
 	local asset = _MyG.Functions:getAssetByID(dragData)
+	G_SysEventEmitter:emit(SysEvent.DO_CHANGE_ASSET, self, asset, true)
+end
 
-	if asset then
-		self:onAttributeChange("change_PrefabResource")
-		local property = asset.property
-		self.scriptFile = property.relativePath
+-- @brief override 资源对比
+function CocoStudioElement:isAssetEqual(asset)
+	local property = asset.property
+    return self.scriptFile == property.relativePath
+end
 
-		self:genRenderNode()
+-- @brief override 资源切换
+function CocoStudioElement:onDoChangeAsset(asset, canUndo)
+	CocoStudioElement.super.onDoChangeAsset(self, asset, canUndo)
+	if canUndo then
+		self:onAttributeChange(EditorEvent.ON_CHANGE_PREFABRESOURCE)
 	end
+	
+	local property = asset.property
+	self.scriptFile = property.relativePath
+	self:genRenderNode()
 end
 
 function CocoStudioElement:doPartMementoGen(attributeName)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		return self.scriptFile
 	else
 		return CocoStudioElement.super.doPartMementoGen(self, attributeName)
@@ -167,7 +175,7 @@ end
 
 -- @brief 撤销属性改变
 function CocoStudioElement:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		self.scriptFile = data
 		self:genRenderNode()
 	else

@@ -9,13 +9,10 @@ function CustomTree:ctor(name)
 	self.scrolling_size = cc.p(0, 0)
 	self.scrolling_flag = ImGuiWindowFlags_HorizontalScrollbar
 
-    self.treeNodeSpacing = 20
     self.treeNodeSize = cc.p(0, 0)
 
-	self.fileIcon = Tools:getImguiTextureID("res/file.png")
-	self.folderIcon = Tools:getImguiTextureID("res/folder.png")
-	self.iconSize = cc.p(20, 20)
-	self.nodeSelectable = cc.p(0, 18)
+	self.fileIcon = EditorIconContent:get(EditorIcon.ICON_FILE)
+	self.folderIcon = EditorIconContent:get(EditorIcon.ICON_FOLDER)
 
     self:updateContent()
 end
@@ -50,19 +47,22 @@ function CustomTree:onGUI()
 end
 
 function CustomTree:cosutomDrawItem(item, noDrag)
+	local height = ImGui.GetFrameHeight()
+	local iconSize = {x = height, y = height}
+
 	if item.noOpen then
-		ImGui.Image(self.fileIcon, self.iconSize)
+		ImGui.Image(self.fileIcon, iconSize)
 	else
-		ImGui.Image(self.folderIcon, self.iconSize)
+		ImGui.Image(self.folderIcon, iconSize)
 	end
 	ImGui.SameLine()
 
 	if noDrag then
-		ImGui.Selectable(item.name, false, ImGuiSelectableFlags_AllowDoubleClick, self.nodeSelectable)
+		ImGui.Selectable(item.name, false, ImGuiSelectableFlags_AllowDoubleClick)
 		return
 	end
 
-	if ImGui.Selectable(item.name, false, ImGuiSelectableFlags_AllowDoubleClick, self.nodeSelectable) then
+	if ImGui.Selectable(item.name, false, ImGuiSelectableFlags_AllowDoubleClick) then
 		if ImGui.IsMouseDoubleClicked(0) then
 			if not item.noOpen then
 				item.__isOpen = not item.__isOpen
@@ -120,11 +120,12 @@ function CustomTree:drawItem(item)
 				self:doseek(item)
 			end
 			if item.items then
-				ImGui.Indent(self.treeNodeSpacing)
+				local frameHeight = ImGui.GetFrameHeight()
+				ImGui.Indent(frameHeight)
 				for k, v in pairs(item.items) do
 					self:drawItem(v)
 				end
-				ImGui.Unindent(self.treeNodeSpacing)
+				ImGui.Unindent(frameHeight)
 			end
 		end
 	else

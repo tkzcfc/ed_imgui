@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-05 16:25:29
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-30 21:34:53
 -- @Description: 编辑矩形以及线段
 
 local Plugin = import(".Plugin")
@@ -22,7 +19,7 @@ function PluginLineRect:ctor()
 	self.isShowRect = true
 
 	self.onLineRectUserdataValueChange = function()
-		self:onAttributeChange("change_line_rect_userdata")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_RECT_USERDATA)
 	end
 end
 
@@ -107,14 +104,14 @@ function PluginLineRect:onAttributeGUI()
 	local boolValue, tmp_ret = self.isShowLine
 	tmp_ret, boolValue = ImGui.Checkbox(STR("EA_IS_VISIBLE_LINE"), boolValue)
 	if tmp_ret then
-		self:onAttributeChange("change_line_visible")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_VISIBLE)
 	    self.isShowLine = boolValue
 	end
 
 	local boolValue, tmp_ret = self.isShowRect
 	tmp_ret, boolValue = ImGui.Checkbox(STR("EA_IS_VISIBLE_RECT"), boolValue)
 	if tmp_ret then
-		self:onAttributeChange("change_rect_visible")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_VISIBLE)
 	    self.isShowRect = boolValue
 	end
 end
@@ -139,7 +136,7 @@ function PluginLineRect:onGUI_Lines()
 		            vec2_tmp[1] = pos.x
 		            vec2_tmp[2] = pos.y
 		            if ImGui.DragFloat2(tostring(i), vec2_tmp, 1) then
-    					self:onAttributeChange("change_line_data")
+    					self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		                lineDirty = true
 		                v:setPointDataByIndex(i, vec2_tmp[1], vec2_tmp[2])
 		            end
@@ -153,7 +150,7 @@ function PluginLineRect:onGUI_Lines()
 		        end
 
 		        if deletePointIndex then
-					self:onAttributeChange("change_line_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		            v:removePointByIndex(deletePointIndex)
 		            lineDirty = true
 		        end
@@ -161,7 +158,7 @@ function PluginLineRect:onGUI_Lines()
 		        local boolValue = v:isLeftNormal()
 		        tmp_ret, boolValue = ImGui.Checkbox(STR("EA_IS_LEFT"), boolValue)
 		        if tmp_ret then
-					self:onAttributeChange("change_line_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		            v:setNormalLeft(boolValue)
 		            lineDirty = true
 		        end
@@ -169,7 +166,7 @@ function PluginLineRect:onGUI_Lines()
 		        boolValue = v:isVisible()
 		        tmp_ret, boolValue = ImGui.Checkbox(STR("EA_IS_VISIBLE"), boolValue)
 		        if tmp_ret then
-					self:onAttributeChange("change_line_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		            v:setVisible(boolValue)
 		            lineDirty = true
 		        end
@@ -187,7 +184,7 @@ function PluginLineRect:onGUI_Lines()
 		        end
 
 		        if ImGui.Button(STR("EA_DELETE")) then
-					self:onAttributeChange("change_line_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		            deleteLineKey = k
 		            lineDirty = true
 		        end
@@ -215,7 +212,7 @@ function PluginLineRect:onGUI_Lines()
 		if editLineKey then
 		    if self.curEditLine ~= self.lines[editLineKey] then
 		    	self:editFinish()
-		        self:onAttributeChange("change_line_data")
+		        self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 		        self.curEditLine = self.lines[editLineKey]
 		        self.curEditLine:setLineCorlor(CurEditLineColor_UINT)
 		        self.curEditLine:setVisible(true)
@@ -252,7 +249,7 @@ function PluginLineRect:onGUI_Rects()
 		        vec2_tmp[2] = vec2Value.y
 		        if ImGui.DragFloat2(STR("EA_POS"), vec2_tmp, 1) then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setPoint(vec2_tmp[1], vec2_tmp[2])
 		        end
 
@@ -261,7 +258,7 @@ function PluginLineRect:onGUI_Rects()
 		        vec2_tmp[2] = vec2Value.y
 		        if ImGui.DragFloat2(STR("EA_ANC"), vec2_tmp, 0.05) then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setAnchorPoint(vec2_tmp[1], vec2_tmp[2])
 		        end
 
@@ -270,7 +267,7 @@ function PluginLineRect:onGUI_Rects()
 		        vec2_tmp[2] = vec2Value.y
 		        if ImGui.DragFloat2(STR("EA_SIZE"), vec2_tmp, 1) then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setContentSize(vec2_tmp[1], vec2_tmp[2])
 		        end
 
@@ -279,7 +276,7 @@ function PluginLineRect:onGUI_Rects()
 		        vec2_tmp[2] = vec2Value.y
 		        if ImGui.DragFloat2(STR("EA_SCALE"), vec2_tmp, 0.1) then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setScale(vec2_tmp[1], vec2_tmp[2])
 		        end
 
@@ -288,14 +285,14 @@ function PluginLineRect:onGUI_Rects()
 		        retTmp, vec2Value.x = ImGui.DragFloat(STR("EA_SKEW_X"), vec2Value.x, 1)
 		        if retTmp then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setSkewX(vec2Value.x)
 		        end
 
 		        retTmp, vec2Value.y = ImGui.DragFloat(STR("EA_SKEW_Y"), vec2Value.y, 1)
 		        if retTmp then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setSkewY(vec2Value.y)
 		        end
 
@@ -303,14 +300,14 @@ function PluginLineRect:onGUI_Rects()
 		        retTmp, vec2Value = ImGui.DragFloat(STR("EA_ROTATION"), vec2Value, 1)
 		        if retTmp then
 		            rectDirty = true
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setRotation(vec2Value)
 		        end
 
 		        vec2Value = v:isVisible()
 		        retTmp, vec2Value = ImGui.Checkbox(STR("EA_IS_VISIBLE"), vec2Value)
 		        if retTmp then
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            v:setVisible(vec2Value)
 		            rectDirty = true
 		        end
@@ -323,7 +320,7 @@ function PluginLineRect:onGUI_Rects()
 		        -- ImGui.Unindent()
 
 		        if ImGui.Button(STR("EA_DELETE")) then
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 		            deleteRectKey = k
 		            rectDirty = true
 		        end
@@ -367,7 +364,7 @@ function PluginLineRect:editLineFinish(noSaveSnapshot)
 			self.curEditLine:setLineCorlor(LineColor_UINT)
 			self.editMode = false
 			if not noSaveSnapshot then
-				self:onAttributeChange("change_line_data")
+				self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 			end
 			table.insert(self.lines, self.curEditLine)
 			self:dataDirty()
@@ -387,7 +384,7 @@ function PluginLineRect:editRectFinish(noSaveSnapshot)
 			if w > 5 and h > 5 then
 				self.editMode = false
 				if not noSaveSnapshot then
-					self:onAttributeChange("change_rect_data")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_RECT_DATA)
 				end
 				local posx = math.min(self.curEditRectData.endpos.x, self.curEditRectData.beginpos.x)
 				local posy = math.min(self.curEditRectData.endpos.y, self.curEditRectData.beginpos.y)
@@ -497,7 +494,7 @@ end
 
 function PluginLineRect:onTouchEnded(touch, event)
 	if self.curEditLine then
-		self:onAttributeChange("change_line_data")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_LINE_DATA)
 
 		local count = self.curEditLine:getPointCount()
 		local convertpos = self.rootNode:convertToNodeSpace(touch:getLocation())

@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-11 21:46:01
 -- @Description: 
 
@@ -14,6 +13,7 @@ function Asset_Layer:init(fullPath)
 
 	local data = self.assetManager:getAssetData(fullPath)
 	self.property.showName = Tools:replaceString(self.property.showName, ".asset", "." .. data.type)
+    self.property.thumbnailTexture = EditorIconContent:get(EditorIcon.ICON_SCENE)
 end
 
 

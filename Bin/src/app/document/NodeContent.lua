@@ -21,11 +21,11 @@ function NodeContent:onGUI()
 
 	ImGui.BeginChild("scrolling", self.scrolling_size, false, self.scrolling_flag)
 	
-	G_SysEventEmitter:emit("onNodeContentGUI", self)
+	G_SysEventEmitter:emit(SysEvent.ON_NODE_CONTENT_GUI, self)
 
 	ImGui.EndChild()
 
-	G_SysEventEmitter:emit("onNodeContentGUI_End")
+	G_SysEventEmitter:emit(SysEvent.ON_NODE_CONTENT_GUI_END)
 
 	if ImGui.BeginPopup("node_content_right_click_popup") and self.popLogic then
 		self.popLogic()

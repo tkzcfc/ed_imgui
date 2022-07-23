@@ -3,7 +3,7 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 cc.FileUtils:getInstance():addSearchPath("src/")
 cc.FileUtils:getInstance():addSearchPath("res/")
 
--- require("LuaPanda").start("127.0.0.1",8818)
+CREATE_OPENGL_VIEW_TML_IN_CPP = true
 require "config"
 require "cocos.init"
 
@@ -14,7 +14,7 @@ local function main()
 	cc.exports.logE = print
 	require("app.init")
     require("app.MyApp"):create():run()
-    cc.Director:getInstance():setAnimationInterval(1 / 30)
+    -- cc.Director:getInstance():setAnimationInterval(1 / 30)
 end
 
 __G__TRACKBACK__ = function(msg)
@@ -28,4 +28,4 @@ if not status then
     logE(msg)
 end
 
-
+cc.Director:getInstance():setDisplayStats(true)

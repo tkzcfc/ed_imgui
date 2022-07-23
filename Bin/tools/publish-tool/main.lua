@@ -23,13 +23,13 @@ end
 
 local function doExport()
 	local export = require("export")
-	local M = export.new(G_Input, G_Output)
+	local M = export.new(G_Input, G_Output, G_CopyResource)
 
 	if M:publish() then
 		logI(STR("PUBLISH_SUCCESS"))
 		os.exit(0)
 	else
-		logI(STR("PUBLISH_FAILED"))
+		logE(STR("PUBLISH_FAILED"))
 		os.exit(1)
 	end
 end
@@ -38,9 +38,20 @@ local function main()
 	init()
 
 	if ENABLE_TEST then
-		G_Input 	= "./../test/"
-		G_Output 	= "./../export/"
+		--[[
+"E:/fc_test/git_pro/editor_img/bin/tools/publish-tool_pro/build/Debug/publish-tool.exe 
+E:/fc_test/git_pro/editor_img/test/alpha/
+E:/fc_test/git_pro/editor_img/test/out/alpha/ en
+"
+
+E:/fc_test/git_pro/editor_img/bin/tools/publish-tool/publish-tool.exe 
+E:/fc_test/git_pro/editor_img/bin/workspace/assets//alpha/ 
+E:/fc_test/git_pro/editor_img/bin/publish/assets/alpha/ cn
+]]
+		G_Input 	= "E:/fc_test/git_pro/editor_img/bin/workspace/assets//alpha/"
+		G_Output 	= "E:/fc_test/git_pro/editor_img/bin/publish/assets/alpha/"
 		G_Lang		= "en"
+		G_CopyResource = false
 	else
 		args = args or {}
 		if #args < 3 then
@@ -51,6 +62,13 @@ local function main()
 		G_Input  = args[2]
 		G_Output = args[3]
 		G_Lang	 = args[4] or "en"
+
+		G_CopyResource = false
+		for k, v in pairs(args) do
+			if v == "copyResource" then
+				G_CopyResource = true
+			end
+		end
 	end
 
 	doExport()

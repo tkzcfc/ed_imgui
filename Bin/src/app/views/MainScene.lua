@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-05 12:48:03
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-04-12 14:39:39
 -- @Description: 
 local MainScene = class("MainScene", cc.load("mvc").ViewBase)
 
@@ -14,15 +11,16 @@ function MainScene:onCreate()
 	local ilayer = context:getIlayer()
     ilayer:registerLuaHandle("onGUIBegin", function()
         _MyG.IsOnGUI = true
-        G_SysEventEmitter:emit("onGUIBegin")
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_BEGIN)
     end)
 
     ilayer:registerLuaHandle("onGUI", function()
-        G_SysEventEmitter:emit("onGUI")
+        G_SysEventEmitter:emit(SysEvent.ON_GUI)
     end)
 
     ilayer:registerLuaHandle("onGUIEnd", function()
-        G_SysEventEmitter:emit("onGUIEnd")
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_POPUP)
+        G_SysEventEmitter:emit(SysEvent.ON_GUI_END)
         _MyG.IsOnGUI = false
     end)
 
@@ -41,6 +39,8 @@ function MainScene:onCreate()
 end
 
 function MainScene:onGUI_Init()
+    _MyG.ThemeManager:readTheme()
+    
     local ilayer = self.ilayer
 
     local DocumentManager = require("app.imgui.DocumentManager")
@@ -56,18 +56,13 @@ function MainScene:onGUI_Init()
 	require("app.logic.GUI_Right")
 	require("app.logic.GUI_Top")
 	require("app.logic.GUI_MenuBar")
+	require("app.logic.GUI_Popup")
+	require("app.logic.GUI_Window")
 
-    if _MyG.UseSystemChineseFont then
-        if ilayer:setSystemChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
+    _MyG.SupportChineseFont = false
+    for k, v in pairs(_MyG.SupportFonts) do
+        if ilayer:setChineseFont(v.fullPath, v.fontSize) then
             _MyG.SupportChineseFont = true
-        else
-            _MyG.SupportChineseFont = false
-        end
-    else
-        if ilayer:setChineseFont(_MyG.ChineseFont, _MyG.ChineseFontSize) then
-            _MyG.SupportChineseFont = true
-        else
-            _MyG.SupportChineseFont = false
         end
     end
 

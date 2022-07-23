@@ -1,4 +1,4 @@
-local subprocess = require("subprocess")
+-- local subprocess = require("subprocess")
 
 local Functions = {}
 
@@ -11,35 +11,6 @@ require "lfs"
 local FileDialog = require("app.imgui.FileDialog")
 local FileUtilsInstance = cc.FileUtils:getInstance()
 
-
-
-local FILE_TMPTY_DATA = {
-	children = {},
-	context = {
-		plugins = {},
-	}
-}
-
-local FILE_TMPTY_DATA_WIDGET = clone(FILE_TMPTY_DATA)
-FILE_TMPTY_DATA_WIDGET.context.plugins = {
-	PluginLineRect = {
-		rect_data = {},
-		line_data = {},
-	},
-}
-
-local FILE_TMPTY_DATA_LAYER = clone(FILE_TMPTY_DATA)
-FILE_TMPTY_DATA_LAYER.context.plugins = {
-	PluginLayerSize = {
-		size = cc.p(_MyG.Editor_DesignResolution.width, _MyG.Editor_DesignResolution.height),
-		color = cc.c4f(0.9, 0, 1, 1),
-	}
-}
-
-
-local FILE_TMPTY_DATA_MAP = clone(FILE_TMPTY_DATA)
-
-
 -- brief 创建工程
 function Functions:createProject(name)
 	if name == "" then
@@ -48,7 +19,7 @@ function Functions:createProject(name)
 
 	for i,v in ipairs(_MyG.GlobalData.ProjectNameArr) do
 		if v == name then
-			_MyG.ShowBox(STR("PROJECT_EXISTS"))
+			_MyG.ShowTipBox(STR("PROJECT_EXISTS"))
 			return
 		end
 	end
@@ -57,29 +28,50 @@ function Functions:createProject(name)
 	local status = _MyG.EditorProject:createProj(projpath, name)
 
 	if status == 0 then
-		_MyG.ShowBox(STR("PROJECT_CREATE_SUCCESS"), function()
+		_MyG.ShowTipBox(STR("PROJECT_CREATE_SUCCESS"), function()
 			self:openProject(_MyG.EditorProject:assembleProjectFileFullName(projpath, name))
 		end)
 	elseif status == 1 then
-		_MyG.ShowBox(STR("PROJECT_CREATE_FAIL_EXIST"))
+		_MyG.ShowTipBox(STR("PROJECT_CREATE_FAIL_EXIST"))
 	elseif status == 2 then
-		_MyG.ShowBox(STR("PROJECT_CREATE_FAIL"))
+		_MyG.ShowTipBox(STR("PROJECT_CREATE_FAIL"))
 	end
 end
 
 -- @brief 打开工程
 function Functions:openProject(projectFileName)
-	if _MyG.EditorProject:open(projectFileName) then
-	else
-		_MyG.ShowBox(STR("PROJECT_OPEN_FAIL"))
+	if _MyG.EditorProject:getProFilePath() == projectFileName then
+		logI("Project opened")
+		return 
 	end
+
+	local function processCallback(taskPercent, totalPercent)
+		_MyG:PercentLoading(totalPercent)
+	end
+
+	local function finishCallback()
+		_MyG:HideLoading()
+	end
+	
+	local function errorCallback(msg)
+		logE(msg)
+		_MyG:HideLoading()
+		_MyG.ShowTipBox(STR("PROJECT_OPEN_FAIL"))
+	end
+
+	local pipe = G_Class.TaskFlowPipe.new()
+	pipe:pushTask(require("app.task.TaskOpenProject").new(projectFileName))
+	pipe:pushTask(require("app.task.TaskUpdateAsset").new(projectFileName))
+	pipe:start(processCallback, finishCallback, errorCallback)
+
+	_MyG.ShowLoading()
 end
 
 -- @brief 将lua的table序列化成json并写入文件中
 function Functions:writeTableToFile(tab, filePath)
 	local success, ok = xpcall(function()
-		local content = json.encode(tab)
-		content = Tools:prettyJson(content)
+		local content = Functions:encodeJson(tab)
+		-- content = Tools:prettyJson(content)
 		if not Functions:writeToFile(content, filePath) then
 			logE(string.format("Failed to write file %q", tostring(filePath)))
 			return false
@@ -95,7 +87,7 @@ function Functions:writeToFile(content, filePath)
 	if FileUtilsInstance:writeStringToFile(content, filePath) then
 		return true
 	else
-		logE("writeStringToFile错误:文件写入失败", filePath)
+		logE("write string to file failed", filePath)
 		logE("str:", tostring(content))
 		return false
 	end
@@ -103,155 +95,22 @@ end
 
 function Functions:autoUpdate(path)
 	if path == nil then
-		G_SysEventEmitter:emit("onAssetContentUpdate")
+		G_SysEventEmitter:emit(SysEvent.ON_ASSET_CONTENT_UPDATE)
 		return
 	end
 	if string.find(path, _MyG.GlobalData.CocosResourcePath) then
 		-- Cocos资源
-		G_SysEventEmitter:emit("onAssetCocosUpdate")
+		G_SysEventEmitter:emit(SysEvent.ON_ASSET_COCOS_UPDATE)
 	else
-		G_SysEventEmitter:emit("onAssetContentUpdate")
+		G_SysEventEmitter:emit(SysEvent.ON_ASSET_CONTENT_UPDATE)
 	end
-end
-
-function Functions:openAsset(asset, createCall)
-	local fullPath = asset:getFilePath()
-
-	local data = asset.assetManager:getAssetData(fullPath)
-	if not data then
-		logE(string.format("[1]Failed to open resource %q", tostring(fullPath)))
-		return
-	end
-
-	fullPath = Tools:replaceString(fullPath, ".asset", "." .. data.type)
-	local docName = self:getRelativePath(fullPath)
-
-	if _MyG.CenterDocumentManager:hasDocument(docName) then
-		_MyG.CenterDocumentManager:setCurShowDocumentByName(docName)
-	else
-		local context = nil
-
-    	local status = xpcall(function() 
-    		context = createCall(docName, data)
-		end, Lua_Error_hook)
-
-		if not status or context == nil then
-			logE(string.format("[2]Failed to open resource %q", tostring(fullPath)))
-			return
-		end
-
-		_MyG.CenterDocumentManager:addDocument(context)
-		_MyG.CenterDocumentManager:setCurShowDocumentByName(docName)
-	end
-end
-
-function Functions:openWidget(asset)
-	Functions:openAsset(asset, function(docName, data)
-		local context = require("app.document.context.EditorWidget").new(docName, asset)
-		if context:deserialize(data.data) then
-			return context
-		end
-		context:destroy()
-	end)
-end
-
-function Functions:openLayer(asset)
-	Functions:openAsset(asset, function(docName, data)
-		local context = require("app.document.context.EditorLayer").new(docName, asset)
-		if context:deserialize(data.data) then
-			return context
-		end
-		context:destroy()
-	end)
-end
-
-function Functions:openMap(asset)
-	Functions:openAsset(asset, function(docName, data)
-		local context = require("app.document.context.EditorMap").new(docName, asset)
-		if context:deserialize(data.data) then
-			return context
-		end
-		context:destroy()
-	end)
-end
-
--- @brief 图片预览
--- @param imgPath 纹理路径
--- @param isPlist 是否是plist文件
--- @param plistFile plist文件名
-local openImageDrawFunc = nil
-function Functions:openImage(imgPath, isPlist, plistFile)
-	if self.curShowImageWindow_FullPath and self.curShowImageWindow_FullPath == imgPath then
-		return
-	end
-
-	if isPlist then
-		cc.SpriteFrameCache:getInstance():addSpriteFrames(plistFile)
-	end
-
-	local textureID = Tools:getImguiTextureID(imgPath, isPlist)
-	if textureID == nil then
-		logE("Failed to get '%s' texture", imgPath)
-		return
-	end
-
-	self.curShowImageWindow_FullPath = imgPath
-
-	local winSize = Tools:getWindowSize()
-	local maxWindW = winSize.width * 0.7
-	local maxWindH = winSize.height * 0.7
-
-	local windW = Tools:getImguiTextureWidth(imgPath)
-	local windH = Tools:getImguiTextureHeight(imgPath)
-	local imageSize = cc.p(windW, windH)
-	windW = windW + 40
-	windH = windH + 80
-	windW = math.max(windW, 100)
-	windH = math.max(windH, 100)
-	windW = math.min(windW, maxWindW)
-	windH = math.min(windH, maxWindH)
-
-	local windSize = cc.p(windW, windH)
-	local windPivot = cc.p(0.5, 0.5)
-	local windPos = cc.p(winSize.width * 0.5, winSize.height * 0.5)
-	local scrolling_size = cc.p(0, 0)
-
-	local showTextureInfo = string.format("%d*%d", windW, windH)
-
-	local flags = 0
-	flags = Tools:bor_int32(flags, ImGuiWindowFlags_NoSavedSettings)
-
-	local tmp
-	local isShow = true
-
-	if openImageDrawFunc then
-		G_SysEventEmitter:removeListener("onGUI", openImageDrawFunc)
-		openImageDrawFunc = nil
-	end
-
-	openImageDrawFunc = function()
-		ImGui.SetNextWindowSize(windSize, ImGuiCond_Appearing)
-		ImGui.SetNextWindowPos(windPos, ImGuiCond_Appearing, windPivot)
-		tmp, isShow = ImGui.Begin("Image", isShow, flags)
-			ImGui.BeginChild("scrolling", scrolling_size, false, ImGuiWindowFlags_HorizontalScrollbar)
-			ImGui.Text(showTextureInfo)
-			ImGui.Image(textureID, imageSize)
-			ImGui.EndChild()
-		ImGui.End()
-
-		if not isShow then
-			G_SysEventEmitter:removeListener("onGUI", openImageDrawFunc)
-			self.curShowImageWindow_FullPath = nil
-			openImageDrawFunc = nil
-		end
-	end
-	G_SysEventEmitter:on("onGUI", openImageDrawFunc)
 end
 
 -- @brief 文件拷贝
 -- @param from 起始地址
 -- @param to 目的地址
 function Functions:doCopy(from, to)
+	from = G_Helper.fmtPath(from)
 	if Tools:copyFile(from, to, false) then
 		logL(string.format("Copy %q to %q succeeded", from, to))
 	else
@@ -301,15 +160,22 @@ function Functions:importResource(filter, toDir, finishCall)
 				local usChoice = 0
 				local showText = string.format(STR("FILE_EXIST_FMT"), filename)
 
-				-- 提示用户是否需要覆盖
-				_MyG.ShowBox(showText, 
-				function()
+				local function cover()
 					usChoice = 1
-				end, 
-				function()
+				end
+
+				local function cancel()
 					usChoice = 2
 					logI(string.format("Cancel copy of %q file", from))
-				end)
+				end
+
+				-- 提示用户是否需要覆盖
+				local msgBox = require("app.imgui.popup.MessageBox").new()
+				msgBox:setContent(showText)
+				msgBox:addBtn("OK", cover)
+				msgBox:addBtn("Cancel", cancel)
+				msgBox:setDefaultCloseCall(cancel)
+				_MyG.PopupManager:addPopup(msgBox)
 
 				repeat
 					if usChoice ~= 0 then
@@ -334,15 +200,36 @@ function Functions:importResource(filter, toDir, finishCall)
 	end))
 end
 
+function Functions:beginWith(str, begin)
+	local pos, _ = string.find(str, begin)
+	return pos and pos == 1
+end
+
+function Functions:beginWithAndSubStr(str, begin)
+	local bpos, epos = string.find(str, begin)
+	if bpos and bpos == 1 then
+		return true, string.sub(str, epos + 1)
+	end
+end
+
 -- @brief 获取相对路径
 function Functions:getRelativePath(fullPath)
+	local ok, newPath
+	local gameResDir = _MyG.EditorProject:getGameResDir()
+	
 	if FileUtilsInstance:isAbsolutePath(fullPath) then
-		if string.find(fullPath, _MyG.GlobalData.CocosResourcePath) then
-			fullPath = Tools:replaceString(fullPath, _MyG.GlobalData.CocosResourcePath, "")
-		else
-			fullPath = Tools:replaceString(fullPath, _MyG.GlobalData.RootWritePath, "")
-		end
+		ok, newPath = self:beginWithAndSubStr(fullPath, _MyG.GlobalData.CocosResourcePath)
+		if ok then return newPath end
+		
+		ok, newPath = self:beginWithAndSubStr(fullPath, _MyG.GlobalData.ProjectsPath)
+		if ok then return newPath end
+		
+		ok, newPath = self:beginWithAndSubStr(fullPath, gameResDir)
+		if ok then return newPath end
 	else
+		ok, newPath = self:beginWithAndSubStr(fullPath, gameResDir)
+		if ok then return newPath end
+		
 		logW(string.format("Calling function getrelativepath parameter '%s' is not an absolute path", tostring(fullPath)))
 	end	
 	return fullPath
@@ -353,13 +240,13 @@ function Functions:removeFile(filepath)
 
 	local docName = self:getRelativePath(filepath)
 	if _MyG.TopDocumentManager:hasDocument(docName) then
-		_MyG.ShowBox(STR("DLG_DEL_FILE_NO_CLOSE"))
+		_MyG.ShowTipBox(STR("DLG_DEL_FILE_NO_CLOSE"))
 		logW(STR("DLG_DEL_FILE_NO_CLOSE"))
 		return
 	end
 
-	_MyG.ShowBox(STR("DLG_IS_DEL_FILE"), 
-	function()
+
+	local function okCall()
 		if FileUtilsInstance:removeFile(filepath) then
 			local publishFilePath = _MyG.GlobalData:getPublishPath(filepath)
 			if FileUtilsInstance:isFileExist(publishFilePath) then
@@ -372,8 +259,14 @@ function Functions:removeFile(filepath)
 		else
 			logE(STR("FAILE_DEL_FILE"), filepath)
 		end
-	end,
-	function() end)
+	end
+
+	-- 提示是否删除文件
+	local msgBox = require("app.imgui.popup.MessageBox").new()
+	msgBox:setContent(STR("DLG_IS_DEL_FILE"))
+	msgBox:addBtn("OK", okCall)
+	msgBox:addBtn("Cancel")
+	_MyG.PopupManager:addPopup(msgBox)
 end
 
 -- @brief 文件夹创建
@@ -386,13 +279,16 @@ function Functions:createFolder(rootpath, call)
 		return
 	end
 
-    local newFolderName = ""
-    local enter_true, drawfunc
-
-    local createFunc = function(name)
+    local input = require("app.imgui.popup.InputText").new()
+	input:setDefaultCloseCall(function()
+    	print("cancel")
+		-- 用户取消
+		call(2)
+	end)
+	input:setInputTextCallback(function(name)
     	print("name", name)
     	-- 用户取消
-        if name == nil or name == "" then
+        if name == "" then
 			if call then
 				call(2)
 			end
@@ -401,6 +297,15 @@ function Functions:createFolder(rootpath, call)
 		rootpath = rootpath .. "/" .. name
 		rootpath = G_Helper.fmtPath(rootpath)
 
+		if FileUtilsInstance:isDirectoryExist(rootpath) then
+			_MyG.ShowTipBox(STR("DIR_EXIST"))
+			-- 文件夹已存在
+			if call then
+				call(1)
+			end
+			return
+		end
+
 		if FileUtilsInstance:createDirectory(rootpath) then
 			-- 创建成功
 			if call then
@@ -408,55 +313,32 @@ function Functions:createFolder(rootpath, call)
 			end
 		else
 			logW(string.format("Failed to create folder %q", tostring(rootpath)))
-			_MyG.ShowBox(STR("FOLDER_CREATE_FAIL"))
+			_MyG.ShowTipBox(STR("FOLDER_CREATE_FAIL"))
         	-- 创建失败
 			if call then
 				call(1)
 			end
 		end
-    end
-
-    drawfunc = function()
-        ImGui.OpenPopup("##NewFolder")
-        if ImGui.BeginPopupModal("##NewFolder", true, Tools:bor_int32(ImGuiWindowFlags_AlwaysAutoResize, ImGuiWindowFlags_NoMove)) then
-            enter_true, newFolderName = Tools:imgui_inputText("Name", newFolderName, 32, ImGuiInputTextFlags_EnterReturnsTrue)
-            if enter_true then
-                ImGui.CloseCurrentPopup()
-                G_SysEventEmitter:removeListener("onGUI", drawfunc)
-                createFunc(newFolderName)
-            end
-            ImGui.Separator()
-            if ImGui.Button("OK", cc.p(-1, 0)) then
-                ImGui.CloseCurrentPopup()
-                G_SysEventEmitter:removeListener("onGUI", drawfunc)
-                createFunc(newFolderName)
-            end
-            ImGui.EndPopup()
-        else
-            G_SysEventEmitter:removeListener("onGUI", drawfunc)
-        end
-    end
-
-    G_SysEventEmitter:on("onGUI", drawfunc)
+    end)
+    _MyG.PopupManager:addPopup(input)
 end
 
 -- 创建带输入框的弹窗
 function Functions:createDilog(usage, path, callback)
     local dilog = FileDialog.new(STR("Open"), path, usage)
 
-    local drawfunc = function()
+    local handler = G_SysEventEmitter:on(SysEvent.ON_GUI, function()
         dilog:onGUI()
-    end
-    G_SysEventEmitter:on("onGUI", drawfunc)
+    end, SysEvent.TAG)
 
     local okCall = function(value)
-        G_SysEventEmitter:removeListener("onGUI", drawfunc)
+        G_SysEventEmitter:off(handler)
         if callback then
             callback(value)
         end
     end
     local cancelCall = function()
-        G_SysEventEmitter:removeListener("onGUI", drawfunc)
+        G_SysEventEmitter:off(handler)
     end
 
 	if _MyG.EditorProject:isValid() then
@@ -468,57 +350,6 @@ function Functions:createDilog(usage, path, callback)
     dilog:open(okCall, cancelCall)
 
     return dilog
-end
-
--- 资源创建
-function Functions:createAsset(path, createCall, finishCall)
-    local dilog = Functions:createDilog(FileDialog.FileDialogUsage_SaveFile, path, function(value)
-    	if value == nil then
-    		return
-    	end
-
-    	local data = nil
-        if createCall then
-        	data = createCall()
-        end
-
-        local ret = _MyG.ProjectAssetManager:writeAssetData(value[1].fullPath, data, true)
-        if finishCall then
-        	finishCall(ret)
-        end
-    end)
-    dilog:addFilter("asset")
-    dilog:setCanOverlap(false)
-end
-
--- 地图创建
-function Functions:createMap(path, finishCall)
-	Functions:createAsset(path, function()
-		return {
-			type = "map",
-			data = FILE_TMPTY_DATA_MAP,
-		}
-	end, finishCall)
-end
-
--- Widget 创建
-function Functions:createWidget(path, finishCall)
-	Functions:createAsset(path, function()
-		return {
-			type = "widget",
-			data = FILE_TMPTY_DATA_WIDGET,
-		}
-	end, finishCall)
-end
-
--- Layer 创建
-function Functions:createLayer(path, finishCall)
-	Functions:createAsset(path, function()
-		return {
-			type = "layer",
-			data = FILE_TMPTY_DATA_LAYER,
-		}
-	end, finishCall)
 end
 
 function Functions:isFileExist(filepath)
@@ -536,6 +367,9 @@ function Functions:getAssetByID(id)
 		local asset = _MyG.ProjectAssetManager:get(id)
 		if asset == nil then
 			asset = _MyG.CocosAssetManager:get(id)
+		end
+		if asset == nil then
+			asset = _MyG.GameAssetManager:get(id)
 		end
 		return asset
 	end
@@ -584,7 +418,8 @@ local function print_lines(lines)
 end
 
 
--- 发布资源
+-- @brief  工程发布
+--  使用 CProcess 新的进程管理
 function Functions:publishResource()
 	if not _MyG.EditorProject:isValid() then
 		return
@@ -604,7 +439,7 @@ function Functions:publishResource()
 	end
 
 	outputdir = outputdir .. "/"
-	outputdir = outputdir .. string.gsub(_MyG.EditorProject.projectDirPath, _MyG.GlobalData.RootWritePath, "")
+	outputdir = outputdir .. _MyG.EditorProject.projectNme
 	outputdir = G_Helper.fmtPath(outputdir)
 
 	local cwd = os.currentdir() .. "tools/publish-tool"
@@ -616,53 +451,86 @@ function Functions:publishResource()
 		lang = "cn"
 	end
 
+	local copyResource = ""
+	if edConfig.isPublishResource then
+		copyResource = "copyResource"
+	end
+
 	print("executable", executable)
-	print("executable", projectdir)
-	print("executable", outputdir)
+	print("projectdir", projectdir)
+	print("outputdir", outputdir)
 
-	local proc = subprocess.popen({
-		executable = executable, 
-		executable, 
-		projectdir, 
-		outputdir, 
-		lang,
-		stdin = subprocess.PIPE, 
-		stdout = subprocess.PIPE, 
-		stderr = subprocess.STDOUT,
-		cwd = cwd})
+	local command = string.format("%s %s %s %s %s", executable, projectdir, outputdir, lang, copyResource)
+	local outputData = ""
 
-	local lines = {}
+	logW(command)
+
+	local pPublish = CProcess:new_local()
+	pPublish:registerLuaHandle("read_stdout", function(data)
+		outputData = outputData .. data
+	end)
+	pPublish:registerLuaHandle("read_stderr", function(data)
+	    logE(data)
+	end)
+	pPublish:start(command, cwd)
 
 	logI("publish start--------------------------------------->")
-
-	_MyG.ShowLoading()
-	oRoutine(o_loop(function()
-		if proc:poll() then
-			-- local exitcode = proc.exitcode
-
-			local lines = {}
-			local call = nil
-			if proc.stdout then
-				call = proc.stdout:lines()
-			end
-			if call then
-				while true do
-					local line = call()
-					if line then
-						lines[#lines + 1] = line
-					else
-						break
-					end
-				end
-			end
+    oRoutine(o_loop(function()
+        local ret, exit_status = pPublish:try_get_exit_status(1)
+        if ret then
+			-- 等待read_stdout函数全部返回
+			o_wait(o_seconds(0.5))
+			print_lines(string.split(outputData, "\n"))
 			_MyG.HideLoading()
+			logI("publish end--------------------------------------->", exit_status)
+            pPublish = nil
+            return true
+        end
+    end))
+
+	-- local proc = subprocess.popen({
+	-- 	executable = executable, 
+	-- 	executable, 
+	-- 	projectdir, 
+	-- 	outputdir, 
+	-- 	lang,
+	-- 	stdin = subprocess.PIPE, 
+	-- 	stdout = subprocess.PIPE, 
+	-- 	stderr = subprocess.STDOUT,
+	-- 	cwd = cwd})
+
+	-- local lines = {}
+
+	-- logI("publish start--------------------------------------->")
+
+	-- _MyG.ShowLoading()
+	-- oRoutine(o_loop(function()
+	-- 	if proc:poll() then
+	-- 		-- local exitcode = proc.exitcode
+
+	-- 		local lines = {}
+	-- 		local call = nil
+	-- 		if proc.stdout then
+	-- 			call = proc.stdout:lines()
+	-- 		end
+	-- 		if call then
+	-- 			while true do
+	-- 				local line = call()
+	-- 				if line then
+	-- 					lines[#lines + 1] = line
+	-- 				else
+	-- 					break
+	-- 				end
+	-- 			end
+	-- 		end
+	-- 		_MyG.HideLoading()
 			
-			print_lines(lines)
-			logI("publish end--------------------------------------->")
+	-- 		print_lines(lines)
+	-- 		logI("publish end--------------------------------------->")
 			
-			return true
-		end
-	end))
+	-- 		return true
+	-- 	end
+	-- end))
 end
 
 function Functions:onGUI_UserData(target, onBeforeValueChange)
@@ -756,6 +624,60 @@ function Functions:onGUI_UserData(target, onBeforeValueChange)
 		end
 		table.insert(userdata, {type = 0, data = 0})
 	end
+end
+
+-- @brief 通过asset文件序列化成json数据
+function Functions:getJsonDataByAssetFile(filename)
+	-- 解析json
+	local jsonData = nil
+	local suc = xpcall(function()
+		local FileUtilsInstance = cc.FileUtils:getInstance()
+		local content = FileUtilsInstance:getStringFromFile(filename)
+		if content == "" then
+			jsonData = {}
+		else
+			jsonData = self:decodeJson(content)
+		end
+	end, Lua_Error_hook)
+
+	if not suc then
+		logE("Deserializing JSON failed", filename)
+	end
+
+	return suc, jsonData
+end
+
+-- @brief 通过asset文件获取对应资源引用
+function Functions:getFileRefResources(filename)
+	local ok, jsonData = self:getJsonDataByAssetFile(filename)
+
+	if not ok then
+		return {}
+	end
+
+	return self:getRefResourcesByAssetJsonData(jsonData)
+end
+
+-- @brief 通过asset资源的json数据获取对应的资源引用
+function Functions:getRefResourcesByAssetJsonData(jsonData)
+	if not jsonData or not jsonData.data then
+		return {}
+	end
+
+	if jsonData.data.context and jsonData.data.context.plugins then
+		local pluginData = jsonData.data.context.plugins.PluginRefResources or {}
+		return pluginData.refs or {}
+	end
+	return {}
+end
+
+local cjson = require("cjson")
+function Functions:encodeJson(data)
+    return cjson.encode(data)
+end
+
+function Functions:decodeJson(content)
+    return cjson.decode(content)
 end
 
 return Functions

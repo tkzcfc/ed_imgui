@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-30 22:48:07
 -- @Description: 
 
@@ -10,6 +9,7 @@ function Asset_Lua:init(fullPath)
 	Asset_Lua.super.init(self, fullPath)
 
 	self.property.resType 		= Asset.ResType.LUA
+    self.property.thumbnailTexture = EditorIconContent:get(EditorIcon.ICON_SCRIPT)
 end
 
 

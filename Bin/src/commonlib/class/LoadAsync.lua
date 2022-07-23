@@ -1,43 +1,258 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
--- @Date:   2019-10-17 21:26:05
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-01-17 22:54:56
--- @Description: 异步资源加载
+-- @Date  : 2019-10-17 21:26:05
+-- @remark: 异步资源加载
 
-local LoadAsync = class("LoadAsync")
+local Task = import(".Task")
+local TaskFlowPipe = import(".TaskFlowPipe")
 
-local autoReleaseFile = {}
+-- 纹理加载是否使用多线程
+local USE_IMAGE_ASYNC = false
+
+local ENABLE_DEBUG = false
+
+local table_insert = table.insert
 local spriteFrameCache = cc.SpriteFrameCache:getInstance()
 local textureCache = cc.Director:getInstance():getTextureCache()
 
+----------------------------------------------------------------
+-- 资源释放任务
+local ReleaseResourceTask = class("LoadTextureTask", Task)
+
+function ReleaseResourceTask:ctor()
+	self.textureFileArr = {}
+	self.spriteFrameFileArr = {}
+end
+
+function ReleaseResourceTask:addTextureFile(fileName)
+	table_insert(self.textureFileArr, fileName)
+end
+
+function ReleaseResourceTask:addSpriteFramesFile(fileName)
+	table_insert(self.spriteFrameFileArr, fileName)
+end
+
+function ReleaseResourceTask:run(taskFlowPipe)
+	for k,v in pairs(self.textureFileArr) do
+		if ENABLE_DEBUG then
+			com_log("unload image:", v)
+		end
+		textureCache:removeTextureForKey(v)
+	end
+
+	for k,v in pairs(self.spriteFrameFileArr) do
+		if ENABLE_DEBUG then
+			com_log("unload sprite frames:", v)
+		end
+		spriteFrameCache:removeSpriteFramesFromFile(v)
+	end
+	self.curProgress = self.progressWeight
+end
+
+function ReleaseResourceTask:updateProgressWeight()
+	self.progressWeight = 0--#self.textureFileArr + #self.spriteFrameFileArr
+	self.progressWeight = self.progressWeight + 1
+end
+
+
+
+
+----------------------------------------------------------------
+-- 资源加载任务
+local LoadResourceTask = class("LoadResourceTask", Task)
+
+function LoadResourceTask:ctor()
+	self.textureFileArr = {}
+	self.spriteFrameFileArr = {}
+	self.exportJsonFileArr = {}
+
+	self.asyncImageKeyArr = {}
+	self.cache_loadImage = {}
+end 
+
+function LoadResourceTask:addTextureFile(fileName)
+	if not self.cache_loadImage[fileName] then
+		self.cache_loadImage[fileName] = true
+		table_insert(self.textureFileArr, fileName)
+	end
+end
+
+function LoadResourceTask:addSpriteFramesFile(fileName)
+	table_insert(self.spriteFrameFileArr, fileName)
+end
+
+function LoadResourceTask:addExportJsonFile(fileName)
+	table_insert(self.exportJsonFileArr, fileName)
+end
+
+function LoadResourceTask:updateProgressWeight()
+	self.progressWeight = #self.textureFileArr + #self.spriteFrameFileArr + #self.exportJsonFileArr
+	self.progressWeight = self.progressWeight + 1
+end
+
+function LoadResourceTask:loadTexture(taskFlowPipe)
+	local totalLoadCount = #self.textureFileArr
+	local curLoadCount = 0
+
+	if USE_IMAGE_ASYNC then
+		local curTime = 0
+		local callback = function()
+			curLoadCount = curLoadCount + 1
+			curTime = 0
+			self.curProgress = curLoadCount
+		end
+	
+		for k,v in pairs(self.textureFileArr) do
+			if ENABLE_DEBUG then
+				com_log("async load image:", v)
+			end
+			local key = v .. "@async"
+			textureCache:addImageAsync(v, callback, key)
+			asyncImageKeyArr[v] = key
+		end
+		
+		-- 循环等待异步资源加载
+		repeat
+			curTime = curTime + taskFlowPipe:yield()
+			if curLoadCount >= totalLoadCount then
+				break
+			end
+			-- 异步加载数量长时间未变化，,还是让程序回调(防止程序一直卡在界面)
+			-- 其实后面直接加载资源也是一样的,只是可能卡点点而已
+			if curTime > 5.0 then
+				break
+			end
+		until(false)
+	else
+		for k,v in pairs(self.textureFileArr) do
+			if ENABLE_DEBUG then
+				com_log("load image:", v)
+			end
+			textureCache:addImage(v)
+			self.curProgress = k
+			taskFlowPipe:yield()
+		end
+	end
+
+	self.curProgress = totalLoadCount
+end
+
+function LoadResourceTask:loadExportJsonFile(taskFlowPipe)
+	if #self.exportJsonFileArr <= 0 then return end
+
+	local armatureManager = ccs.ArmatureDataManager:getInstance()
+
+	-- -- 异步加载底层有Bug，此处使用同步加载
+	-- for k, v in pairs(self.exportJsonFileArr) do
+	-- 	if armatureManager:getArmatureData(v) == nil then
+	-- 		armatureManager:addArmatureFileInfo(v)
+	-- 	end
+	-- 	self.curProgress = self.curProgress + 1
+	-- 	taskFlowPipe:yield()
+	-- end
+
+	local oldProgress = self.curProgress
+	
+	-- 底层有Bug，同时异步加载多个动画会出现某个动画不回调的情况,此处一个一个的异步加载
+	for k,v in pairs(self.exportJsonFileArr) do
+		if ENABLE_DEBUG then
+			com_log("async load ExportJson:", v)
+		end
+
+        local filename = G_Helper.getLastName(v)
+        local clsName = G_Helper.getFileClsName(filename)
+
+		if armatureManager:getArmatureData(clsName) == nil then
+			local finish = false
+			armatureManager:addArmatureFileInfoAsync(v, function(percent)
+				if percent >= 1.0 then
+					com_log("async load finish", v)
+					finish = true
+				end
+			end)
+
+			-- 循环等待异步资源加载
+			local curTime = 0
+			repeat
+				curTime = curTime + taskFlowPipe:yield()
+				if finish then
+					break
+				end
+
+				-- 异步加载数量长时间未变化，还是让程序回调(防止程序一直卡在界面)
+				-- 其实后面直接加载资源也是一样的,只是可能卡点点而已
+				if curTime > 5.0 then
+					break
+				end
+			until(false)
+			self.curProgress = self.curProgress + 1
+		-- else
+			-- print("contain file", v)
+		end
+	end
+
+	self.curProgress = oldProgress + #self.exportJsonFileArr
+end
+
+function LoadResourceTask:run(taskFlowPipe)
+	self:loadTexture(taskFlowPipe)
+	self:loadExportJsonFile(taskFlowPipe)
+
+	local count = 0
+	for k,v in pairs(self.spriteFrameFileArr) do
+		if ENABLE_DEBUG then
+			com_log("load sprite frames:", v)
+		end
+
+		spriteFrameCache:addSpriteFrames(v)
+		self.curProgress = self.curProgress + 1
+		count = count + 1
+		if count > 3 then
+			count = 0
+			taskFlowPipe:yield()
+		end
+	end
+end
+
+function LoadResourceTask:abort(isError)
+	if USE_IMAGE_ASYNC then
+		for k,v in pairs(self.asyncImageKeyArr) do
+			if ENABLE_DEBUG then
+				com_log("unbind image async:", v)
+			end
+			textureCache:unbindImageAsync(v)
+		end
+	end
+end
+
+
+----------------------------------------------------------------
+local autoReleaseFile = {}
+
+-- 异步加载
+local LoadAsync = class("LoadAsync")
+
 function LoadAsync:ctor()
-	self.resFiles = {}
-	self.loadFileName_True = {}
+	local pipe = TaskFlowPipe.new()
+	local releaseTask = ReleaseResourceTask.new()
+	local loadTask 	  = LoadResourceTask.new()
 
-	self.curLoadCount = 0
-	self.totalLoadCount = 0
+	pipe:pushTask(releaseTask)
+	pipe:pushTask(loadTask)
 
-	self.curReleaseCount = 0
-	self.totalReleaseCount = 0
+	self.pipe = pipe
+	self.releaseTask = releaseTask
+	self.loadTask = loadTask
 
-	self.releaseFiles = {}
 	self:clearAutoReleaseFile()
 end
 
-local ENABLE_DEBUG = true
-
-------------------------------------------------------------public begin------------------------------------------------------------
-
+-- @brief 添加要加载的资源
+-- @param fileName 资源名称
+-- @param isAutoRelease 是否自动释放
+-- @param resType 资源类型（后缀名，为空自动通过fileName取出）
 function LoadAsync:addLoadResource(fileName, isAutoRelease, resType)
-
 	if resType == nil then
 		resType = LoadAsync.getExtension(fileName)
-	end
-
-	if not self.loadFileName_True[fileName] then
-		self.loadFileName_True[fileName] = true
-		table.insert(self.resFiles, LoadAsync.allocFileData(fileName, resType))
 	end
 
 	if isAutoRelease then
@@ -45,253 +260,76 @@ function LoadAsync:addLoadResource(fileName, isAutoRelease, resType)
 	end
 
 	if resType == "plist" then
+		self.loadTask:addSpriteFramesFile(fileName)
 		fileName = string.gsub(fileName, ".plist$", ".png")
-		self:addLoadResource(fileName, isAutoRelease, "png")
+		self.loadTask:addTextureFile(fileName)
+	elseif resType == "png" then
+		self.loadTask:addTextureFile(fileName)
+	elseif resType == "ExportJson" then
+		self.loadTask:addExportJsonFile(fileName)
+	else
+		com_log("未知资源格式", fileName)
 	end
 end
 
+-- @brief 添加要释放的资源
+-- @param fileName 资源名称
+-- @param resType 资源类型（后缀名，为空自动通过fileName取出）
 function LoadAsync:addReleaseResource(fileName, resType)
 	if resType == nil then
 		resType = LoadAsync.getExtension(fileName)
 	end
-	table.insert(self.releaseFiles, LoadAsync.allocFileData(fileName, resType))
-end
 
-function LoadAsync:clearReleseFiles()
-	self.releaseFiles = {}
-end
+	if resType == "plist" then
+		self.releaseTask:addSpriteFramesFile(fileName)
+		fileName = string.gsub(fileName, ".plist$", ".png")
+		self.releaseTask:addTextureFile(fileName)
+	elseif resType == "png" then
+		self.releaseTask:addTextureFile(fileName)
+	elseif resType == "ExportJson" then
 
-function LoadAsync:start(processCallback, finishCallback)
-	if self.runCoroutine then
-		return false
-	end
-
-	self.runCoroutine = coroutine.create(function()
-		self:doLogic()
-	end)
-
-	self.onProcessCallback = processCallback
-	self.onFinishCallback = finishCallback
-
-	return true
-end
-
-function LoadAsync:update(delta)
-	if self.runCoroutine == nil then
-		return
-	end
-	local ret, msg = coroutine.resume(self.runCoroutine, delta)
-	if not ret then
-		print("\n\n\n")
-		print(msg)
-		print("\n\n\n")
-		self.runCoroutine = nil
+	else
+		com_log("未知资源格式", fileName)
 	end
 end
 
-function LoadAsync:destroy()
-	if self.resFiles == nil then
-		return
-	end
-
-	for k, v in pairs(self.resFiles) do
-		if self.isSupportAsyncLoad(v) then
-			textureCache:unbindImageAsync(v.fileName)
-		end
-	end
-	self.runCoroutine = nil
-	self.resFiles = nil
-	self.loadFileName_True = nil
-	self.releaseFiles = nil
+function LoadAsync:pushTask(task)
+	self.pipe:pushTask(task)
 end
 
-------------------------------------------------------------public end------------------------------------------------------------
-
-function LoadAsync:yield()
-	self:updatePercent()
-	return coroutine.yield()
+-- @brief 插入任务
+function LoadAsync:insertTask(task, idx)
+	self.pipe:insertTask(task, idx)
 end
 
+-- @brief 加载开始
+-- @param processCallback 加载进度回调
+-- @param finishCallback 加载完成回调
+-- @param errorCallback 错误回调
+function LoadAsync:start(processCallback, finishCallback, errorCallback)
+	self.loadTask:updateProgressWeight()
+	self.releaseTask:updateProgressWeight()
+	self.pipe:start(processCallback, finishCallback, errorCallback)
+end
+
+-- @brief 中断
+function LoadAsync:abort()
+	self.pipe:done()
+end
+
+-- @brief 清空缓存，将上次自动释放的图片加入本次资源释放任务中
 function LoadAsync:clearAutoReleaseFile()
 	for k, v in pairs(autoReleaseFile) do
-		table.insert(self.releaseFiles, v)
+		self:addReleaseResource(v.fileName, v.resType)
 	end
 	autoReleaseFile = {}
 end
 
-function LoadAsync:doLogic()
-	self:yield()
-	
-	self:calcuLogic()
-
-	self:releaseLogic()
-
-	self:asyncLoadLogic()
-
-	self:syncLoadLogic()
-
-	self:yield()
-
-	if self.onFinishCallback then
-		self.onFinishCallback()
-	end
-end
-
-function LoadAsync:calcuLogic()
-	self.curLoadCount = 0
-	self.totalLoadCount = 0
-	for k, v in pairs(self.resFiles) do
-		self.totalLoadCount = self.totalLoadCount + 1
-	end
-
-	self.curReleaseCount = 0
-	self.totalReleaseCount = 0
-	for k, v in pairs(self.releaseFiles) do
-		self.totalReleaseCount = self.totalReleaseCount + 1
-	end
-
-	self:updatePercent()
-end
-
-function LoadAsync:asyncLoadLogic()
-	local totalAsyncLoadCount = 0
-	local curAsyncLoadCount = 0
-	local curTime = 0
-
-	for k, v in pairs(self.resFiles) do
-		if self.isSupportAsyncLoad(v) then
-			totalAsyncLoadCount = totalAsyncLoadCount + 1
-		end
-	end
-
-	local loadingCallback = function()
-		curAsyncLoadCount = curAsyncLoadCount + 1
-		curTime = 0
-		self.curLoadCount = self.curLoadCount + 1
-	end
-
-	for k, v in pairs(self.resFiles) do
-		if self.isSupportAsyncLoad(v) then
-			self:doAsyncLoad(v, loadingCallback)
-		end
-	end
-
-	repeat
-		curTime = curTime + self:yield()
-
-		if curAsyncLoadCount >= totalAsyncLoadCount then
-			break
-		end
-
-		-- 异步加载数量长时间未变化，,还是让程序回调(防止程序一直卡在界面)
-		-- 其实后面直接加载资源也是一样的,只是可能卡点点而已
-		if curTime > 3.0 then
-			self.curLoadCount = totalAsyncLoadCount
-			break
-		end
-	until(false)
-end
-
-function LoadAsync:syncLoadLogic()
-	local count = 0
-	for k, v in pairs(self.resFiles) do
-		if not self.isSupportAsyncLoad(v) then
-			self:doSyncLoad(v, loadingCallback)
-			self.curLoadCount = self.curLoadCount + 1
-			if count > 3 then
-				count = 0
-				self:yield()
-			end
-		end
-	end
-
-	self.curLoadCount = self.totalLoadCount
-end
-
-function LoadAsync:releaseLogic()
-	local count = 0
-	for k, v in pairs(self.releaseFiles) do
-		self:doRelease(v)
-		self.curReleaseCount = self.curReleaseCount + 1
-		if count > 3 then
-			count = 0
-			self:yield()
-		end 
-	end
-
-	self.curReleaseCount = self.totalReleaseCount
-end
-
-function LoadAsync:doAsyncLoad(fileData, callback)
-	if ENABLE_DEBUG then
-		print("async load", fileData.fileName)
-		if LoadAsync.isTexture(fileData.resType) then
-			textureCache:addImageAsync(fileData.fileName, function()
-				print("load finish", fileData.fileName)
-				callback()
-			end)
-		end
-	else
-		if LoadAsync.isTexture(fileData.resType) then
-			textureCache:addImageAsync(fileData.fileName, callback)
-		end
-	end
-end
-
-function LoadAsync:doSyncLoad(fileData)
-	if ENABLE_DEBUG then
-		print("sync load", fileData.fileName)
-	end
-
-	if fileData.resType == "plist" then
-		spriteFrameCache:addSpriteFrames(fileData.fileName)
-	end
-end
-
-function LoadAsync:doRelease(fileData)
-	if ENABLE_DEBUG then
-		print("release", fileData.fileName)
-	end
-
-	if fileData.resType == "png" or fileData.resType == "jpg" then
-		textureCache:removeTextureForKey(fileData.fileName)
-	elseif fileData.resType == "plist" then
-		spriteFrameCache:removeSpriteFramesFromFile(fileData.fileName)
-	end
-end
-
-function LoadAsync:updatePercent()
-	if self.onProcessCallback == nil then
-		return
-	end
-
-	local total = self.totalLoadCount + self.totalReleaseCount
-	if total <= 0 then
-		self.onProcessCallback(1)
-		return
-	end
-
-	local cur = self.curLoadCount + self.curReleaseCount
-	cur = math.min(cur, total)
-
-	self.onProcessCallback(cur / total)
-
-	if ENABLE_DEBUG then
-		print(cur / total)
-	end
-end
-
-------------------------------------------------------------static begin------------------------------------------------------------
-
-function LoadAsync.isTexture(extension)
-	return extension == "png" or extension == "jpg"
-end
-
-function LoadAsync.isSupportAsyncLoad(fileData)
-	if LoadAsync.isTexture(fileData.resType) then
-		return true
-	end
-	return false
+-- @brief 获取当前所有任务的进度权重值
+function LoadAsync:getTotalProgressWeight()
+	self.loadTask:updateProgressWeight()
+	self.releaseTask:updateProgressWeight()
+	return self.loadTask.progressWeight + self.releaseTask.progressWeight
 end
 
 function LoadAsync.getExtension(fileName)
@@ -302,15 +340,11 @@ function LoadAsync.getExtension(fileName)
 	return extension
 end
 
-function LoadAsync.allocFileData(_fileName, _resType)
+function LoadAsync.allocFileData(fileName, resType)
 	local t = {}
-	t["fileName"] = _fileName
-	t["resType"] = _resType
+	t["fileName"] = fileName
+	t["resType"] = resType
 	return t
 end
 
-------------------------------------------------------------static end------------------------------------------------------------
-
 return LoadAsync
-
-

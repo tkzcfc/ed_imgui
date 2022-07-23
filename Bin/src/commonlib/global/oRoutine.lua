@@ -25,9 +25,13 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------
 local function wait(cond)
-	repeat
+	if cond == nil then
 		yield(false)
-	until not cond(DirectordeltaTime)
+	else
+		repeat
+			yield(false)
+		until not cond(DirectordeltaTime)
+	end
 end
 
 local function once(job)

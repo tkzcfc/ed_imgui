@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-05 17:05:54
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-05 15:17:47
 -- @Description: 
 
 local CenterWindow = class("CenterWindow")
@@ -24,18 +21,23 @@ function CenterWindow:ctor()
     self.rootNode = cc.Node:create()
     render:addChild(self.rootNode, 1)
 
+    self.renderGuiShow = false
+    self.renderCanShow = true
+
 	self:initEventDispatcher()
 end
 
 function CenterWindow:onGUI()
 	if centerDocumentManager:count() > 0 then
-		self.render:setVisible(true)
+        self.renderGuiShow = true
 		self:updateRenderSize()
 		self:updateContainStatus()
 		centerDocumentManager:onGUI()
 	else
-		self.render:setVisible(false)
+        self.renderGuiShow = false
 	end
+
+    self.render:setVisible(self.renderGuiShow and self.renderCanShow)
 end
 
 function CenterWindow:changeEventDispatcher(rootNode)
@@ -72,8 +74,6 @@ function CenterWindow:isContainMouse()
 end
 
 function CenterWindow:checkMouseIsContain()
-    -- local pos = ImGui.GetIO().MousePos
-    -- pos = G_Helper.win_2_visible_pos(pos)
     local pos = _MyG.MouseEventDispatcher:getCursorPos()
     return Tools:isInRect(self.render, pos.x, pos.y)
 end
@@ -92,12 +92,19 @@ function CenterWindow:updateRenderSize()
     pos.y = pos.y + thickness * 2 + framePaddingY
 
     size.width = size.width - thickness - framePaddingY
-    size.height = size.height - thickness - style.IndentSpacing
+    size.height = size.height - thickness - style.IndentSpacing - framePaddingY
 
     pos.x = G_Helper.win_2_visible_x(pos.x)
-    pos.y = G_Helper.win_2_visible_x(pos.y)
+    pos.y = G_Helper.win_2_visible_y(pos.y)
     size.width = G_Helper.win_2_visible_x(size.width)
-    size.height = G_Helper.win_2_visible_x(size.height) - framePaddingY
+    size.height = G_Helper.win_2_visible_y(size.height)
+
+    if size.height < 20 or size.width < 20 then
+        self.renderCanShow = false
+        return
+    else
+        self.renderCanShow = true
+    end
 
     self.senderSize = size
 
@@ -171,54 +178,54 @@ end
 function CenterWindow:initEventDispatcher()
     self.cache_MouseDownStatus = {}
 
-    G_SysEventEmitter:on("onMouseMove", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_MOUSE_MOVE, function(event)
         if self.cache_MouseDownStatus[event:getMouseButton()] or self:isContainMouse() then
             self.eventDispatcher:dispatchEvent(event)
             -- print("move", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
         end
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onMouseScroll", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_MOUSE_SCROLL, function(event)
         if self:isContainMouse() then
             self.eventDispatcher:dispatchEvent(event)
             -- print("scroll", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
         end
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onMouseDown", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_MOUSE_DOWN, function(event)
         if self:isContainMouse() then
             self.cache_MouseDownStatus[event:getMouseButton()] = true
             self.eventDispatcher:dispatchEvent(event)
             -- print("down", _MyG.MouseEventDispatcher:getCursorX(), _MyG.MouseEventDispatcher:getCursorY())
         end
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onMouseUp", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_MOUSE_UP, function(event)
         local valid = self.cache_MouseDownStatus[event:getMouseButton()] or self:isContainMouse()
         self.cache_MouseDownStatus[event:getMouseButton()] = false
         if valid then
             self.eventDispatcher:dispatchEvent(event)
         end
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onTouchBegan", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_TOUCH_BEGAN, function(event)
         if self:isContainMouse() then
             self.eventDispatcher:dispatchEvent(event)
         end
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onTouchMoved", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_TOUCH_MOVED, function(event)
         self.eventDispatcher:dispatchEvent(event)
-    end)
+    end, self)
 
 
-    G_SysEventEmitter:on("onTouchEnded", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_TOUCH_ENDED, function(event)
         self.eventDispatcher:dispatchEvent(event)
-    end)
+    end, self)
 
-    G_SysEventEmitter:on("onTouchCancelled", function(event)
+    G_SysEventEmitter:on(SysEvent.ON_TOUCH_CANCELLED, function(event)
         self.eventDispatcher:dispatchEvent(event)
-    end)
+    end, self)
 
     self.eventDispatcher = cc.EventDispatcher:new()
     self.eventDispatcher:setEnabled(true)

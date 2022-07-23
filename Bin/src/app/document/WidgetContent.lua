@@ -7,23 +7,32 @@ function WidgetContent:ctor()
 
 	self.scrolling_size = cc.p(0, 0)
 	self.scrolling_flag = ImGuiWindowFlags_HorizontalScrollbar
+    self.scrolling_flag = Tools:bor_int32(self.scrolling_flag, ImGuiWindowFlags_NoScrollbar)
 
 	self.widgetDataArr = {}
 
-	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/Sprite.png"), "WC_Sprite")
-	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/ImageFile.png"), "WC_Image")
+	self:appendWidgetInfo(EditorIconContent:get(EditorIcon.DEFAULT_SPRITE), "WC_Sprite")
+	self:appendWidgetInfo(EditorIconContent:get(EditorIcon.DEFAULT_IMAGE), "WC_Image")
 	-- 复活点
-	self:appendWidgetInfo(Tools:getImguiTextureID("res/Default/RevivePoint.png"), "WC_RevivePoint")
+	self:appendWidgetInfo(EditorIconContent:get(EditorIcon.DEFAULT_REVIVEPOINT), "WC_RevivePoint")
 end
 
 function WidgetContent:appendWidgetInfo(_icon, _text)
 	table.insert(self.widgetDataArr, {icon = _icon, text = _text})
 end
 
+local const_widget_min_width = 60
+local const_widget_max_width = 85
+local const_widget_size = {x = 80, y = 80}
+local const_icon_size = {x = 40, y = 40}
+
 local widget_min_width = 80
 local widget_max_width = 85
 local widget_size = {x = 80, y = 80}
 local icon_size = {x = 40, y = 40}
+
+
+
 
 local color = Tools:getStyleColor(ImGuiCol_FrameBgHovered)
 local FrameBgHovered_Color = IM_COL32(color.x * 255, color.y * 255, color.z * 255, color.w * 255)
@@ -35,11 +44,21 @@ function WidgetContent:onGUI()
 	self.cache_drag_item_last = self.cache_drag_item
 	self.cache_drag_item = nil
 
+
+	local fontScale = ImGui.GetIO().FontGlobalScale
+
+	widget_min_width = const_widget_min_width * fontScale
+	widget_max_width = const_widget_max_width * fontScale
+	widget_size.x = const_widget_size.x * fontScale
+	widget_size.y = const_widget_size.y * fontScale
+	icon_size.x = const_icon_size.x * fontScale
+	icon_size.y = const_icon_size.y * fontScale
+
 	self:render()
 
 	if self.cache_drag_item == nil then
 		if self.cache_drag_item_last then
-			G_SysEventEmitter:emit("onDragPreWidget", self.cache_drag_item_last.text)
+			G_SysEventEmitter:emit(SysEvent.ON_DRAG_PRE_WIDGET, self.cache_drag_item_last.text)
 		end
 	end
 end

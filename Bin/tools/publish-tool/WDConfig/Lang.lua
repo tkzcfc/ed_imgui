@@ -1,5 +1,4 @@
 -- Auto Generate by Excel 'language.xlsx', Don't try to modify!
--- Generated on 2020-06-09 21:26:39.
 
 local M = {}
 
@@ -24,11 +23,12 @@ M.Data['WRITE_FILE_FAILED'] = {cn = '文件"{0}"写入失败', en = 'Failed to w
 M.Data['PUBLISH_FILE_FAILED_AND_WRITE'] = {cn = '文件"{0}"发布失败<写入失败>', en = 'Failed to publish file "{0}" <write failed>'}
 M.Data['EXPORT_FILE_FAILED_UNKNOWN_TYPE'] = {cn = '文件"{0}"导出失败,不支持导出类型"{1}"', en = 'Export of file "{0}" failed, unknown type "{1}"'}
 M.Data['PUB_PLUGIN_FAIL_NO_IMP'] = {cn = '插件"{0}"没有对应的发布逻辑实现', en = 'Publishing implementation for plug-in "{0}" not found'}
+M.Data['PUB_FILE_FAIL_NO_IMP'] = {cn = '文件"{0}"中的类型"{1}"没有相应的发布逻辑实现', en = 'The type "{0}" in the file "{1}" does not have a corresponding publishing logic implementation'}
 M.Data['COPY_FILE_FAILED_FMT'] = {cn = '文件"{0}"拷贝失败', en = 'Failed to copy file "{0}"'}
 M.Data['COPY_FILE_SUC_FMT'] = {cn = '文件"{0}"拷贝成功', en = 'Copy file "{0}" succeeded'}
 M.Data['PUBLISH_SUCCESS'] = {cn = '发布成功', en = 'publish finished'}
 M.Data['PUBLISH_FAILED'] = {cn = '发布失败', en = 'publish failed'}
-M.length = 24
+M.length = 25
 
 function M.getData(key)
     return M.Data[key]

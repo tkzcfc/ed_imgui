@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-25 21:14:05
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-04-25 21:18:53
 -- @Description: 编辑器逻辑根节点
 
 local BaseElement = import(".BaseElement")

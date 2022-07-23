@@ -5,6 +5,34 @@
 local Asset_File = import(".Asset_File")
 local Asset_PlistSub = class("Asset_PlistSub", Asset_File)
 
+
+----------------------------------------------------------------------------------------------------------------
+
+-- @brief 获取生成缓存路径(生成全路径)
+local function genCachePath_1(plistFile, pngName)
+	-- 缓存路径
+	local baseName = string.gsub(plistFile, ".plist$", "")
+	baseName = G_Helper.fmtPath(baseName)
+
+	-- 调用saveToFile时候，会在此路径前面加上 cc.FileUtils:getInstance():getWritablePath(),所以此处写相对路径
+	return ".cache_plist/" .. baseName .. "/" .. pngName
+end
+
+-- @brief 获取生成缓存路径(生成路径md5.png)
+local function genCachePath_2(plistFile, pngName)
+	-- 缓存路径
+	local baseName = string.gsub(plistFile, ".plist$", "")
+	baseName = G_Helper.fmtPath(baseName)
+
+	baseName = baseName .. "/" .. pngName
+
+	-- 调用saveToFile时候，会在此路径前面加上 cc.FileUtils:getInstance():getWritablePath(),所以此处写相对路径
+	return ".cache_plist/" .. G_Helper.md5(baseName) .. ".png"
+end
+
+----------------------------------------------------------------------------------------------------------------
+
+
 function Asset_PlistSub:ctor(plistFile, textureName, assetManager)
 	self.textureName = textureName
 	Asset_PlistSub.super.ctor(self, plistFile, assetManager)
@@ -13,7 +41,7 @@ end
 function Asset_PlistSub:init(fullPath)
 	fullPath = G_Helper.fmtPath(fullPath)
 	self.property.extension = G_Helper.getExtension(fullPath)
-	self.property.thumbnail = "res/file.png"
+	self.property.thumbnailTexture 		= EditorIconContent:get(EditorIcon.ICON_TEXTURE)
 	self.property.fullPath = fullPath
 	self.property.relativePath = _MyG.Functions:getRelativePath(fullPath)
 
@@ -24,18 +52,16 @@ function Asset_PlistSub:init(fullPath)
 	self.property.showName 		= self.textureName
 	self.property.isPlist 		= true
 
-	-- 缓存路径
-	local baseName = self.property.relativePath
-	baseName = string.gsub(baseName, ".plist$", "")
-	baseName = G_Helper.fmtPath(baseName)
-
-	-- 调用saveToFile时候，会在此路径前面加上 cc.FileUtils:getInstance():getWritablePath(),所以此处写相对路径
-	self.saveToFileName = ".cache_plist/" .. baseName .. "/" .. self.textureName
-
+	-- saveToFile 函数只能传入相对路径,此处没有加 WritablePath
+	self.saveToFileName = genCachePath_2(self.property.relativePath, self.textureName)
 	-- 在读取图片时加上 WritablePath
 	self.cacheTextureName = cc.FileUtils:getInstance():getWritablePath() .. self.saveToFileName
 
-	baseName = G_Helper.getLastName(self.cacheTextureName)
+	if cc.FileUtils:getInstance():isFileExist(self.cacheTextureName) then
+		self.genTextureTag = true
+	end
+
+	local baseName = G_Helper.getLastName(self.cacheTextureName)
 	self.cacheTextureDirName = string.sub(self.cacheTextureName, 1, #self.cacheTextureName - #baseName)
 end
 
@@ -54,6 +80,12 @@ function Asset_PlistSub:_onItemHovered()
 		end
 
 		if cache.textureID ~= textureID then
+			if cache.textureID ~= nil then
+				Tools:freeImageuiTexture(cache.textureID)
+			end
+			Tools:retainImageuiTexture(textureID)
+			textureCleanup()
+
 			local imageW = Tools:getImguiTextureWidth(textureName)
 			local imageH = Tools:getImguiTextureHeight(textureName)
 			local showTextureInfo = string.format("%d*%d", imageW, imageH)
@@ -82,7 +114,7 @@ function Asset_PlistSub:_onItemHovered()
 			cc.SpriteFrameCache:getInstance():addSpriteFrames(self.property.relativePath)
 
 			local sp = cc.Sprite:createWithSpriteFrameName(self.property.textureName)
-			sp:setAnchorPoint(cc.p(0, 0))
+			sp:setAnchorPoint(VecZero)
 			sp:setPosition(0, 0)
 			
 			local size = sp:getContentSize()
@@ -99,8 +131,12 @@ function Asset_PlistSub:_onItemHovered()
 	end
 end
 
-function Asset_PlistSub:_onLeftDoubleClick()
-	-- _MyG.Functions:openImage(self:getFilePath(), false)
+function Asset_PlistSub:isGenTexture()
+	return self.genTextureTag
+end
+
+function Asset_PlistSub:getGenTextureName()
+	return self.saveToFileName
 end
 
 return Asset_PlistSub

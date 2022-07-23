@@ -1,6 +1,6 @@
 -- @Author: fangcheng
 -- @Date:   2020-07-05 20:46:34
--- @remark: 
+-- @remark: 复活点设置
 
 local Plugin = import(".Plugin")
 local PluginRevivePoint = class("PluginRevivePoint", Plugin)
@@ -33,7 +33,7 @@ function PluginRevivePoint:onKeyBoardDelete()
 	if tolua.isnull(self.focalNode) then
 		self.focalNode = nil
 	else
-		self:onAttributeChange("change_RevivePoint_del")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_REVIVEPOINT_DEL)
 		self.focalNode:removeFromParent()
 		self.focalNode = nil
 		return true
@@ -43,7 +43,7 @@ end
 -- @brief 预制体拖拽
 function PluginRevivePoint:onDragPreWidgetDragEnd(typeName, pos)
 	if typeName == "WC_RevivePoint" then
-		self:onAttributeChange("change_RevivePoint")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_REVIVEPOINT_CREATE)
 		self.revivePoints[#self.revivePoints + 1] = pos
 		self:revivePointsRender()
 		return
@@ -69,7 +69,7 @@ end
 
 function PluginRevivePoint:onTouchMoved(touch, event)
 	if self.focalNode then
-		self:onAttributeChange("change_RevivePoint_pos")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_REVIVEPOINT_POS)
 		local pos = self.renderNode:convertToNodeSpace(_MyG.MouseEventDispatcher:getCursorPos())
 		local touchOffset = self.focalNode.touchOffset or cc.p(0, 0)
 		self.focalNode:setPosition(cc.pAdd(pos, touchOffset))

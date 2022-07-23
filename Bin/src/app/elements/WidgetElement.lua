@@ -1,26 +1,23 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-06 21:42:34
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-06-01 22:27:26
 -- @Description: 
 
 	local MINSIZE_W = 100
 	local MINSIZE_H = 100
 
+local ArmatureRender = require("app.render.ArmatureRender")
+
 local NodeElement = import(".NodeElement")
 local CocoStudioElement = import(".CocoStudioElement")
 local SpriteElement = import(".SpriteElement")
 local ImageElement = import(".ImageElement")
+local ArmatureElement = import(".ArmatureElement")
 
 local WidgetElement = class("WidgetElement", NodeElement)
 
 WidgetElement.type = "Widget"
 WidgetElement.defaultFileName = "Default/defaultWidget.asset"
 
-
-
-local FileUtilsInstance = cc.FileUtils:getInstance()
 
 local function Error_hook(err)
 	logE(debug.traceback(err, 3))
@@ -33,7 +30,7 @@ function WidgetElement:ctor(context)
 	self.dragDropKey_WIDGET = "drag" .. Asset.ResType.WIDGET
 
 	self.sysRecipient 	= G_Class.Recipient.new(G_SysEventEmitter)
-	self.sysRecipient:on("content_onContentChange", function(asset)
+	self.sysRecipient:on(SysEvent.CONTENT_ON_CONTENT_CHANGE, function(asset)
 		if asset  and asset.property.relativePath == self.assetFile then
 			self.context:needRefreshOnShow()
 		end
@@ -99,22 +96,10 @@ function WidgetElement:deserializeFromFile(filename)
 
 	self.referenceResources = {}
 
-	-- 解析json
-	local jsonData = nil
-	local suc = xpcall(function()
-		local content = FileUtilsInstance:getStringFromFile(filename)
-		if content == "" then
-			jsonData = {}
-		else
-			jsonData = json.decode(content)
-		end
-	end, Error_hook)
-
-	if not suc then
+	local ok, jsonData = _MyG.Functions:getJsonDataByAssetFile(filename)
+	if not ok then
 		return
 	end
-
-	jsonData = jsonData or {}
 
 	if jsonData.type ~= "widget" then
 		logE(string.format("Illegal type %q, expected type %q", tostring(jsonData.type), "widget"))
@@ -126,13 +111,10 @@ function WidgetElement:deserializeFromFile(filename)
 		return false
 	end
 
-	if jsonData.data.context and jsonData.data.context.plugins then
-		local refResources = jsonData.data.context.plugins.PluginRefResources or {}
-		local refs = {}
-		G_Helper.getTableStringValue(refs, refResources)
-		for k,v in pairs(refs) do
-			self.referenceResources[v] = true
-		end
+	local refs = {}
+	G_Helper.getTableStringValue(refs, _MyG.Functions:getRefResourcesByAssetJsonData(jsonData))
+	for k,v in pairs(refs) do
+		self.referenceResources[v] = true
 	end
 
 	-- 根据json数据创建节点
@@ -256,6 +238,19 @@ function WidgetElement:spawn_CocostudioFile(rootNode, data)
 	return studio_ui.root
 end
 
+-- @brief 创建动画
+function WidgetElement:spawn_ArmatureFile(rootNode, data)
+	local resFile = ArmatureElement:checkResource(data.resFile)
+	
+	local render = ArmatureRender.new()
+	render:initWithFile(resFile, data.playIndex, data.playLoop)
+
+	self:setNodeAttribute(render, data)
+	rootNode:addChild(render)
+
+	return render
+end
+
 function WidgetElement:showLineRect(rootNode, pluginData)
 	local lines = {}
 	local rects = {}
@@ -366,7 +361,7 @@ function WidgetElement:onGUI_Base()
     tmpTabNumArr[1] = positionx
     tmpTabNumArr[2] = positiony
     if ImGui.DragFloat2(STR("EA_POS"), tmpTabNumArr, 1) then
-    	self:onAttributeChange("change_position")
+    	self:onAttributeChange(EditorEvent.ON_CHANGE_POSITION)
     	self.renderNode:setPosition(tmpTabNumArr[1], tmpTabNumArr[2])
     end
 
@@ -378,17 +373,28 @@ end
 -- @brief 切换资源
 function WidgetElement:changeAssetWidget(dragData)
 	local asset = _MyG.Functions:getAssetByID(dragData)
+	G_SysEventEmitter:emit(SysEvent.DO_CHANGE_ASSET, self, asset, true)
+end
 
-	if asset then
-		local property = asset.property
-		if property.relativePath == self.assetFile then
-			return
-		end
-		self:onAttributeChange("change_PrefabResource")
-
-		self.assetFile = property.relativePath
-		self:deserializeFromFile(self.assetFile)
+-- @brief override 资源对比
+function WidgetElement:isAssetEqual(asset)
+	local property = asset.property
+	if property.relativePath == self.assetFile then
+		return true
 	end
+	return false
+end
+
+-- @brief override 资源切换
+function WidgetElement:onDoChangeAsset(asset, canUndo)
+	WidgetElement.super.onDoChangeAsset(self, assert, canUndo)
+	if canUndo then
+		self:onAttributeChange(EditorEvent.ON_CHANGE_PREFABRESOURCE)
+	end
+
+	local property = asset.property
+	self.assetFile = property.relativePath
+	self:deserializeFromFile(self.assetFile)
 end
 
 function WidgetElement:checkResource(assetFile)
@@ -399,7 +405,7 @@ function WidgetElement:checkResource(assetFile)
 end
 
 function WidgetElement:doPartMementoGen(attributeName)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		return self.assetFile
 	else
 		return WidgetElement.super.doPartMementoGen(self, attributeName)
@@ -408,7 +414,7 @@ end
 
 -- @brief 撤销属性改变
 function WidgetElement:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_PrefabResource" then
+	if attributeName == EditorEvent.ON_CHANGE_PREFABRESOURCE then
 		self.assetFile = data
 		self:deserializeFromFile(self.assetFile)
 	else

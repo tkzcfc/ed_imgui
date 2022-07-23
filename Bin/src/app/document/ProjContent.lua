@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-12 11:19:41
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-07 21:36:29
 -- @Description: 
 local AssetContent = require("app.document.AssetContent")
 local ProjContent = class("ProjContent", AssetContent)
@@ -14,10 +11,9 @@ function ProjContent:ctor(name, assetManager)
 end
 
 function ProjContent:initEvent()
-	self.onAssetContentUpdateHandle = function()
+	G_SysEventEmitter:on(SysEvent.ON_ASSET_CONTENT_UPDATE, function()
 		self:updateAsset()
-	end
-	G_SysEventEmitter:on("onAssetCocosUpdate", self.onAssetContentUpdateHandle)
+	end, self)
 
 	self:regAssetOnItemHoveredEvent()
 	self:regAssetOnLeftDoubleClick()
@@ -26,48 +22,43 @@ function ProjContent:initEvent()
 end
 
 function ProjContent:regAssetOnItemHoveredEvent()
-	-- G_SysEventEmitter:on("asset_onItemHovered", function(asset)
+	-- G_SysEventEmitter:on(SysEvent.ASSET_ON_ITEM_HOVERED, function(asset)
 	-- 	if asset.assetManager ~= self.assetManager then
 	-- 		return
 	-- 	end
-	-- end)
+	-- end, self)
 end
 
 function ProjContent:regAssetOnLeftDoubleClick()
-	G_SysEventEmitter:on("asset_onLeftDoubleClick", function(asset)
+	G_SysEventEmitter:on(SysEvent.ASSET_ON_LEFT_DOUBLE_CLICK, function(asset)
 		if asset.assetManager ~= self.assetManager then
 			return
 		end
 
-		local resType = asset.property.resType
-		if resType == Asset.ResType.WIDGET then
-			_MyG.Functions:openWidget(asset)
+		if _MyG.OpenAsset:canOpen(asset) then
 			asset:breakImplement()
-		elseif resType == Asset.ResType.LAYER then
-			_MyG.Functions:openLayer(asset)
-			asset:breakImplement()
-		elseif resType == Asset.ResType.MAP then
-			_MyG.Functions:openMap(asset)
-			asset:breakImplement()
+			_MyG.OpenAsset:open(asset)
+		else
+			logW(string.format(STR("CANNOT_OPEN_FAIL"), asset:getFilePath()))
 		end
-	end)
+	end, self)
 end
 
 function ProjContent:regAssetOnRightClick()
-	-- G_SysEventEmitter:on("asset_onRightClick", function(asset)
+	-- G_SysEventEmitter:on(SysEvent.ASSET_ON_RIGHT_CLICK, function(asset)
 	-- 	if asset.assetManager ~= self.assetManager then
 	-- 		return
 	-- 	end
-	-- end)
+	-- end, self)
 end
 
 function ProjContent:regAssetMenu_OnGUI()
-	G_SysEventEmitter:on("asset_Menu_OnGUI", function(asset)
+	G_SysEventEmitter:on(SysEvent.ASSET_MENU_ONGUI, function(asset)
 		if asset.assetManager ~= self.assetManager then
 			return
 		end
 		self:Menu_OnGUI(asset)
-	end)
+	end, self)
 end
 
 function ProjContent:Menu_OnGUI(asset)
@@ -86,26 +77,35 @@ function ProjContent:Menu_OnGUI(asset)
 			end)
 		end
 		if ImGui.MenuItem(STR("Map")) then
-			_MyG.Functions:createMap(asset:getDirPath(), function(success)
+			_MyG.CreateAsset:create(Asset.ResType.MAP, asset:getDirPath(), function(success)
 				if success then
 					asset:refreshSameLevel()
 				end
 			end)
 		end
 		if ImGui.MenuItem(STR("Widget")) then
-			_MyG.Functions:createWidget(asset:getDirPath(), function(success)
+			_MyG.CreateAsset:create(Asset.ResType.WIDGET, asset:getDirPath(), function(success)
 				if success then
 					asset:refreshSameLevel()
 				end
 			end)
 		end
 		if ImGui.MenuItem(STR("Layer")) then
-			_MyG.Functions:createLayer(asset:getDirPath(), function(success)
+			_MyG.CreateAsset:create(Asset.ResType.LAYER, asset:getDirPath(), function(success)
 				if success then
 					asset:refreshSameLevel()
 				end
 			end)
 		end
+
+		if ImGui.MenuItem(STR("Role")) then
+			_MyG.CreateAsset:create(Asset.ResType.ROLE, asset:getDirPath(), function(success)
+				if success then
+					asset:refreshSameLevel()
+				end
+			end)
+		end
+
 		ImGui.EndMenu()
 	end
 
@@ -117,6 +117,15 @@ function ProjContent:Menu_OnGUI(asset)
 
 	if ImGui.MenuItem(STR("Update")) then
 		asset:refreshSameLevel()
+	end
+	
+	if _MyG.OpenAsset:canOpen(asset) then
+		if ImGui.MenuItem(STR("Duplicate")) then
+			asset:getAssetManager():duplicate(asset)
+		end
+		if ImGui.MenuItem(STR("Open")) then
+			_MyG.OpenAsset:open(asset)
+		end
 	end
 end
 

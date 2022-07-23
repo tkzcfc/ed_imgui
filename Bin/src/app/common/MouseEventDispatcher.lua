@@ -1,3 +1,7 @@
+-- @Author: fangcheng
+-- @Date:   2020-07-15 22:56:37
+-- @remark: 鼠标事件管理
+
 local MouseEventDispatcher = class("MouseEventDispatcher")
 
 function MouseEventDispatcher:ctor()
@@ -9,30 +13,34 @@ function MouseEventDispatcher:ctor()
 	self.preCursorY = 0
 
 	local function onMouseMove(event)
-		self.cursorX = event:getCursorX()
-		self.cursorY = event:getCursorY()
-		G_SysEventEmitter:emit("onMouseMove", event)
-
 		self.preCursorX = self.cursorX
 		self.preCursorY = self.cursorY
+		
+		self.cursorX = event:getCursorX()
+		self.cursorY = event:getCursorY()
+		G_SysEventEmitter:emit(SysEvent.ON_MOUSE_MOVE, event)
     end
 
 	local function onMouseScroll(event)
+		if math.abs(event:getScrollY()) <= 0.0001 then
+			logE("mouse scroll y:", event:getScrollY());
+			return
+		end
 		self.cursorX = event:getCursorX()
 		self.cursorY = event:getCursorY()
-		G_SysEventEmitter:emit("onMouseScroll", event)
+		G_SysEventEmitter:emit(SysEvent.ON_MOUSE_SCROLL, event)
     end
 
 	local function onMouseDown(event)
 		self.cursorX = event:getCursorX()
 		self.cursorY = event:getCursorY()
-		G_SysEventEmitter:emit("onMouseDown", event)
+		G_SysEventEmitter:emit(SysEvent.ON_MOUSE_DOWN, event)
     end
 
 	local function onMouseUp(event)
 		self.cursorX = event:getCursorX()
 		self.cursorY = event:getCursorY()
-		G_SysEventEmitter:emit("onMouseUp", event)
+		G_SysEventEmitter:emit(SysEvent.ON_MOUSE_UP, event)
     end
 
     local mouseListener = cc.EventListenerMouse:create()
@@ -45,20 +53,20 @@ function MouseEventDispatcher:ctor()
 
 
     local function onTouchBegan(touch, event)
-		G_SysEventEmitter:emit("onTouchBegan", event)
+		G_SysEventEmitter:emit(SysEvent.ON_TOUCH_BEGAN, event)
         return true
     end
 
     local function onTouchMoved(touch, event)
-		G_SysEventEmitter:emit("onTouchMoved", event)
+		G_SysEventEmitter:emit(SysEvent.ON_TOUCH_MOVED, event)
     end
 
     local function onTouchEnded(touch, event)
-		G_SysEventEmitter:emit("onTouchEnded", event)
+		G_SysEventEmitter:emit(SysEvent.ON_TOUCH_ENDED, event)
     end
 
     local function onTouchCancelled(touch, event)
-		G_SysEventEmitter:emit("onTouchCancelled", event)
+		G_SysEventEmitter:emit(SysEvent.ON_TOUCH_CANCELLED, event)
     end
 
     local listener = cc.EventListenerTouchOneByOne:create()

@@ -1,21 +1,28 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-05 17:13:52
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-04-05 17:29:44
 -- @Description: 
 
+local BottomDocMger = _MyG.BottomDocumentManager
+
 local function onGUI()
-	_MyG.BottomDocumentManager:onGUI()
+	BottomDocMger:onGUI()
 end
 
 _MyG.edContext:registerLuaHandle("onGUI_Bottom", onGUI)
 
 
-
+-- logger
 local log = require("app.document.Log").new()
-_MyG.BottomDocumentManager:addDocument(log)
+BottomDocMger:addDocument(log)
 
+-- node
 local node = require("app.document.NodeContent").new()
-_MyG.BottomDocumentManager:addDocument(node)
+BottomDocMger:addDocument(node)
 _MyG.MainScene.NodeContent = node
+
+-- time line
+BottomDocMger:addDocument(require("app.document.Timeline").new())
+
+G_SysEventEmitter:on(SysEvent.ON_SHOW_BOTTOM_DOCUMENT, function(docName)
+	BottomDocMger:setCurShowDocumentByName(docName)
+end, SysEvent.TAG)

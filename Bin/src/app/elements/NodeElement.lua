@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-19 14:44:46
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-05-30 22:31:28
 -- @Description: 节点
 
 
@@ -11,19 +8,6 @@ local NodeElement = class("NodeElement", BaseElement)
 
 NodeElement.type = "Node"
 NodeElement.defaultFileName = "Default/DefaultWidget.png"
-
-
--- 是否使用图片按钮
-local USE_TEXTURE_BUTTON = true
-
-local panel_collapsed_arrow = Tools:getImguiTextureID("panel_collapsed_arrow.png")
-local panel_expanded_arrow = Tools:getImguiTextureID("panel_expanded_arrow.png")
-local icon_size = cc.p(15, 11)
-
-if not panel_collapsed_arrow or not panel_expanded_arrow then
-	USE_TEXTURE_BUTTON = false
-end
-
 
 -- @brief 
 function NodeElement:ctor(context)
@@ -127,7 +111,7 @@ function NodeElement:onAttributeGUI()
 	local name = self.name
 	retTmp, name = Tools:imgui_inputText(STR("EA_NAME"), name, 32)
     if retTmp then
-        self:onAttributeChange("change_name")
+        self:onAttributeChange(EditorEvent.ON_CHANGE_NAME)
     	self:setName(name)
     end
 	ImGui.Separator()
@@ -162,7 +146,7 @@ function NodeElement:onGUI_Base()
     tmpTabNumArr[2] = anchorPoint.y
     if self:bool_can_edit_anchor() then
 		if ImGui.DragFloat2(STR("EA_ANC"), tmpTabNumArr, 0.05) then
-			self:onAttributeChange("change_anchorPoint")
+			self:onAttributeChange(EditorEvent.ON_CHANGE_ANCHOR_POINT)
 
 			local prepos = {}
 			prepos.x = positionx - size.width * anchorPoint.x
@@ -184,7 +168,7 @@ function NodeElement:onGUI_Base()
     tmpTabNumArr[1] = positionx
     tmpTabNumArr[2] = positiony
     if ImGui.DragFloat2(STR("EA_POS"), tmpTabNumArr, 1) then
-    	self:onAttributeChange("change_position")
+    	self:onAttributeChange(EditorEvent.ON_CHANGE_POSITION)
     	self.renderNode:setPosition(tmpTabNumArr[1], tmpTabNumArr[2])
     end
 
@@ -192,7 +176,7 @@ function NodeElement:onGUI_Base()
     tmpTabNumArr[2] = size.height
     if self:bool_can_edit_size() then
         if ImGui.DragFloat2(STR("EA_SIZE"), tmpTabNumArr, 1) then
-    		self:onAttributeChange("change_contentSize")
+    		self:onAttributeChange(EditorEvent.ON_CHANGE_SIZE)
 	        size.width = tmpTabNumArr[1]
         	size.height = tmpTabNumArr[2]
         	self.renderNode:setContentSize(size)
@@ -204,7 +188,7 @@ function NodeElement:onGUI_Base()
 	tmpTabNumArr[1] = self.renderNode:getScaleX()
     tmpTabNumArr[2] = self.renderNode:getScaleY()
     if ImGui.DragFloat2(STR("EA_SCALE"), tmpTabNumArr, 0.05) then
-		self:onAttributeChange("change_scale")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_SCALE)
     	self.renderNode:setScaleX(tmpTabNumArr[1])
     	self.renderNode:setScaleY(tmpTabNumArr[2])
     end
@@ -212,21 +196,21 @@ function NodeElement:onGUI_Base()
     tmpTabNumArr[1] = self.renderNode:getSkewX()
     tmpTabNumArr[2] = self.renderNode:getSkewY()
     if ImGui.DragFloat2(STR("EA_SKEW"), tmpTabNumArr, 0.05) then
-		self:onAttributeChange("change_skew")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_SKEW)
     	self.renderNode:setSkewX(tmpTabNumArr[1])
     	self.renderNode:setSkewY(tmpTabNumArr[2])
     end
 
     retTmp, rotation = ImGui.DragFloat(STR("EA_ROTATION"), rotation, 1)
     if retTmp then
-		self:onAttributeChange("change_rotation")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_ROTATION)
     	self.renderNode:setRotation(rotation)
     end
 
     local opacity = self.renderNode:getOpacity()
     retTmp, opacity = ImGui.SliderInt(STR("EA_OPACITY"), opacity, 0, 255)
     if retTmp then
-		self:onAttributeChange("change_opacity")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_OPACITY)
     	self.renderNode:setOpacity(opacity)
     end
 
@@ -235,7 +219,7 @@ function NodeElement:onGUI_Base()
     tmpTabNumArr[2] = color.g / 255
     tmpTabNumArr[3] = color.b / 255
     if ImGui.ColorEdit3(STR("EA_COLOR"), tmpTabNumArr) then
-		self:onAttributeChange("change_color")
+		self:onAttributeChange(EditorEvent.ON_CHANGE_COLOR)
     	color.r = tmpTabNumArr[1] * 255
     	color.g = tmpTabNumArr[2] * 255
     	color.b = tmpTabNumArr[3] * 255
@@ -245,33 +229,33 @@ end
 
 -- @brief 元素拖拽
 function NodeElement:doElementDrag(offset)
-	self:onAttributeChange("change_position")
+	self:onAttributeChange(EditorEvent.ON_CHANGE_POSITION)
 	NodeElement.super.doElementDrag(self, offset)
 end
 
 function NodeElement:doPartMementoGen(attributeName)
-	if attributeName == "change_NodeOrder" then			-- 顺序改变
-	elseif attributeName == "change_parent" then		-- 父节点改变
-	elseif attributeName == "change_name" then			-- 改变名称
+	if attributeName == EditorEvent.ON_CHANGE_NODE_ORDER then			-- 顺序改变
+	elseif attributeName == EditorEvent.ON_CHANGE_PARENT then		-- 父节点改变
+	elseif attributeName == EditorEvent.ON_CHANGE_NAME then			-- 改变名称
 		return self.name
-	elseif attributeName == "change_anchorPoint" then	-- 改变锚点
+	elseif attributeName == EditorEvent.ON_CHANGE_ANCHOR_POINT then	-- 改变锚点
 		local m = {}
 		m.anchor = self.renderNode:getAnchorPoint()
 		m.position = cc.p(self.renderNode:getPosition())
 		return m
-	elseif attributeName == "change_position" then		-- 改变位置
+	elseif attributeName == EditorEvent.ON_CHANGE_POSITION then		-- 改变位置
 		return cc.p(self.renderNode:getPosition())
-	elseif attributeName == "change_contentSize" then	-- 改变尺寸
+	elseif attributeName == EditorEvent.ON_CHANGE_SIZE then	-- 改变尺寸
 		return self.renderNode:getContentSize()
-	elseif attributeName == "change_scale" then			-- 改变缩放
+	elseif attributeName == EditorEvent.ON_CHANGE_SCALE then			-- 改变缩放
 		return cc.p(self.renderNode:getScaleX(), self.renderNode:getScaleY())
-	elseif attributeName == "change_rotation" then		-- 改变旋转
+	elseif attributeName == EditorEvent.ON_CHANGE_ROTATION then		-- 改变旋转
 		return self.renderNode:getRotation()
-	elseif attributeName == "change_opacity" then		-- 改变不透明度
+	elseif attributeName == EditorEvent.ON_CHANGE_OPACITY then		-- 改变不透明度
 		return self.renderNode:getOpacity()
-	elseif attributeName == "change_color" then			-- 改变颜色
+	elseif attributeName == EditorEvent.ON_CHANGE_COLOR then			-- 改变颜色
 		return self.renderNode:getColor()
-	elseif attributeName == "change_skew" then			-- 改变斜率
+	elseif attributeName == EditorEvent.ON_CHANGE_SKEW then			-- 改变斜率
 		return cc.p(self.renderNode:getSkewX(), self.renderNode:getSkewY())
 	end
 
@@ -281,27 +265,27 @@ end
 -- @brief 撤销属性改变
 function NodeElement:revokeAttributeChange(attributeName, data)
 
-	if attributeName == "change_NodeOrder" then			-- 顺序改变
-	elseif attributeName == "change_parent" then		-- 父节点改变
-	elseif attributeName == "change_name" then			-- 改变名称
+	if attributeName == EditorEvent.ON_CHANGE_NODE_ORDER then			-- 顺序改变
+	elseif attributeName == EditorEvent.ON_CHANGE_PARENT then		-- 父节点改变
+	elseif attributeName == EditorEvent.ON_CHANGE_NAME then			-- 改变名称
 		self:setName(data)
-	elseif attributeName == "change_anchorPoint" then	-- 改变锚点
+	elseif attributeName == EditorEvent.ON_CHANGE_ANCHOR_POINT then	-- 改变锚点
 		self.renderNode:setAnchorPoint(data.anchor)
 		self.renderNode:setPosition(data.position)
-	elseif attributeName == "change_position" then		-- 改变位置
+	elseif attributeName == EditorEvent.ON_CHANGE_POSITION then		-- 改变位置
 		self.renderNode:setPosition(data)
-	elseif attributeName == "change_contentSize" then	-- 改变尺寸
+	elseif attributeName == EditorEvent.ON_CHANGE_SIZE then	-- 改变尺寸
 		self.renderNode:setContentSize(data)
-	elseif attributeName == "change_scale" then			-- 改变缩放
+	elseif attributeName == EditorEvent.ON_CHANGE_SCALE then			-- 改变缩放
 		self.renderNode:setScaleX(data.x)
 		self.renderNode:setScaleY(data.y)
-	elseif attributeName == "change_rotation" then		-- 改变旋转
+	elseif attributeName == EditorEvent.ON_CHANGE_ROTATION then		-- 改变旋转
 		self.renderNode:setRotation(data)
-	elseif attributeName == "change_opacity" then		-- 改变不透明度
+	elseif attributeName == EditorEvent.ON_CHANGE_OPACITY then		-- 改变不透明度
 		self.renderNode:setOpacity(data)
-	elseif attributeName == "change_color" then			-- 改变颜色
+	elseif attributeName == EditorEvent.ON_CHANGE_COLOR then			-- 改变颜色
 		self.renderNode:setColor(data)
-	elseif attributeName == "change_skew" then			-- 改变斜率
+	elseif attributeName == EditorEvent.ON_CHANGE_SKEW then			-- 改变斜率
 		self.renderNode:setSkewX(data.x)
 		self.renderNode:setSkewY(data.y)
 	else
@@ -315,25 +299,15 @@ function NodeElement:onNodeContentGUI(nodeContent)
 
 	if showFolderMode then
 
-		if USE_TEXTURE_BUTTON then
-			if self.isOpenFolder then
-				if ImGui.ImageButton(panel_expanded_arrow, icon_size) then
-					self.isOpenFolder = not self.isOpenFolder
-				end
-			else
-				if ImGui.ImageButton(panel_collapsed_arrow, icon_size) then
-					self.isOpenFolder = not self.isOpenFolder
-				end
+		local frameHeight = ImGui.GetFrameHeight()
+
+		if self.isOpenFolder then
+			if ImGui.ArrowButton(self.uniqueIDStr, ImGuiDir_Down) then
+				self.isOpenFolder = not self.isOpenFolder
 			end
 		else
-			if self.isOpenFolder then
-				if ImGui.ArrowButton(self.uniqueIDStr, ImGuiDir_Down) then
-					self.isOpenFolder = not self.isOpenFolder
-				end
-			else
-				if ImGui.ArrowButton(self.uniqueIDStr, ImGuiDir_Right) then
-					self.isOpenFolder = not self.isOpenFolder
-				end
+			if ImGui.ArrowButton(self.uniqueIDStr, ImGuiDir_Right) then
+				self.isOpenFolder = not self.isOpenFolder
 			end
 		end
 		ImGui.SameLine()
@@ -341,11 +315,11 @@ function NodeElement:onNodeContentGUI(nodeContent)
 
 		if self.isOpenFolder then
 			if #self.children > 0 then
-				ImGui.Indent(20)
+				ImGui.Indent(frameHeight)
 					for k, v in pairs(self.children) do
 						v:onNodeContentGUI(nodeContent)
 					end
-				ImGui.Unindent(20)
+				ImGui.Unindent(frameHeight)
 			end
 		end
 	else
@@ -358,7 +332,7 @@ end
 local nodeSelectable = cc.p(0, 18)
 local dragDropEle = nil
 function NodeElement:onItemGUI(nodeContent)
-	if ImGui.Selectable(self.name, self.isFocusCell, ImGuiSelectableFlags_AllowDoubleClick, nodeSelectable) then
+	if ImGui.Selectable(self.name, self.isFocusCell, ImGuiSelectableFlags_AllowDoubleClick) then
 
 		if _MyG.KeyboardStateMng:keyCodeIsPressed(cc.KeyCode.KEY_CTRL) then
 			if self.context:isFocusElement(self) then
@@ -390,7 +364,7 @@ function NodeElement:onItemGUI(nodeContent)
 				if dragDropEle ~= self then
 					if self:canDoMoveOperation(dragDropEle) then
 						if self.context:elementChangeParentHook(dragDropEle, self) then
-							self:onAttributeChange("change_parent")
+							self:onAttributeChange(EditorEvent.ON_CHANGE_PARENT)
 	
 							local beginNode = dragDropEle.renderNode
 							local endNode = self.renderNode
@@ -410,9 +384,9 @@ function NodeElement:onItemGUI(nodeContent)
 		-- 右键点击
 		if ImGui.IsMouseClicked(1) then
 
-			G_SysEventEmitter:once("onNodeContentGUI_End", function()
+			G_SysEventEmitter:once(SysEvent.ON_NODE_CONTENT_GUI_END, function()
 				ImGui.OpenPopup("node_content_right_click_popup")
-			end)
+			end, self)
 
 			local canUp = self:canMoveOrderUp()
 			local canDown = self:canMoveOrderDown()
@@ -440,7 +414,7 @@ function NodeElement:onItemGUI(nodeContent)
 				end
 
 				if ImGui.MenuItem(STR("EA_NODE_MOVE_TO_ROOT_ITEM"), "", false, canMoveToRoot) then
-					self:onAttributeChange("change_NodeOrder")
+					self:onAttributeChange(EditorEvent.ON_CHANGE_NODE_ORDER)
 					self:getRenderNode():retain()
 					self:removeFromParent(false)
 					self.context.rootElement:addChild(self)
@@ -508,7 +482,7 @@ function NodeElement:nodeMovingOrder(isUp, isFull)
 		return
 	end
 
-	self:onAttributeChange("change_NodeOrder")
+	self:onAttributeChange(EditorEvent.ON_CHANGE_NODE_ORDER)
 
 	for k, v in pairs(children) do
 		if v:getRenderNode() then

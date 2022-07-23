@@ -1,9 +1,6 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-11 11:00:10
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-04-12 11:20:39
--- @Description: 
+-- @Description: 资源面板
 local Document = require("app.imgui.Document")
 local FileDialog = require("app.imgui.FileDialog")
 
@@ -53,6 +50,11 @@ end
 
 function AssetContent:canClose()
 	return false
+end
+
+function AssetContent:destroy()
+	G_SysEventEmitter:offByTag(self)
+	AssetContent.super.destroy(self)
 end
 
 return AssetContent

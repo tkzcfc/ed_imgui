@@ -4,19 +4,18 @@ local FileDialog = require("app.imgui.FileDialog")
 local function createDilog(usage, path, callback)
     local dilog = FileDialog.new(STR("Open"), path, usage)
 
-    local drawfunc = function()
+    local handle = G_SysEventEmitter:on(SysEvent.ON_GUI, function()
         dilog:onGUI()
-    end
-    G_SysEventEmitter:on("onGUI", drawfunc)
+    end, SysEvent.TAG)
 
     local okCall = function(value)
-        G_SysEventEmitter:removeListener("onGUI", drawfunc)
+        G_SysEventEmitter:off(handle)
         if callback then
             callback(value)
         end
     end
     local cancelCall = function()
-        G_SysEventEmitter:removeListener("onGUI", drawfunc)
+        G_SysEventEmitter:off(handle)
     end
 
     if _MyG.EditorProject:isValid() then
@@ -31,9 +30,9 @@ local function createDilog(usage, path, callback)
 end
 
 
-G_SysEventEmitter:on("Menu/File/New/Project", function(path)
+G_SysEventEmitter:on(SysEvent.ON_MENU_FILE_NEW_PROJECT, function(path)
     local newFolderName = ""
-    local enter_true, drawfunc
+    local enter_true, drawfunc, handle
 
     local createFunc = function(name)
         if name == nil or name == "" then
@@ -48,25 +47,25 @@ G_SysEventEmitter:on("Menu/File/New/Project", function(path)
             enter_true, newFolderName = Tools:imgui_inputText("ProjectName", newFolderName, 32, ImGuiInputTextFlags_EnterReturnsTrue)
             if enter_true then
                 ImGui.CloseCurrentPopup()
-                G_SysEventEmitter:removeListener("onGUI", drawfunc)
+                G_SysEventEmitter:off(handle)
                 createFunc(newFolderName)
             end
             ImGui.Separator()
             if ImGui.Button("OK", cc.p(-1, 0)) then
                 ImGui.CloseCurrentPopup()
-                G_SysEventEmitter:removeListener("onGUI", drawfunc)
+                G_SysEventEmitter:off(handle)
                 createFunc(newFolderName)
             end
             ImGui.EndPopup()
         else
-            G_SysEventEmitter:removeListener("onGUI", drawfunc)
+            G_SysEventEmitter:off(handle)
         end
     end
 
-    G_SysEventEmitter:on("onGUI", drawfunc)
-end)
+    handle = G_SysEventEmitter:on(SysEvent.ON_GUI, drawfunc, SysEvent.TAG)
+end, SysEvent.TAG)
 
-G_SysEventEmitter:on("Menu/File/New/Folder", function(rootpath)
+G_SysEventEmitter:on(SysEvent.ON_MENU_FILE_NEW_FOLDER, function(rootpath)
     _MyG.Functions:createFolder(rootpath, function(status)
         if status == 0 then
             local rootAsset = _MyG.ProjectAssetManager.rootAsset
@@ -76,20 +75,20 @@ G_SysEventEmitter:on("Menu/File/New/Folder", function(rootpath)
             rootAsset:refreshSameLevel()
         end
     end)
-end)
+end, SysEvent.TAG)
 
-G_SysEventEmitter:on("Menu/File/Save", function()
-    G_SysEventEmitter:emit("onEditorContentSave")
-end)
+G_SysEventEmitter:on(SysEvent.ON_MENU_FILE_SAVE, function()
+    G_SysEventEmitter:emit(SysEvent.CONTENT_ON_EDITOR_CONTENT_SAVE)
+end, SysEvent.TAG)
 
-G_SysEventEmitter:on("Menu/File/SaveAll", function()
+G_SysEventEmitter:on(SysEvent.ON_MENU_FILE_SAVEALL, function()
     local documents = _MyG.CenterDocumentManager:getDocuments()
     for k,document in pairs(documents) do
         document:save()
     end
-end)
+end, SysEvent.TAG)
 
-G_SysEventEmitter:on("Menu/File/Open/Project", function(path)
+G_SysEventEmitter:on(SysEvent.ON_MENU_FILE_OPEN_PROJECT, function(path)
     if path == nil then
         local dilog = createDilog(FileDialog.FileDialogUsage_OpenFile, _MyG.GlobalData.ProjectsPath, function(value)
             if value then
@@ -101,63 +100,9 @@ G_SysEventEmitter:on("Menu/File/Open/Project", function(path)
     else
         _MyG.Functions:openProject(path)
     end
-end)
+end, SysEvent.TAG)
 
 
-
-
-
-
-
-
-
-
-
-
-local settingsDilogShow = true
-local function proSettingDilog()
-    if ImGui.OpenPopup(STR("Project settings")) then
-        ImGui.EndPopup()
-    end
-
-    
-
-    local visible, enter_true
-    visible, settingsDilogShow = ImGui.BeginPopupModal(STR("Project settings"), settingsDilogShow, ImGuiWindowFlags_AlwaysAutoResize)
-    if visible then
-        local edConfig = _MyG.EditorProject.config
-        edConfig.publishDir = edConfig.publishDir or ""
-
-
-        ImGui.Text(STR("PUBLISH_DIR"))
-        ImGui.SameLine()
-
-        ImGui.PushItemWidth(280)
-        enter_true, edConfig.publishDir = Tools:imgui_inputText("", edConfig.publishDir, 512, ImGuiInputTextFlags_EnterReturnsTrue)
-        ImGui.PopItemWidth()
-
-        -- ImGui.SameLine()
-        -- if ImGui.Button(STR("SELECT")) then
-        -- end
-
-        ImGui.Separator()
-        if ImGui.Button(STR("Save")) then
-            _MyG.EditorProject:save()
-            ImGui.CloseCurrentPopup()
-            settingsDilogShow = false
-        end
-
-        ImGui.EndPopup()
-    end
-
-
-    if not settingsDilogShow then
-        G_SysEventEmitter:removeListener("onGUI", proSettingDilog)
-    end
-end
-
-G_SysEventEmitter:on("Menu/Project/Project settings", function(path)
-    settingsDilogShow = true
-    ImGui.OpenPopup(STR("Project settings"))
-    G_SysEventEmitter:on("onGUI", proSettingDilog)
-end)
+G_SysEventEmitter:on(SysEvent.ON_MENU_PROJECT_PROJECT_SETTINGS, function()
+    _MyG.PopupManager:addPopup(require("app.imgui.popup.ProjectSetting").new())
+end, SysEvent.TAG)

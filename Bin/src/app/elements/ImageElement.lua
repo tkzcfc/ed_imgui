@@ -1,8 +1,5 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-05-05 14:56:19
--- @Last Modified by:   fangcheng
--- @Last Modified time: 2020-06-01 22:35:42
 -- @Description: 
 
 
@@ -94,8 +91,12 @@ function ImageElement:onAttributeGUI()
 	if not ImGui.CollapsingHeader(STR("EA_FEATURES"), ImGuiTreeNodeFlags_DefaultOpen) then
 		return
 	end
-
-	Tools:imgui_inputText(STR("EA_RESOURCE"), self.textureName, 512, ImGuiInputTextFlags_ReadOnly)
+	
+	if self.isPlist then
+		Tools:imgui_inputText(STR("EA_RESOURCE"), string.format("%s @ [%s]", self.textureName, self.plistFileName), 512, ImGuiInputTextFlags_ReadOnly)
+	else
+		Tools:imgui_inputText(STR("EA_RESOURCE"), self.textureName, 512, ImGuiInputTextFlags_ReadOnly)
+	end
 
     if ImGui.BeginDragDropTarget() then
     	if Tools:check_AcceptDragDropPayload(self.dragDropKey_PNG) then
@@ -128,7 +129,7 @@ function ImageElement:onAttributeGUI()
     local boolValue = self.renderNode:isIgnoreContentAdaptWithSize()
     retTmp, boolValue = ImGui.Checkbox(STR("EA_USE_TEXTURE_SIZE"), boolValue)
     if retTmp then
-    	self:onAttributeChange("change_Image_Use_Tex_Size")
+    	self:onAttributeChange(EditorEvent.ON_CHANGE_IMAGE_USE_TEX_SIZE)
     	self.renderNode:ignoreContentAdaptWithSize(boolValue)
     end
 
@@ -138,22 +139,47 @@ end
 -- @brief 切换图片资源
 function ImageElement:changeAssetImg(dragData)
 	local asset = _MyG.Functions:getAssetByID(dragData)
+	G_SysEventEmitter:emit(SysEvent.DO_CHANGE_ASSET, self, asset, true)
+end
 
-	if asset then
-		self:onAttributeChange("change_SpriteResource")
+-- @brief override 资源对比
+function ImageElement:isAssetEqual(asset)
+	local property = asset.property
 
-		local property = asset.property
-		self.isPlist = property.isPlist
-		self.textureName = property.relativePath
-
-		if property.isPlist then
-			self.plistFileName = property.relativePath
-			self.textureName = property.textureName
+	-- 资源相同
+	if self.isPlist == property.isPlist then
+		if self.isPlist then
+			if self.plistFileName == property.relativePath and self.textureName == property.textureName then
+				return true
+			end
 		else
-			self.plistFileName = ""
+			if self.textureName == property.relativePath then
+				return true
+			end
 		end
-		self:refreshImg()
 	end
+
+	return false
+end
+
+-- @brief override 资源切换
+function ImageElement:onDoChangeAsset(asset, canUndo)
+	ImageElement.super.onDoChangeAsset(self, asset, canUndo)
+	if canUndo then
+		self:onAttributeChange(EditorEvent.ON_CHANGE_SPRITERESOURCE)
+	end
+
+	local property = asset.property
+	self.isPlist = property.isPlist
+	self.textureName = property.relativePath
+
+	if property.isPlist then
+		self.plistFileName = property.relativePath
+		self.textureName = property.textureName
+	else
+		self.plistFileName = ""
+	end
+	self:refreshImg()
 end
 
 function ImageElement:refreshImg()
@@ -182,9 +208,9 @@ function ImageElement:checkResource(textureName, plistFileName, isPlist)
 end
 
 function ImageElement:doPartMementoGen(attributeName)
-	if attributeName == "change_Image_Use_Tex_Size" then
+	if attributeName == EditorEvent.ON_CHANGE_IMAGE_USE_TEX_SIZE then
 		return self.renderNode:isIgnoreContentAdaptWithSize()
-	elseif attributeName == "change_SpriteResource" then
+	elseif attributeName == EditorEvent.ON_CHANGE_SPRITERESOURCE then
 		return {
 			isPlist = self.isPlist,
 			textureName = self.textureName,
@@ -197,9 +223,9 @@ end
 
 -- @brief 撤销属性改变
 function ImageElement:revokeAttributeChange(attributeName, data)
-	if attributeName == "change_Image_Use_Tex_Size" then
+	if attributeName == EditorEvent.ON_CHANGE_IMAGE_USE_TEX_SIZE then
 		self.renderNode:ignoreContentAdaptWithSize(data)
-	elseif attributeName == "change_SpriteResource" then
+	elseif attributeName == EditorEvent.ON_CHANGE_SPRITERESOURCE then
 		self.isPlist = data.isPlist
 		self.textureName = data.textureName
 		self.plistFileName = data.plistFileName

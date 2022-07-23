@@ -1,3 +1,7 @@
+-- @Author: fangcheng
+-- @Date:   2020-07-15 22:56:37
+-- @remark: 属性面板
+
 local Document = require("app.imgui.Document")
 
 local AttributeContent = class("AttributeContent", Document)
@@ -10,7 +14,7 @@ end
 
 function AttributeContent:onGUI()
 	ImGui.BeginChild("scrolling", self.scrolling_size, false, self.scrolling_flag)
-	G_SysEventEmitter:emit("onAttributeContent_GUI")
+	G_SysEventEmitter:emit(SysEvent.ON_ATTRIBUTE_CONTENT_GUI)
 	ImGui.EndChild()
 end
 

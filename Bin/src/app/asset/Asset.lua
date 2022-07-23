@@ -1,52 +1,50 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-08 20:59:16
 -- @Description: 
 
 local Asset = class("Asset")
 
-Asset.ResType = {
-	NONE 			= -1,			-- 无效资源
-	PNG 			= 0,			-- png
-	JPG 			= 1,			-- jpg
-	LUA 			= 2,			-- lua文件
-	FOLDER 			= 3,			-- 文件夹
-	PLIST 			= 4,			-- plist文件
-	PLIST_SUBGRAPH 	= 5,			-- plist子图
-	WIDGET			= 6,			-- widget
-	LAYER			= 7,			-- 地图层
-	MAP				= 8,			-- 地图
+Asset.ResType = enum {
+	"NONE",              -- 无效资源
+	"PNG",               -- png
+	"JPG",               -- jpg
+	"LUA",               -- lua文件
+	"FOLDER",            -- 文件夹
+	"PLIST",             -- plist文件
+	"PLIST_SUBGRAPH",    -- plist子图
+	"WIDGET",            -- widget
+	"LAYER",             -- 地图层
+	"MAP",               -- 地图
+	"EXPORTJSON",        -- cocostudio骨骼动画
+	"SPINE",             -- spine骨骼动画
+	"ROLE",              -- role
 }
+
 
 -- 唯一标识
 local uniqueIDGen = 0
-
--- 绘制图标大小
-local iconSize = cc.p(20, 20)
-local treeNodeSpacing = 20
-local nodeSelectable = cc.p(0, 18)
 
 local cache_drag_item_last  = nil
 local cache_drag_item = nil
 
 
-G_SysEventEmitter:on("onGUIBegin", function()
+G_SysEventEmitter:on(SysEvent.ON_GUI_BEGIN, function()
 	cache_drag_item_last = cache_drag_item
 	if cache_drag_item_last then
 	end
 	cache_drag_item = nil
-end)
+end, SysEvent.TAG)
 
 
-G_SysEventEmitter:on("onGUIEnd", function()
+G_SysEventEmitter:on(SysEvent.ON_GUI_END, function()
 	if cache_drag_item == nil then
 		if cache_drag_item_last then
-			G_SysEventEmitter:emit("onAssetDragEnd", cache_drag_item_last)
+			G_SysEventEmitter:emit(SysEvent.ON_ASSET_DRAG_END, cache_drag_item_last)
 			print("drag", cache_drag_item_last.property.fullPath)
 			cache_drag_item_last = nil
 		end
 	end
-end)
+end, SysEvent.TAG)
 
 -------------------------------------------------------------------------------------------------------
 function Asset:ctor(fullPath, assetManager)
@@ -56,7 +54,6 @@ function Asset:ctor(fullPath, assetManager)
 		isPlist 		= false,	-- 是否为plist
 		extension		= "",		-- 后缀（不带点，如png）
 		fullPath		= "",		-- 路径
-		thumbnail		= "",		-- 缩略图
 		showName		= "",		-- 显示名
 		resType			= Asset.ResType.NONE,		-- 资源类型
 		thumbnailTexture= nil,		-- 缩略图纹理
@@ -78,9 +75,8 @@ function Asset:ctor(fullPath, assetManager)
 
 	-- 检测资源是否有效
 	if self:checkValid() then
-		self.property.thumbnailTexture = Tools:getImguiTextureID(self.property.thumbnail)
 		if not self.property.thumbnailTexture then
-			self.property.thumbnailTexture = Tools:getImguiTextureID("res/file.png")
+			self.property.thumbnailTexture = EditorIconContent:get(EditorIcon.ICON_FILE)
 		end
 		assetManager:add(self)
 	else
@@ -96,7 +92,7 @@ function Asset:initDragDropData()
 end
 
 function Asset:destroy()
-	print("Asset destroy:", self.uniqueID)
+	logI("Asset destroy:", self.uniqueID)
 	self.assetManager = nil
 	self.children = nil
 end
@@ -109,7 +105,7 @@ end
 function Asset:init(fullPath)
 	fullPath = G_Helper.fmtPath(fullPath)
 	self.property.extension = G_Helper.getExtension(fullPath)
-	self.property.thumbnail = "res/file.png"
+	self.property.thumbnailTexture = EditorIconContent:get(EditorIcon.ICON_FILE)
 	self.property.fullPath = fullPath
 	self.property.showName = G_Helper.getLastName(fullPath)
 	self.property.relativePath = _MyG.Functions:getRelativePath(fullPath)
@@ -131,6 +127,11 @@ function Asset:getDirPath()
 	local filename = Tools:getFilename(fullPath)
 	local path = string.sub(fullPath, 1, -#filename - 1)
 	return path
+end
+
+-- @brief 获取所属资源管理器
+function Asset:getAssetManager()
+	return self.assetManager
 end
 
 -- 资源文件路径
@@ -166,7 +167,7 @@ end
 
 -- 刷新自己包括所有子节点资源
 function Asset:refreshAll()
-	function _refresh(asset)
+	local function _refresh(asset)
 		asset.cache_doSeekTag = false
 		for k,v in pairs(asset.children or {}) do
 			_refresh(v)
@@ -224,7 +225,7 @@ end
 function Asset:onItemHovered()
 	self.continueTag = true
 
-	G_SysEventEmitter:emit("asset_onItemHovered", self)
+	G_SysEventEmitter:emit(SysEvent.ASSET_ON_ITEM_HOVERED, self)
 
 	if self.continueTag then
 		self:_onItemHovered()
@@ -237,24 +238,14 @@ end
 
 -- 鼠标左键双击
 function Asset:onLeftDoubleClick()
-	self.continueTag = true
-	
-	G_SysEventEmitter:emit("asset_onLeftDoubleClick", self)
-
-	if self.continueTag then
-		self:_onLeftDoubleClick()
-	end
-end
-
--- 子类继承，实现默认效果
-function Asset:_onLeftDoubleClick()
+	G_SysEventEmitter:emit(SysEvent.ASSET_ON_LEFT_DOUBLE_CLICK, self)
 end
 
 -- 鼠标右键单击
 function Asset:onRightClick()
 	self.continueTag = true
 	
-	G_SysEventEmitter:emit("asset_onRightClick", self)
+	G_SysEventEmitter:emit(SysEvent.ASSET_ON_RIGHT_CLICK, self)
 
 	if self.continueTag then
 		self:_onRightClick()
@@ -288,11 +279,12 @@ function Asset:onGUI()
 		if property.isOpenFolder then
 			self:doSeek()
 			if #self.children > 0 then
-				ImGui.Indent(treeNodeSpacing)
+				local frameHeight = ImGui.GetFrameHeight()
+				ImGui.Indent(frameHeight)
 					for k, v in pairs(self.children) do
 						v:onGUI()
 					end
-				ImGui.Unindent(treeNodeSpacing)
+				ImGui.Unindent(frameHeight)
 			end
 		end
 	else
@@ -312,15 +304,17 @@ function Asset:drawItem()
 end
 
 function Asset:_drawItem(noDrag)
+	local frameHeight = ImGui.GetFrameHeight()
+
 	local property = self.property
-	ImGui.Image(property.thumbnailTexture, iconSize)
+	ImGui.Image(property.thumbnailTexture, cc.p(frameHeight, frameHeight))
 	ImGui.SameLine()
 
 	if noDrag then
-		return ImGui.Selectable(property.showName, false, ImGuiSelectableFlags_AllowDoubleClick, nodeSelectable)
+		return ImGui.Selectable(property.showName, false, ImGuiSelectableFlags_AllowDoubleClick)
 	end
 
-	if ImGui.Selectable(property.showName, false, ImGuiSelectableFlags_AllowDoubleClick, nodeSelectable) then
+	if ImGui.Selectable(property.showName, false, ImGuiSelectableFlags_AllowDoubleClick) then
 		if ImGui.IsMouseDoubleClicked(0) then
 			if property.showFolderMode then
 				property.isOpenFolder = not property.isOpenFolder

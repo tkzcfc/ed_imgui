@@ -1,6 +1,6 @@
 -- @Author: fangcheng
 -- @Date:   2020-06-21 20:25:03
--- @remark: 
+-- @remark: 资源引用分析
 
 local Plugin = import(".Plugin")
 local PluginRefResources = class("PluginRefResources", Plugin)
@@ -64,31 +64,7 @@ function PluginRefResources:getMapRefResources()
 end
 
 function PluginRefResources:getFileRefResources(filename)
--- 解析json
-	local jsonData = nil
-	local suc = pcall(function()
-		local FileUtilsInstance = cc.FileUtils:getInstance()
-		local content = FileUtilsInstance:getStringFromFile(filename)
-		if content == "" then
-			jsonData = {}
-		else
-			jsonData = json.decode(content)
-		end
-	end)
-
-	if not suc then
-		return {}
-	end
-
-	if not jsonData or not jsonData.data then
-		return {}
-	end
-
-	if jsonData.data.context and jsonData.data.context.plugins then
-		local refs = jsonData.data.context.plugins.PluginRefResources or {}
-		return refs
-	end
-	return {}
+	return _MyG.Functions:getFileRefResources(filename)
 end
 
 return PluginRefResources

@@ -1,5 +1,4 @@
 -- @Author: fangcheng
--- @URL: github.com/tkzcfc
 -- @Date:   2020-04-06 21:25:47
 -- @Description: 资产管理
 
@@ -30,6 +29,8 @@ end
 -- @brief 缓存文件夹打开状态
 function AssetManager:cacheOpenFolderStatus(asset)
 	self.openFolderStatusCache[asset.property.relativePath] = asset.property.isOpenFolder
+
+	G_SysEventEmitter:emit(SysEvent.ON_PRJ_USER_TMP_DATA_CHANGE)
 end
 
 -- @brief 获取文件夹打开状态
@@ -37,17 +38,52 @@ function AssetManager:getOpenFolderStatus(asset)
 	return self.openFolderStatusCache[asset.property.relativePath] 
 end
 
+-- @brief 复制资源
+function AssetManager:duplicate(asset)
+	local fileFullpath = FileUtilsInstance:fullPathForFilename(asset:getFilePath())
+	fileFullpath = G_Helper.fmtPath(fileFullpath)
+
+	-- 新的文件名
+	local newFilePath = ""
+	local index = 1
+	repeat
+		local replace = "%1_" .. index .. "%2"
+		newFilePath = string.gsub(fileFullpath, "(.+)(%.[a-zA-Z_-]+)$", replace)
+		if not FileUtilsInstance:isFileExist(newFilePath) then
+			break
+		end
+		index = index + 1
+	until(false)
+
+	if not os.copyfile(fileFullpath, newFilePath) then
+		return false
+	end
+
+	-- -- 读取内容
+	-- -- local content = FileUtilsInstance:getStringFromFile(fileFullpath)
+	-- local content = os.readfile(fileFullpath)
+	-- -- 写入文件
+	-- -- if not FileUtilsInstance:writeStringToFile(content, newFilePath) then return false end
+	-- if not os.writefile(newFilePath, content) then return false end
+
+	-- 加入管理器
+	asset:refreshSameLevel()
+	return true
+end
+
 -- @brief 获取资源数据
 function AssetManager:getAssetData(path)
 	if self.dataCache[path] then
+		-- print("use cache", path)
 		return self.dataCache[path]
 	end
+	-- print("read", path)
 	local suc = xpcall(function()
 		local content = FileUtilsInstance:getStringFromFile(path)
 		if content == "" then
 			self.dataCache[path] = {}
 		else
-			self.dataCache[path] = json.decode(content)
+			self.dataCache[path] = _MyG.Functions:decodeJson(content)
 		end
 	end, Error_hook)
 
@@ -61,7 +97,7 @@ function AssetManager:writeAssetData(path, data, isCreate)
     if data == nil or data.type == nil or data.type == "" then
     	-- 写入失败，内容非法
     	xpcall(function() 
-    		local content = json.encode(data)
+    		local content = _MyG.Functions:encodeJson(data)
     		logE(string.format("Write failed, illegal content: %q", tostring(content)))
 		end, function()
 			logE(string.format("Write failed, illegal content: %q", tostring(data)))
@@ -111,28 +147,27 @@ function AssetManager:delayDestructionAssets(list)
 	end))
 end
 
+-- @brief 清除缓存信息
+function AssetManager:clearCache()
+	self.dataCache = {}	
+end
+
+function AssetManager:isEqualRootPath(rootPath)
+	return self.rootPath == rootPath
+end
+
+-- @brief 打开
 function AssetManager:open(rootPath)
-	self.rootPath = nil
-	self.rootAsset = nil
-	self.dataCache = {}
-	self.assetMap = {}
-
-	self.openFolderStatusCache = {}
-
-	if self.rootAsset then
-		local t = {}
-		t[#t + 1] = self.rootAsset
-		self:delayDestructionAssets(t)
-		self.rootAsset:destroyAllChildren()
-	end
+	self:clear()
 
 	if type(rootPath) == "string" and rootPath ~= "" then
 
-		local edCfg = _MyG.EditorProject.config
-		if edCfg and type(edCfg.openFolderStatusCache) == "table" then
-			self.openFolderStatusCache = edCfg.openFolderStatusCache
+		local data = _MyG.EditorProject:getUserTmpData()
+		if not data.openFolderStatusCache then
+			data.openFolderStatusCache = {}
 		end
-
+		self.openFolderStatusCache = data.openFolderStatusCache
+		
 		local rootAsset = Asset_Folder.new(rootPath, self)
 		if rootAsset:checkValid() then
 			self.rootAsset = rootAsset
@@ -141,11 +176,22 @@ function AssetManager:open(rootPath)
 	end
 end
 
-function AssetManager:save()
-	local edCfg = _MyG.EditorProject.config
-	if edCfg then
-		edCfg.openFolderStatusCache = self.openFolderStatusCache
+function AssetManager:getRootPath()
+	return self.rootPath
+end
+
+function AssetManager:clear()
+	if self.rootAsset then
+		local t = {}
+		t[#t + 1] = self.rootAsset
+		self:delayDestructionAssets(t)
+		self.rootAsset:destroyAllChildren()
 	end
+
+	self.rootAsset = nil
+	self.rootPath = nil
+	self.assetMap = {}
+	self.openFolderStatusCache = {}
 end
 
 return AssetManager
