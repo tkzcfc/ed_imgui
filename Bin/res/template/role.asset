@@ -1,0 +1,52 @@
+{
+	"type": "role",
+	"data": {
+		"children": {},
+		"context": {
+			"roleSkillDoc": {
+				"curDataIndex": -1
+			},
+			"role": {
+				"mass": 1,
+				"force": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"skillInfo": {},
+				"defaultSkillIndex": 1,
+				"impulsion": {
+					"y": 10,
+					"x": 0,
+					"z": 0
+				},
+				"offset": {
+					"y": 0,
+					"x": 0
+				},
+				"roleSize": {
+					"y": 85,
+					"x": 50,
+					"z": 10
+				},
+				"resFile": "Default/DemoPlayer.ExportJson",
+				"moveSpeed": {
+					"y": 10,
+					"x": 10
+				},
+				"actInfo": {},
+				"radius": 15,
+				"directionLeft": false
+			},
+			"roleActionDoc": {
+				"curDataIndex": 1
+			},
+			"_renderScale": 1,
+			"_renderPos": {
+				"y": -7,
+				"x": 125
+			},
+			"plugins": {}
+		}
+	}
+}
