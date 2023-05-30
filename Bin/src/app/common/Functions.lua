@@ -98,7 +98,8 @@ function Functions:autoUpdate(path)
 		G_SysEventEmitter:emit(SysEvent.ON_ASSET_CONTENT_UPDATE)
 		return
 	end
-	if string.find(path, _MyG.GlobalData.CocosResourcePath) then
+	
+	if self:beginWith(path, _MyG.GlobalData.CocosResourcePath) then
 		-- Cocos资源
 		G_SysEventEmitter:emit(SysEvent.ON_ASSET_COCOS_UPDATE)
 	else
