@@ -127,6 +127,65 @@ function ProjContent:Menu_OnGUI(asset)
 			_MyG.OpenAsset:open(asset)
 		end
 	end
+
+	if asset.property.resType == Asset.ResType.PLIST then
+		if ImGui.MenuItem(STR("Disassembly")) then
+			local fullPath = asset.property.fullPath
+			local frames = Tools:splitPlist(fullPath)
+
+			cc.SpriteFrameCache:getInstance():addSpriteFrames(asset.property.relativePath)
+
+			async_run(function()
+				_MyG.ShowLoading()
+				async_yield()
+				for k, textureName in pairs(frames) do
+					local saveToFileName = self:genPlistSubFilePath(asset.property.relativePath, textureName)
+
+					-- 缓存全路径
+					local cacheTextureName = cc.FileUtils:getInstance():getWritablePath() .. saveToFileName
+
+					local baseName = G_Helper.getLastName(cacheTextureName)
+					local cacheTextureDirName = string.sub(cacheTextureName, 1, #cacheTextureName - #baseName)
+
+					-- 创建对应目录
+					os.mkdirpath(cacheTextureDirName)
+
+					-- plist子图渲染
+					do
+						local sp = cc.Sprite:createWithSpriteFrameName(textureName)
+						sp:setAnchorPoint(VecZero)
+						sp:setPosition(0, 0)
+						
+						local size = sp:getContentSize()
+						
+						local renderTexture = cc.RenderTexture:create(size.width, size.height)
+						
+						-- render
+						renderTexture:beginWithClear(0,0,0,0)
+						sp:visit()
+						renderTexture:endToLua()
+						
+						renderTexture:saveToFile(saveToFileName, cc.IMAGE_FORMAT_PNG, true)
+					end
+
+					async_yield(1 / 30)
+					_MyG:PercentLoading(k / #frames)
+				end
+				async_yield()
+				_MyG:HideLoading()
+			end)
+		end
+	end
+end
+
+-- @brief 
+function ProjContent:genPlistSubFilePath(plistFile, pngName)
+	-- 缓存路径
+	local baseName = string.gsub(plistFile, ".plist$", "")
+	baseName = G_Helper.fmtPath(baseName)
+
+	-- 调用saveToFile时候，会在此路径前面加上 cc.FileUtils:getInstance():getWritablePath(),所以此处写相对路径
+	return ".cache_plist/" .. baseName .. "/" .. pngName
 end
 
 return ProjContent

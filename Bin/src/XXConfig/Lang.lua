@@ -210,7 +210,8 @@ M.Data['GPhysicalForceType'] = {cn = '力类型', en = 'GPhysicalForceType'}
 M.Data['GPhysicalForceType.FORCE'] = {cn = '力', en = 'FORCE'}
 M.Data['GPhysicalForceType.IMPULSE'] = {cn = '冲力', en = 'IMPULSE'}
 M.Data['GPhysicalForceType.MOVEMENT'] = {cn = '匀速移动', en = 'MOVEMENT'}
-M.length = 207
+M.Data['Disassembly'] = {cn = '拆解子图', en = 'Disassembly'}
+M.length = 208
 
 function M.getData(key)
     return M.Data[key]

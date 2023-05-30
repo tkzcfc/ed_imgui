@@ -53,7 +53,7 @@ function Asset_PlistSub:init(fullPath)
 	self.property.isPlist 		= true
 
 	-- saveToFile 函数只能传入相对路径,此处没有加 WritablePath
-	self.saveToFileName = genCachePath_2(self.property.relativePath, self.textureName)
+	self.saveToFileName = genCachePath_1(self.property.relativePath, self.textureName)
 	-- 在读取图片时加上 WritablePath
 	self.cacheTextureName = cc.FileUtils:getInstance():getWritablePath() .. self.saveToFileName
 
