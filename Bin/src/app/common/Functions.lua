@@ -201,15 +201,15 @@ function Functions:importResource(filter, toDir, finishCall)
 end
 
 function Functions:beginWith(str, begin)
-	local pos, _ = string.find(str, begin)
-	return pos and pos == 1
+    if string.sub(str, 1, #begin) == begin then
+    	return true
+    end
 end
 
 function Functions:beginWithAndSubStr(str, begin)
-	local bpos, epos = string.find(str, begin)
-	if bpos and bpos == 1 then
-		return true, string.sub(str, epos + 1)
-	end
+    if string.sub(str, 1, #begin) == begin then
+        return true, string.sub(str, #begin + 1)
+    end
 end
 
 -- @brief 获取相对路径
